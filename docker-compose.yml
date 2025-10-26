@@ -1,0 +1,5 @@
+services:
+  db:
+    build: ./database
+    volumes:
+      - /var/mysql/data:./data/mysql
