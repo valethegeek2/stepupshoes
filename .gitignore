@@ -22,3 +22,6 @@ gradle-app.setting
 
 # Docker Environment
 .env
+
+# Ignore idea project files
+.idea
