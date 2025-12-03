@@ -7,16 +7,16 @@ USE eshop;
 SET FOREIGN_KEY_CHECKS = 0;
 
 -- Drop existing tables (if re-running)
--- DROP TABLE IF EXISTS order_details;
--- DROP TABLE IF EXISTS orders;
--- DROP TABLE IF EXISTS cart_items;
--- DROP TABLE IF EXISTS wishlist_items;
--- DROP TABLE IF EXISTS product_images;
--- DROP TABLE IF EXISTS product_variants;
--- DROP TABLE IF EXISTS products;
--- DROP TABLE IF EXISTS categories;
--- DROP TABLE IF EXISTS user_profiles;
--- DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS order_details;
+DROP TABLE IF EXISTS orders;
+DROP TABLE IF EXISTS cart_items;
+DROP TABLE IF EXISTS wishlist_items;
+DROP TABLE IF EXISTS product_images;
+DROP TABLE IF EXISTS product_variants;
+DROP TABLE IF EXISTS products;
+DROP TABLE IF EXISTS categories;
+DROP TABLE IF EXISTS user_profiles;
+DROP TABLE IF EXISTS users;
 
 -- ====================================================
 --  Users
@@ -219,6 +219,7 @@ SET FOREIGN_KEY_CHECKS = 1;
 -- Usage: Product listing, search, filters
 -- Contains: Product info, category, stock, price range, primary image
 -- ==================================================
+DROP VIEW IF EXISTS v_product_catalog;
 CREATE OR REPLACE VIEW v_product_catalog AS
 SELECT 
     p.product_id,
@@ -231,20 +232,23 @@ SELECT
     c.category_id,
     c.name AS category_name,
     
-    -- Stock calculations from variants
+    -- Stock calculations from variants - Maybe later we can optimize this
+    -- and add A separate field in product_variant with the appropriate trigger
+    -- without having to calculate it every time
     SUM(pv.stock) AS total_stock,
     COUNT(DISTINCT pv.variant_id) AS variant_count,
     
-    -- Price range from variants
-    MIN(p.base_price + pv.price_adjustment) AS min_price,
-    MAX(p.base_price + pv.price_adjustment) AS max_price,
+    -- Price range from variants - Probably unnecessary
+    -- MIN(p.base_price + pv.price_adjustment) AS min_price,
+    -- MAX(p.base_price + pv.price_adjustment) AS max_price,
     
-    -- Primary image (γενική εικόνα προϊόντος)
+    -- Primary image
+    -- Maybe make primary_image_url a separate field?
     (SELECT pi.url 
      FROM product_images pi 
      WHERE pi.product_id = p.product_id 
        AND pi.is_primary = TRUE 
-       AND pi.variant_id IS NULL 
+       AND pi.variant_id IS NULL -- NULL = primary product image, NOT NULL = variant image
      LIMIT 1) AS primary_image_url,
     
     -- Availability check
