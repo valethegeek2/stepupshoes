@@ -1,0 +1,34 @@
+src/main/java/com/...
+│
+├── StepUpApplication.java              (@SpringBootApplication - main class)
+│
+├── resources/                             (Configuration classes)
+│   ├── application.properties
+│
+├── controllers/                       (REST endpoints - @RestController)
+│   ├── ProductController.java         ← Εδώ θα φτιάξεις το /search
+│   ├── AuthController.java            ← Εδώ /auth/register
+│   ├── CartController.java
+│   └── OrderController.java
+│
+├── service/                           (Business logic - @Service)
+│   ├── ProductService.java           ← Search logic εδώ
+│   ├── AuthService.java
+│   └── UserService.java
+│
+├── repository/                        (Database access - @Repository / JpaRepository)
+│   ├── ProductRepository.java        ← Queries στη βάση
+│   ├── ProductCatalogViewRepository.java  ← Για το view!
+│   └── UserRepository.java
+│
+├── model/entity/                      (Database entities - @Entity)
+│   ├── Product.java
+│   ├── ProductVariant.java
+│   ├── User.java
+│   └── views/
+│       └── ProductCatalogView.java   ← Το view σου!
+│
+└── model/dto/                         (Data Transfer Objects)
+    ├── ProductSearchResponse.java    ← Response για search
+    ├── RegisterRequest.java
+    └── RegisterResponse.java
