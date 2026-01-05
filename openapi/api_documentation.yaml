@@ -88,6 +88,15 @@ paths:
         - in: query
           name: maxPrice
           schema: { type: number }
+        - in: query
+          name: color
+          schema: { type: string }
+        - in: query
+          name: size
+          schema: { type: string }
+        - in: query
+          name: gender
+          schema: { type: string }
       responses:
         "200":
           description: Filtered results
@@ -97,6 +106,8 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/Product"
+        "404":
+          description: No products matching the filters found
 
 
   ####################################################
@@ -534,24 +545,36 @@ components:
     Product:
       type: object
       properties:
-        product_id: { type: integer }
-        name: { type: string }
-        description: { type: string }
-        image_url: { type: string }
-        price: { type: number }
-        stock: { type: integer }
-        category_id: { type: integer }
+        product_id:   { type: integer }
+        name:         { type: string }
+        tags:         { type: string }
+        image_url:    { type: string }
+        # Show the minimal price of the product
+        min_price:    { type: number }
+        # Is the sum of all variants stock levels
+        total_stock:  { type: integer }
+        # The number of variants available
+        no_variants:  { type: integer }
+        cat_name:     { type: string }
+        cat_id:       { type: integer }
+        in_stock:     { type: boolean }
 
     ProductCreate:
       type: object
       required: [name, price, stock]
       properties:
-        name: { type: string }
-        description: { type: string }
-        image_url: { type: string }
-        price: { type: number }
-        stock: { type: integer }
-        category_id: { type: integer }
+        name:         { type: string }
+        tags:         { type: string }
+        image_url:    { type: string }
+        # Show the minimal price of the product
+        min_price:    { type: number }
+        # Is the sum of all variants stock levels
+        total_stock:  { type: integer }
+        # The number of variants available
+        no_variants:  { type: integer }
+        cat_name:     { type: string }
+        cat_id:       { type: integer }
+        in_stock:     { type: boolean }
 
     ProductUpdate:
       type: object
