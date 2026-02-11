@@ -1,5 +1,4 @@
 USE eshop;
-
 -- ================= Final Corrected E-shop Schema =================
 -- For related documentation see ERDiagram.png, ...
 
@@ -99,7 +98,6 @@ CREATE TABLE product_variants (
     product_id INT NOT NULL,
     color VARCHAR(50) NOT NULL,
     size VARCHAR(20) NOT NULL,
-    sku VARCHAR(100) UNIQUE COMMENT 'Stock Keeping Unit - unique identifier', -- Probably wont be used in current scope
     stock INT NOT NULL DEFAULT 0,
     price_adjustment DECIMAL(10,2) DEFAULT 0.00 COMMENT 'Price difference from base_price',
     is_available BOOLEAN DEFAULT TRUE,
@@ -201,8 +199,8 @@ CREATE TABLE order_details (
     order_id INT NOT NULL,
     variant_id INT NOT NULL,
     quantity INT NOT NULL CHECK (quantity > 0),
-    price_per_item DECIMAL(10,2) NOT NULL COMMENT 'Price at time of order',
-    subtotal DECIMAL(10,2) GENERATED ALWAYS AS (quantity * price_per_item) STORED,
+--    price_per_item DECIMAL(10,2) NOT NULL COMMENT 'Price at time of order',
+--    subtotal DECIMAL(10,2) GENERATED ALWAYS AS (quantity * price_per_item) STORED,
     FOREIGN KEY (order_id) REFERENCES orders(order_id) ON DELETE CASCADE,
     FOREIGN KEY (variant_id) REFERENCES product_variants(variant_id) ON DELETE CASCADE,
     INDEX idx_order (order_id),
@@ -237,10 +235,6 @@ SELECT
     -- without having to calculate it every time
     SUM(pv.stock) AS total_stock,
     COUNT(DISTINCT pv.variant_id) AS variant_count,
-    
-    -- Price range from variants - Probably unnecessary
-    -- MIN(p.base_price + pv.price_adjustment) AS min_price,
-    -- MAX(p.base_price + pv.price_adjustment) AS max_price,
     
     -- Primary image
     -- Maybe make primary_image_url a separate field?
@@ -604,15 +598,15 @@ GROUP BY p.product_id, c.category_id;
 
 -- Users
 INSERT INTO users (username, email, password, role) VALUES
-('john_doe', 'john@example.com', '$2a$10$hashed_password_1', 'customer'),
+('john_doe', 'john@example.com', '5f4dcc3b5aa765d61d8327deb882cf99', 'customer'), -- password=password
 ('maria_k',  'maria@example.com', '$2a$10$hashed_password_2', 'customer'),
 ('admin01',  'admin@example.com', '$2a$10$hashed_password_3', 'admin');
 
 -- User Profiles
 INSERT INTO user_profiles (user_id, first_name, last_name, address, city, postal_code, phone_number, birthdate) VALUES
 (1, 'John', 'Doe', '123 Main St', 'Athens', '10435', '2101234567', '1990-02-15'),
-(2, 'Maria', 'Konstantinou', '45 Ermou St', 'Patras', '26221', '2610123456', '1995-11-03'),
-(3, 'Admin', 'User', '1 Admin Avenue', 'Thessaloniki', '54622', '2310123456', '1985-05-22');
+(2, 'Maria', 'Konstantinou', '45 Ermou St', 'Patras', '26221', '2610123456', '1995-11-03');
+-- (3, 'Admin', 'User', '1 Admin Avenue', 'Thessaloniki', '54622', '2310123456', '1985-05-22'); admin doesnt need profile? Or maybe should have?
 
 -- Categories
 INSERT INTO categories (name, description) VALUES
@@ -629,49 +623,50 @@ INSERT INTO products (name, gender, description, tags, base_price, category_id) 
 ('Baseball Cap', 'kids', 'Adjustable cotton cap', 'cap,accessory', 14.99, 3);
 
 -- Product Variants
-INSERT INTO product_variants (product_id, color, size, sku, stock, price_adjustment) VALUES
+INSERT INTO product_variants (product_id, color, size, stock, price_adjustment) VALUES
 -- Running Shoes X1 (product_id = 1)
-(1, 'Black', '42', 'RS-X1-BLK-42', 5, 0.00),
-(1, 'Black', '43', 'RS-X1-BLK-43', 3, 0.00),
-(1, 'Black', '44', 'RS-X1-BLK-44', 1, 0.00),
-(1, 'Blue', '42', 'RS-X1-BLU-42', 4, 0.00),
-(1, 'Blue', '43', 'RS-X1-BLU-43', 6, 0.00),
-(1, 'Blue', '44', 'RS-X1-BLU-44', 2, 0.00),
+(1, 'Black', '42', 5, 0.00),
+(1, 'Black', '43', 3, 0.00),
+(1, 'Black', '44', 1, 0.00),
+(1, 'Blue', '42', 4, 0.00),
+(1, 'Blue', '43', 6, 0.00),
+(1, 'Blue', '44', 2, 0.00),
 -- Leather Boots Pro (product_id = 2)
-(2, 'Brown', '39', 'LB-PRO-BRN-39', 10, 0.00),
-(2, 'Brown', '40', 'LB-PRO-BRN-40', 8, 0.00),
-(2, 'Brown', '41', 'LB-PRO-BRN-41', 5, 0.00),
-(2, 'Black', '39', 'LB-PRO-BLK-39', 7, 10.00),
-(2, 'Black', '40', 'LB-PRO-BLK-40', 4, 10.00),
+(2, 'Brown', '39', 10, 0.00),
+(2, 'Brown', '40', 8, 0.00),
+(2, 'Brown', '41', 5, 0.00),
+(2, 'Black', '39', 7, 10.00),
+(2, 'Black', '40', 4, 10.00),
 -- Sports T-Shirt (product_id = 3)
-(3, 'Red', 'S', 'ST-RED-S', 15, 0.00),
-(3, 'Red', 'M', 'ST-RED-M', 20, 0.00),
-(3, 'Red', 'L', 'ST-RED-L', 12, 0.00),
-(3, 'Blue', 'S', 'ST-BLU-S', 10, 0.00),
-(3, 'Blue', 'M', 'ST-BLU-M', 18, 0.00),
-(3, 'Blue', 'L', 'ST-BLU-L', 8, 0.00),
+(3, 'Red', 'S', 15, 0.00),
+(3, 'Red', 'M', 20, 0.00),
+(3, 'Red', 'L', 12, 0.00),
+(3, 'Blue', 'S', 10, 0.00),
+(3, 'Blue', 'M', 18, 0.00),
+(3, 'Blue', 'L', 8, 0.00),
 -- Gym Backpack (product_id = 4)
-(4, 'Black', 'OneSize', 'GB-BLK-OS', 25, 0.00),
-(4, 'Navy', 'OneSize', 'GB-NAV-OS', 15, 0.00),
-(4, 'Red', 'OneSize', 'GB-RED-OS', 10, 5.00),
+(4, 'Black', 'OneSize', 25, 0.00),
+(4, 'Navy', 'OneSize', 15, 0.00),
+(4, 'Red', 'OneSize', 10, 5.00),
 -- Baseball Cap (product_id = 5)
-(5, 'Red', 'OneSize', 'BC-RED-OS', 30, 0.00),
-(5, 'Blue', 'OneSize', 'BC-BLU-OS', 25, 0.00),
-(5, 'White', 'OneSize', 'BC-WHT-OS', 20, 0.00);
+(5, 'Red', 'OneSize', 30, 0.00),
+(5, 'Blue', 'OneSize', 25, 0.00),
+(5, 'White', 'OneSize', 20, 0.00);
 
 -- Product Images
 INSERT INTO product_images (product_id, variant_id, url, alt_text, position, is_primary) VALUES
 -- General product images
 (1, NULL, '/images/products/running-shoes-x1-main.jpg', 'Running Shoes X1', 1, TRUE),
 (1, NULL, '/images/products/running-shoes-x1-side.jpg', 'Running Shoes X1 Side View', 2, FALSE),
+(2, NULL, '/images/products/boots-pro-main.jpg', 'Leather Boots Pro', 1, TRUE),
+(3, NULL, '/images/products/sports-tshirt-main.jpg', 'Sports T-Shirt', 1, TRUE),
+(4, NULL, '/images/products/gym-backpack-main.jpg', 'Gym Backpack', 1, TRUE),
+(5, NULL, '/images/products/baseball-cap-main.jpg', 'Baseball Cap', 1, TRUE),
 -- Variant-specific images
 (1, 1, '/images/products/running-shoes-x1-black.jpg', 'Running Shoes X1 Black', 1, TRUE),
 (1, 4, '/images/products/running-shoes-x1-blue.jpg', 'Running Shoes X1 Blue', 1, TRUE),
-(2, NULL, '/images/products/boots-pro-main.jpg', 'Leather Boots Pro', 1, TRUE),
-(2, 7, '/images/products/boots-pro-brown.jpg', 'Leather Boots Pro Brown', 1, TRUE),
-(3, NULL, '/images/products/sports-tshirt-main.jpg', 'Sports T-Shirt', 1, TRUE),
-(4, NULL, '/images/products/gym-backpack-main.jpg', 'Gym Backpack', 1, TRUE),
-(5, NULL, '/images/products/baseball-cap-main.jpg', 'Baseball Cap', 1, TRUE);
+(2, 7, '/images/products/boots-pro-brown.jpg', 'Leather Boots Pro Brown', 1, TRUE);
+
 
 -- Wishlist Items (UPDATED: χωρίς variant_id)
 INSERT INTO wishlist_items (user_id, product_id) VALUES
@@ -704,4 +699,4 @@ INSERT INTO order_details (order_id, variant_id, quantity, price_per_item) VALUE
 (3, 7, 1, 129.99),
 (3, 23, 2, 14.99);
 
-SELECT * FROM v_product_catalog;
+-- SELECT * FROM v_product_catalog;

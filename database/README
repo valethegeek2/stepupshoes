@@ -1,0 +1,12 @@
+**sql_scripts** are ran **only on the first setup** of the container.
+If you want to make any changes you will have to **delete the volume**
+and restart the container
+
+<!-- RUN commands are build time not run time
+Replace variables in init.sql and move it to initdb folder
+We do this because we don't want to expose the username and password into
+the github repo, so we load what we need from .env file
+RUN sed -i \
+    -e "s|\${MYSQL_USER}|$MYSQL_USER|g" \
+    -e "s|\${MYSQL_PASSWORD}|$MYSQL_PASSWORD|g" \
+    /docker-entrypoint-initdb.d/01_init.sql -->

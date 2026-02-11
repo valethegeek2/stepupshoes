@@ -1,4 +1,4 @@
-package com.teamstep.stepup.models.entities.views;
+package com.teamstep.stepup.models.views;
 
 import jakarta.persistence.*;
 import lombok.Getter;
