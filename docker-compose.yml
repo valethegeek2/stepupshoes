@@ -10,7 +10,7 @@ services:
       - mysql_data:/var/lib/mysql
     restart: unless-stopped
 
-  swagger-ui:
+  swagger-ui: # For OpenAPI Documentation
     image: swaggerapi/swagger-ui
     ports:
       - "9090:8080"   # host:container
