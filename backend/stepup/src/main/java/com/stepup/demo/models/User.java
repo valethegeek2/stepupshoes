@@ -3,6 +3,7 @@ package com.stepup.demo.models;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -14,6 +15,8 @@ import java.time.Instant;
 @Entity
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
+@Table(name = "users")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,8 +40,4 @@ public class User {
 
     private Instant createdAt;
 
-    public enum Role {
-        customer,
-        admin
-    }
 }

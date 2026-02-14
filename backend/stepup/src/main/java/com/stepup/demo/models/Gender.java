@@ -1,4 +1,8 @@
 package com.stepup.demo.models;
 
-public class Gender {
+public enum Gender {
+    MEN,
+    WOMEN,
+    KIDS,
+    UNISEX
 }

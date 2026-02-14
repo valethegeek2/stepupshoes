@@ -1,5 +1,6 @@
 package com.stepup.demo.models.views;
 
+import com.stepup.demo.models.Gender;
 import jakarta.persistence.*;
 import lombok.Getter;
 import org.hibernate.annotations.Immutable;
@@ -103,8 +104,4 @@ public class ProductCatalogView {
         this.inStock = inStock;
     }
 
-    // Enum για Gender
-    public enum Gender {
-        men, women, kids, unisex
-    }
 }

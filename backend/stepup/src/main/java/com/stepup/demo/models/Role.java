@@ -1,4 +1,6 @@
 package com.stepup.demo.models;
 
-public enum Roles {
+public enum Role {
+    customer,
+    admin
 }
