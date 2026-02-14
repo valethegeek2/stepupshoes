@@ -1,0 +1,40 @@
+src/main/java/com/...
+│
+├── StepUpApplication.java             (@SpringBootApplication - main class)
+│
+├── resources/                         (Configuration classes)
+│   ├── application.properties
+│
+├── controllers/                       (REST endpoints - @RestController)
+│   ├── ProductController.java         ← Εδώ θα φτιάξεις το /search
+│   ├── AuthController.java            ← Εδώ /auth/register
+│   ├── CartController.java
+│   └── OrderController.java
+│
+├── service/                           (Business logic - @Service)
+│   ├── ProductService.java            ← Search logic εδώ
+│   ├── AuthService.java
+│   └── UserService.java
+│
+├── repository/                        (Database access - @Repository / JpaRepository)
+│   ├── ProductRepository.java         ← Queries στη βάση
+│   ├── ProductCatalogViewRepository.java  ← Για το view!
+│   └── UserRepository.java
+│
+├── model/entities/                    (Database entities - @Entity)
+│   ├── Product.java
+│   ├── ProductVariant.java
+│   ├── User.java
+│   └── views/
+│       └── ProductCatalogView.java   ← Το view σου!
+│
+└── model/dtos/                         (Data Transfer Objects)
+    ├── ProductViewDTO.java           ← Response για search
+    ├── RegisterRequest.java
+    └── RegisterResponse.java
+
+Notes:
+ 1) In order to use Lombok effectively in IntelliJ IDEA, make sure to enable Annotation Processing
+ from Settings.
+ 2) For local database deployment we will use H2 database, and for remote MySQL, because we
+ use ORM, we shouldn't need to do anything, the migration should be done automatically

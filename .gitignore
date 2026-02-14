@@ -31,9 +31,6 @@ gradle-app.setting
 # Playwright
 package-lock.json
 package.json
-playwright.config.tsawait page.locator('body').click();
-await expect(page.locator('body')).toBeVisible();
-await page.goto('chrome-error://chromewebdata/');
 node_modules/
 /test-results/
 /playwright-report/
