@@ -1,6 +1,5 @@
-package com.stepup.demo.models.views;
+package com.stepup.demo.models;
 
-import com.stepup.demo.models.Product;
 import jakarta.persistence.*;
 import lombok.*;
 

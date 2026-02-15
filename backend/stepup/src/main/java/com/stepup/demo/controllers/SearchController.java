@@ -2,7 +2,6 @@ package com.stepup.demo.controllers;
 
 import com.stepup.demo.models.dtos.ProductSearchResponseDTO;
 import com.stepup.demo.services.SearchService;
-import com.stepup.demo.services.SearchServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,13 +20,14 @@ public class SearchController {
     @GetMapping("/search")
     public ResponseEntity<List<ProductSearchResponseDTO>> searchProducts(
             @RequestParam(required = false) String name,
+            @RequestParam(required = false) String tags,
             @RequestParam(required = false) String category,
             @RequestParam(required = false) String size,
             @RequestParam(required = false) String gender
     ) {
 
         return ResponseEntity.ok(
-                productService.searchProducts(name, category, size, gender)
+                productService.searchProducts(name, tags, category, size, gender)
         );
     }
 
