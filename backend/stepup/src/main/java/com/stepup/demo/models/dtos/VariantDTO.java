@@ -10,10 +10,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class VariantDTO {
-
     private Long variantId;
     private String color;
     private String size;
     private Integer stock;
     private float finalPrice;
+    private boolean is_available;
 }

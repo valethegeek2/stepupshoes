@@ -1,6 +1,5 @@
 package com.stepup.demo.models;
 
-import com.stepup.demo.models.views.ProductVariant;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -24,6 +23,7 @@ public class Product {
     @Column(columnDefinition = "TEXT")
     private String description;
 
+    @Column(length = 255)
     private String tags;
 
     private float basePrice;
@@ -31,6 +31,7 @@ public class Product {
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
+    @Column (name = "is_active")
     private Boolean isActive;
 
     @ManyToOne

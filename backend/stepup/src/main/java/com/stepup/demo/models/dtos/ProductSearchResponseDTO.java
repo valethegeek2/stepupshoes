@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
@@ -17,6 +19,7 @@ public class ProductSearchResponseDTO {
     private Long productId;
     private String name;
     private String description;
+    private String tags;
     private float basePrice;
     private String gender;
     private String category;
@@ -43,6 +46,7 @@ public class ProductSearchResponseDTO {
                 .basePrice(p.getBasePrice())
                 .gender(p.getGender().name())
                 .category(p.getCategory().getName())
+                .tags(p.getTags())
                 .variants(variants)
                 .build();
     }

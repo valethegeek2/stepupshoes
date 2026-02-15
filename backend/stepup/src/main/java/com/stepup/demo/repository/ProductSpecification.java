@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.stepup.demo.models.Gender;
 import com.stepup.demo.models.Product;
-import com.stepup.demo.models.views.ProductVariant;
+import com.stepup.demo.models.ProductVariant;
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.JoinType;
 import jakarta.persistence.criteria.Predicate;
@@ -16,6 +16,7 @@ public class ProductSpecification {
 
     public static Specification<Product> search(
             String name,
+            String tags,
             String category,
             String size,
             String gender
@@ -51,6 +52,12 @@ public class ProductSpecification {
                         root.join("variants", JoinType.INNER);
 
                 predicates.add(cb.equal(variants.get("size"), size));
+            }
+
+            if (tags != null) {
+                predicates.add(
+                        cb.like(cb.lower(root.get("tags")), "%" + tags.toLowerCase() + "%")
+                );
             }
 
             predicates.add(cb.isTrue(root.get("isActive")));
