@@ -3,11 +3,15 @@ package com.stepup.demo.services;
 import com.stepup.demo.models.Role;
 import com.stepup.demo.models.User;
 import com.stepup.demo.models.UserProfile;
+import com.stepup.demo.models.dtos.AuthResponseDTO;
+import com.stepup.demo.models.dtos.LoginRequestDTO;
 import com.stepup.demo.models.dtos.RegisterRequestDTO;
 import com.stepup.demo.models.dtos.RegisterResponse;
 import com.stepup.demo.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +19,7 @@ import java.time.Instant;
 
 @Service
 @RequiredArgsConstructor
-public class RegisterServiceImpl implements RegisterService {
+public class AuthServiceImpl implements AuthService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
@@ -56,4 +60,23 @@ public class RegisterServiceImpl implements RegisterService {
                 saved.getUsername()
         );
     }
+
+    private final AuthenticationManager authenticationManager;
+    private final JWTService jwtService;
+
+    @Override
+    public AuthResponseDTO login(LoginRequestDTO request) {
+
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        request.getUsername(),
+                        request.getPassword()
+                )
+        );
+
+        String token = jwtService.generateToken(request.getUsername());
+
+        return new AuthResponseDTO(token);
+    }
+
 }
