@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.core.Authentication;
 
 
 @RestController
@@ -31,5 +32,9 @@ public class AuthController {
     ) {
 
         return ResponseEntity.ok(authService.login(request));
+    }
+    @GetMapping("/test-auth")
+    public String test(Authentication auth) {
+        return auth.getName();
     }
 }
