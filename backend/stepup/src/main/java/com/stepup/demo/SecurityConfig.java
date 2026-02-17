@@ -14,6 +14,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
 
 @Profile("dev")
 @Configuration
@@ -22,6 +24,7 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
     private final CustomUserDetailsServiceImpl userDetailsService;
+    private final JWTAuthenticationFilter jwtAuthFilter;
 
     @Bean
     public AuthenticationManager authenticationManager(
@@ -45,8 +48,12 @@ public class SecurityConfig {
                         // Only certain endpoints require authentication
                         .requestMatchers(
                                 "/api/v1/cart/**",
-                                "/api/v1/orders/**"
+                                "/api/v1/orders/**",
+                                "/api/v1/auth/test-auth/**"
                         ).authenticated()
+
+                        // ADMIN Endpoints
+                        .requestMatchers("/api/v1/admin/**").hasRole("admin")
 
                         // Everything else is public
                         .anyRequest().permitAll()
@@ -56,7 +63,8 @@ public class SecurityConfig {
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .httpBasic(basic -> basic.disable())
-                .formLogin(login -> login.disable());
+                .formLogin(login -> login.disable())
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

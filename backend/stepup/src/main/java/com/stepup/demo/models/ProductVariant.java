@@ -28,6 +28,7 @@ public class ProductVariant {
     @ManyToOne
     @JoinColumn(name = "product_id")
     private Product product;
+
 }
 
 

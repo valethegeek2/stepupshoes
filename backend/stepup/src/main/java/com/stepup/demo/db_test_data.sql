@@ -43,9 +43,9 @@ INSERT INTO product_variants (product_id, color, size, stock, price_adjustment, 
 -- Passwords must be encoded with BCrypt if using Spring Security
 -- Example: $2a$10$... is a BCrypt hash of '1234'
 -- ====================================================
-INSERT INTO users (username, email, password, role) VALUES
-('admin', 'admin@sports.com', '$2a$10$D9F2xT8pQZXc2.3h1nIhS.6mZpH8kGz1cqlMfxZo4Qph3Ujz8y3/C', 'ADMIN'),
-('customer1', 'cust1@sports.com', '$2a$10$D9F2xT8pQZXc2.3h1nIhS.6mZpH8kGz1cqlMfxZo4Qph3Ujz8y3/C', 'CUSTOMER');
+INSERT INTO users (username, email, password, role, created_at) VALUES
+('admin', 'admin@stepup.com', '$2a$10$gImjzeDHCbKwGZo8UkKw6Olu5ZYT1W72g68sGOIWPrJlRbBRa8K86', 'ADMIN', CURRENT_TIMESTAMP), --admin123
+('customer1', 'cust1@myemail.com', '$2a$10$X/gtuhqYi9u7AT99.I6aZ.fZuQ6IyK0P.WHl2bS030TYKk8Pihl5a', 'CUSTOMER', CURRENT_TIMESTAMP); -- password
 
 -- ====================================================
 -- 5) How to add more data
