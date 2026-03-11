@@ -1,0 +1,692 @@
+/* --- Γενικές Ρυθμίσεις --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+/* --- Επάνω Μενού (Navbar) --- */
+.nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px 40px;
+    border-bottom: 1px solid #eaeaea;
+    position: sticky; 
+    top: 0; 
+    background-color: #fff;
+    z-index: 1000;
+}
+
+.nav-left {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+}
+
+.nav h1 {
+    color: #222;
+    font-size: 24px;
+}
+
+/* --- Κουμπί ΠΡΟΪΟΝΤΑ --- */
+.products-btn {
+    background-color: #f59e0b;
+    color: #111;
+    border: none;
+    padding: 10px 22px;
+    border-radius: 25px;
+    font-weight: bold;
+    font-size: 15px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: background-color 0.3s ease;
+}
+
+.products-btn:hover {
+    background-color: #d97706;
+}
+
+.products-btn i {
+    font-size: 18px;
+}
+
+/* --- Αναζήτηση --- */
+.search-container {
+    position: relative;
+    width: 45%;
+}
+
+.search-container i {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #999;
+}
+
+.search-container input {
+    width: 100%;
+    height: 42px;
+    border-radius: 25px;
+    border: 1px solid #ccc;
+    padding-left: 40px;
+    outline: none;
+    font-size: 15px;
+}
+
+/* --- Δεξί Μενού --- */
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+}
+
+.fa-heart,
+.fa-cart-shopping {
+    font-size: 22px;
+    cursor: pointer;
+    color: #333;
+    transition: color 0.3s ease;
+}
+
+.nav-right .fa-heart:hover,
+.nav-right .fa-cart-shopping:hover {
+    color: #f59e0b;
+}
+
+.nav-right p {
+    font-size: 16px;
+    cursor: pointer;
+    color: #333;
+    font-weight: 500;
+}
+
+.sign-up-btn {
+    background-color: #f59e0b;
+    color: #111;
+    border: none;
+    padding: 10px 22px;
+    border-radius: 25px;
+    font-weight: bold;
+    font-size: 15px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.sign-up-btn:hover {
+    background-color: #d97706;
+}
+
+/* =========================================
+   Mega Menu Sidebar & Subcategories
+   ========================================= */
+.mega-menu-container {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    height: 0;
+    overflow: hidden;
+    background-color: rgba(0, 0, 0, 0.4);
+    display: flex;
+    z-index: 999;
+    transition: height 0.3s ease;
+}
+
+.mega-menu-container.active {
+    height: calc(100vh - 73px);
+}
+
+.mega-menu-sidebar {
+    list-style: none;
+    width: 280px;
+    background-color: #1a3c82;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    padding-top: 10px;
+    position: relative;
+}
+
+.mega-menu-item {
+    position: static; 
+}
+
+.mega-menu-link {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 25px;
+    color: #fff;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 15px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.2s ease;
+}
+
+.mega-menu-link i {
+    font-size: 12px;
+}
+
+.mega-menu-item:hover .mega-menu-link {
+    background-color: #f4f5f7;
+    color: #1a3c82;
+}
+
+/* --- Παραθυράκι 2ου Επιπέδου (Δεξιά από το Sidebar) --- */
+.mega-menu-subpanel {
+    position: absolute;
+    top: 0;
+    left: 280px;
+    width: 400px;
+    height: 100%;
+    background-color: #f4f5f7;
+    display: none;
+    padding: 30px;
+    box-shadow: 5px 0 15px rgba(0,0,0,0.05);
+}
+
+.mega-menu-item:hover .mega-menu-subpanel {
+    display: block; 
+}
+
+.subpanel-title {
+    color: #1a3c82;
+    font-size: 18px;
+    margin-bottom: 25px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-transform: uppercase;
+}
+
+.subpanel-title i {
+    font-size: 14px;
+    color: #f59e0b;
+}
+
+.subpanel-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.subpanel-list li a {
+    color: #444;
+    text-decoration: none;
+    font-size: 15px;
+    transition: color 0.2s;
+}
+
+.subpanel-list li a:hover {
+    color: #f59e0b;
+}
+
+/* =========================================
+   Παραθυράκι 3ου Επιπέδου (Μέσα στα Παπούτσια)
+   ========================================= */
+.has-third-level {
+    position: static; 
+}
+
+/* Style για το link "Παπούτσια" ώστε να γίνεται μπλε στο hover */
+.has-third-level > a {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 15px;
+    margin: -10px -15px; /* Κρατάει τις σωστές αποστάσεις στο ul */
+    border-radius: 4px;
+}
+
+.has-third-level > a i {
+    font-size: 12px;
+}
+
+.has-third-level:hover > a {
+    background-color: #1a3c82;
+    color: #fff !important; /* Λευκά γράμματα στο hover */
+}
+
+/* Το λευκό παραθυράκι του 3ου επιπέδου */
+.third-level-panel {
+    position: absolute;
+    top: 0;
+    left: 400px; /* Εμφανίζεται αμέσως μετά το 2ο επίπεδο (που έχει width 400) */
+    width: 350px;
+    height: 100%;
+    background-color: #fff; /* Λευκό φόντο */
+    display: none; /* Αρχικά κρυμμένο */
+    padding: 30px;
+    box-shadow: 5px 0 15px rgba(0,0,0,0.05);
+    border-left: 1px solid #eaeaea; /* Λεπτή διαχωριστική γραμμή */
+    z-index: 10;
+}
+
+/* Εμφάνιση του 3ου επιπέδου όταν κάνουμε hover στο "Παπούτσια" */
+.has-third-level:hover .third-level-panel {
+    display: block;
+}
+
+/* Λίστα του 3ου επιπέδου (Τρέξιμο, Sneakers κλπ) */
+.third-level-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.third-level-list li a {
+    color: #1a3c82 !important; /* Σκούρο μπλε γράμματα όπως Intersport */
+    font-size: 15px;
+}
+
+.third-level-list li a:hover {
+    color: #f59e0b !important; /* Πορτοκαλί στο hover */
+    text-decoration: underline;
+}
+
+/* --- Κεντρική Εικόνα (Hero Section) --- */
+.hero-section {
+    position: relative;
+    margin: 20px 40px;
+}
+
+.hero-bg-img {
+    width: 100%;
+    border-radius: 15px;
+    display: block;
+}
+
+.shop-now-btn {
+    position: absolute;
+    left: 11.5%;
+    top: 62%;
+    background-color: #f59e0b;
+    color: #111;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 25px;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.shop-now-btn:hover {
+    background-color: #d97706;
+}
+
+/* --- Μπάρα Χαρακτηριστικών --- */
+.features-section {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px 40px;
+}
+
+.feature-box {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.feature-box i {
+    font-size: 24px;
+    color: #444;
+}
+
+.feature-text h4 {
+    font-size: 14px;
+    color: #222;
+    margin-bottom: 4px;
+}
+
+.feature-text p {
+    font-size: 12px;
+    color: #777;
+}
+
+/* --- Featured Products Section --- */
+.featured-products-section {
+    margin-top: 61px;
+    padding: 20px 40px 60px 40px;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.section-title {
+    font-size: 26px;
+    color: #222;
+    margin: 0;
+}
+
+.view-all {
+    color: #f59e0b;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 30px;
+}
+
+.product-card {
+    background-color: #fff;
+    border: 1px solid transparent;
+    border-radius: 10px;
+    padding: 15px;
+    transition: all 0.3s ease;
+}
+
+.product-card:hover {
+    border: 1px solid #eaeaea;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+}
+
+.img-placeholder {
+    position: relative;
+    width: 100%;
+    height: 200px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.img-placeholder img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.card-heart {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    font-size: 20px;
+    color: #555;
+    cursor: pointer;
+    transition: color 0.3s ease;
+    z-index: 2;
+}
+
+.card-heart:hover {
+    color: #f59e0b;
+}
+
+.product-info {
+    text-align: left;
+}
+
+.product-title {
+    font-size: 15px;
+    color: #222;
+    margin-bottom: 10px;
+    font-weight: 600;
+    line-height: 1.4;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.product-title:hover {
+    text-decoration: underline;
+    text-decoration-color: #f59e0b;
+    color:#f59e0b;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 4px;
+}
+
+.product-rating {
+    font-size: 12px;
+    color: #fbc02d;
+    margin-bottom: 12px;
+}
+
+.product-rating span {
+    color: #999;
+    margin-left: 5px;
+    font-size: 13px;
+}
+
+.product-price {
+    font-size: 18px;
+    color: #111;
+    font-weight: 800;
+}
+
+/* --- Categories Section (4 εικόνες στη σειρά) --- */
+.categories-section {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    padding: 20px 40px 60px 40px;
+}
+
+.category-card {
+    position: relative; 
+    width: 100%; 
+    aspect-ratio: 312 / 530;
+    background-color: #f4f5f7; 
+    border-radius: 12px; 
+    overflow: hidden; 
+}
+
+.category-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.category-btn {
+    position: absolute;
+    left: 10px; 
+    bottom: 15px; 
+    background-color: #f59e0b; 
+    color: #111;
+    border: none;
+    padding: 10px 24px;
+    border-radius: 25px; 
+    font-weight: bold;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    z-index: 2; 
+}
+
+.category-btn:hover {
+    background-color: #d97706;
+}
+
+/* --- Tabbed Products Section --- */
+.tabbed-products-section {
+    padding: 20px 40px 80px 40px;
+}
+
+.tabs-header {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.tab-btn {
+    background: transparent;
+    border: none;
+    color: #003b82;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 8px 18px;
+    transition: all 0.3s ease;
+}
+
+.tab-btn.active {
+    background-color: #f59e0b;
+    color: #fff;
+    border-radius: 5px;
+}
+
+.tab-btn:hover:not(.active) {
+    color: #f59e0b;
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active-content {
+    display: grid;
+}
+
+/* --- Top Brands Section --- */
+.top-brands-wrapper {
+    margin-top: -20px;
+}
+
+.brands-title {
+    font-size: 26px;
+    color: #000;
+    margin-left: 40px;
+    margin-bottom: 0;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+.brands-section {
+    padding-top: 20px; 
+}
+
+/* --- All Brands Banner Section --- */
+.all-brands-section {
+    padding: 20px 40px 60px 40px; 
+}
+
+.all-brands-section .section-header {
+    margin-bottom: 20px; 
+}
+
+.all-brands-section .section-title {
+    font-size: 26px;
+    color: #111;
+    margin: 0;
+}
+
+.brands-banner-img {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.brands-banner-img img {
+    width: 100%; 
+    height: auto; 
+    display: block;
+}
+
+/* --- Footer Section --- */
+.footer {
+    padding: 60px 40px 20px 40px;
+    background-color: #fff;
+    border-top: 1px solid #eaeaea;
+}
+
+.footer-top {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    margin-bottom: 40px;
+}
+
+.footer-col {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.footer-logo {
+    font-size: 24px;
+    font-weight: 800;
+    color: #222;
+    margin-bottom: 30px;
+}
+
+.footer-logo .dot {
+    color: #f59e0b;
+}
+
+.footer-contact-col {
+    max-width: 250px;
+    gap: 15px;
+}
+
+.contact-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.contact-item i {
+    color: #555;
+    font-size: 16px;
+}
+
+.contact-item p {
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.footer-col h4 {
+    font-size: 16px;
+    color: #111;
+    margin-bottom: 15px;
+}
+
+.footer-col p {
+    font-size: 13px;
+    color: #666;
+}
+
+.payment-icons {
+    display: flex;
+    gap: 10px;
+    font-size: 28px;
+}
+
+.follow-title {
+    margin-top: 20px;
+}
+
+.footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid #eaeaea;
+    padding-top: 20px;
+}
+
+.footer-bottom p {
+    font-size: 12px;
+    color: #999;
+}
+
+.legal-links p {
+    word-spacing: 2px;
+}
