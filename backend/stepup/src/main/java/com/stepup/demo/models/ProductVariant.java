@@ -1,5 +1,6 @@
 package com.stepup.demo.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -20,12 +21,12 @@ public class ProductVariant {
     private String color;
     private String size;
     private Integer stock;
-
     private float priceAdjustment;
-
     private Boolean isAvailable;
+    private String variantImage;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY,  cascade = CascadeType.ALL)
+    @JsonIgnore
     @JoinColumn(name = "product_id")
     private Product product;
 
