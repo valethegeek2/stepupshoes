@@ -1,10 +1,48 @@
 "use client";
 import { useState } from "react";
 import Link from "next/link";
+import ProductCard from "../components/ProductCard";
 
 export default function Home() {
-  // State για τα Tabs των προϊόντων
   const [activeTab, setActiveTab] = useState("mens-products");
+
+  // --- Προσωρινά Στατικά Δεδομένα για την Αρχική ---
+  // (Μέχρι να συνδέσουμε τα δικά σου mock data)
+
+  const featuredProducts = [
+    { id: 1, title: "Pro Running Shoes High Quality Value Buy", price: "89.99", reviews: 50, rating: 5 },
+    { id: 2, title: "Dry-Fit Training T-Shirt Breathable", price: "29.99", reviews: 120, rating: 4.5 },
+    { id: 3, title: "Athletic Jogger Pants For Men Ultra HD", price: "45.00", reviews: 100, rating: 4 },
+    { id: 4, title: "Waterproof Gym Bag with Flash Pocket", price: "35.50", reviews: 70, rating: 5 }
+  ];
+
+  const mensProducts = [
+    { id: 5, title: "Ανδρικά Παπούτσια Τρεξίματος", price: "120.00", reviews: 85, rating: 5 },
+    { id: 6, title: "Ανδρικό Αθλητικό Μπουφάν", price: "95.00", reviews: 42, rating: 4.5 },
+    { id: 7, title: "Ανδρικά Sneakers", price: "65.00", reviews: 110, rating: 4 },
+    { id: 8, title: "Ανδρικό Παντελόνι Φόρμας", price: "45.00", reviews: 24, rating: 5 }
+  ];
+
+  const womensProducts = [
+    { id: 9, title: "Γυναικείο Κολάν Προπόνησης", price: "40.00", reviews: 60, rating: 5 },
+    { id: 10, title: "Γυναικεία Αθλητικά Παπούτσια", price: "110.00", reviews: 130, rating: 5 },
+    { id: 11, title: "Γυναικείο Αθλητικό Μπουστάκι", price: "25.00", reviews: 35, rating: 3.5 },
+    { id: 12, title: "Γυναικεία Τσάντα Γυμναστηρίου", price: "55.00", reviews: 45, rating: 5 }
+  ];
+
+  const kidsProducts = [
+    { id: 13, title: "Παιδικά Παπούτσια Μπάσκετ", price: "60.00", reviews: 20, rating: 4 },
+    { id: 14, title: "Παιδικό Σετ Φόρμας", price: "35.00", reviews: 55, rating: 5 },
+    { id: 15, title: "Παιδικό T-Shirt Βαμβακερό", price: "15.00", reviews: 15, rating: 3.5 },
+    { id: 16, title: "Παιδικό Μπουφάν Αντιανεμικό", price: "50.00", reviews: 32, rating: 5 }
+  ];
+
+  const featuredShoes = [
+    { id: 17, title: "Nike Air Zoom Running Shoes", price: "129.99", reviews: 150, rating: 5 },
+    { id: 18, title: "Adidas Pro Basketball Shoes", price: "145.00", reviews: 95, rating: 4.5 },
+    { id: 19, title: "ASICS Trail Running Shoes", price: "110.00", reviews: 80, rating: 4 },
+    { id: 20, title: "Puma Daily Training Sneakers", price: "85.50", reviews: 210, rating: 5 }
+  ];
 
   return (
     <>
@@ -52,69 +90,13 @@ export default function Home() {
       <div className="featured-products-section">
           <div className="section-header">
               <h2 className="section-title">Featured Products</h2>
-              <a href="#" className="view-all">View All &rarr;</a>
+              <a href="/products" className="view-all">View All &rarr;</a>
           </div>
           
           <div className="product-grid">
-              <div className="product-card">
-                  <div className="img-placeholder">
-                      <i className="fa-regular fa-heart card-heart"></i>
-                      <img src="" alt="Product 1" />
-                  </div>
-                  <div className="product-info">
-                      <h3 className="product-title">Pro Running Shoes High Quality Value Buy</h3>
-                      <div className="product-rating">
-                          <i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i>
-                          <span>(50)</span>
-                      </div>
-                      <p className="product-price">$89.99</p>
-                  </div>
-              </div>
-
-              <div className="product-card">
-                  <div className="img-placeholder">
-                      <i className="fa-regular fa-heart card-heart"></i>
-                      <img src="" alt="Product 2" />
-                  </div>
-                  <div className="product-info">
-                      <h3 className="product-title">Dry-Fit Training T-Shirt Breathable</h3>
-                      <div className="product-rating">
-                          <i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star-half-stroke"></i>
-                          <span>(120)</span>
-                      </div>
-                      <p className="product-price">$29.99</p>
-                  </div>
-              </div>
-
-              <div className="product-card">
-                  <div className="img-placeholder">
-                      <i className="fa-regular fa-heart card-heart"></i>
-                      <img src="" alt="Product 3" />
-                  </div>
-                  <div className="product-info">
-                      <h3 className="product-title">Athletic Jogger Pants For Men Ultra HD</h3>
-                      <div className="product-rating">
-                          <i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-regular fa-star"></i>
-                          <span>(100)</span>
-                      </div>
-                      <p className="product-price">$45.00</p>
-                  </div>
-              </div>
-
-              <div className="product-card">
-                  <div className="img-placeholder">
-                      <i className="fa-regular fa-heart card-heart"></i>
-                      <img src="" alt="Product 4" />
-                  </div>
-                  <div className="product-info">
-                      <h3 className="product-title">Waterproof Gym Bag with Flash Pocket</h3>
-                      <div className="product-rating">
-                          <i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i>
-                          <span>(70)</span>
-                      </div>
-                      <p className="product-price">$35.50</p>
-                  </div>
-              </div>
+              {featuredProducts.map((prod) => (
+                  <ProductCard key={prod.id} product={prod} />
+              ))}
           </div>
       </div>
 
@@ -126,21 +108,18 @@ export default function Home() {
                 <button className="category-btn">Shop Now</button>
               </Link>
           </div>
-
           <div className="category-card">
               <img src="γυναικεια.png" alt="Women" className="category-img" />
               <Link href="/products">
                 <button className="category-btn">Shop Now</button>
               </Link>
           </div>
-
           <div className="category-card">
               <img src="αγορι.png" alt="Boys" className="category-img" />
               <Link href="/products">
                 <button className="category-btn">Shop Now</button>
               </Link>
           </div>
-
           <div className="category-card">
               <img src="κοριτσι.png" alt="Girls" className="category-img" />
               <Link href="/products">
@@ -151,7 +130,6 @@ export default function Home() {
 
       {/* Tabbed Products Section */}
       <div className="tabbed-products-section">
-          
           <div className="tabs-header">
               <button 
                 className={`tab-btn ${activeTab === 'mens-products' ? 'active' : ''}`} 
@@ -175,110 +153,23 @@ export default function Home() {
 
           {/* Tab 1: Ανδρικά */}
           <div className={`product-grid tab-content ${activeTab === 'mens-products' ? 'active-content' : ''}`}>
-              <div className="product-card">
-                  <div className="img-placeholder"><i className="fa-regular fa-heart card-heart"></i><img src="" alt="" /></div>
-                  <div className="product-info">
-                      <h3 className="product-title">Ανδρικά Παπούτσια Τρεξίματος</h3>
-                      <div className="product-rating"><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><span>(85)</span></div>
-                      <p className="product-price">$120.00</p>
-                  </div>
-              </div>
-              <div className="product-card">
-                  <div className="img-placeholder"><i className="fa-regular fa-heart card-heart"></i><img src="" alt="" /></div>
-                  <div className="product-info">
-                      <h3 className="product-title">Ανδρικό Αθλητικό Μπουφάν</h3>
-                      <div className="product-rating"><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star-half-stroke"></i><span>(42)</span></div>
-                      <p className="product-price">$95.00</p>
-                  </div>
-              </div>
-              <div className="product-card">
-                  <div className="img-placeholder"><i className="fa-regular fa-heart card-heart"></i><img src="" alt="" /></div>
-                  <div className="product-info">
-                      <h3 className="product-title">Ανδρικά Sneakers</h3>
-                      <div className="product-rating"><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-regular fa-star"></i><span>(110)</span></div>
-                      <p className="product-price">$65.00</p>
-                  </div>
-              </div>
-              <div className="product-card">
-                  <div className="img-placeholder"><i className="fa-regular fa-heart card-heart"></i><img src="" alt="" /></div>
-                  <div className="product-info">
-                      <h3 className="product-title">Ανδικό Παντελόνι Φόρμας</h3>
-                      <div className="product-rating"><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><span>(24)</span></div>
-                      <p className="product-price">$45.00</p>
-                  </div>
-              </div>
+              {mensProducts.map((prod) => (
+                  <ProductCard key={prod.id} product={prod} />
+              ))}
           </div>
 
           {/* Tab 2: Γυναικεία */}
           <div className={`product-grid tab-content ${activeTab === 'womens-products' ? 'active-content' : ''}`}>
-              <div className="product-card">
-                  <div className="img-placeholder"><i className="fa-regular fa-heart card-heart"></i><img src="" alt="" /></div>
-                  <div className="product-info">
-                      <h3 className="product-title">Γυναικείο Κολάν Προπόνησης</h3>
-                      <div className="product-rating"><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><span>(60)</span></div>
-                      <p className="product-price">$40.00</p>
-                  </div>
-              </div>
-              <div className="product-card">
-                  <div className="img-placeholder"><i className="fa-regular fa-heart card-heart"></i><img src="" alt="" /></div>
-                  <div className="product-info">
-                      <h3 className="product-title">Γυναικεία Αθλητικά Παπούτσια</h3>
-                      <div className="product-rating"><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><span>(130)</span></div>
-                      <p className="product-price">$110.00</p>
-                  </div>
-              </div>
-              <div className="product-card">
-                  <div className="img-placeholder"><i className="fa-regular fa-heart card-heart"></i><img src="" alt="" /></div>
-                  <div className="product-info">
-                      <h3 className="product-title">Γυναικείο Αθλητικό Μπουστάκι</h3>
-                      <div className="product-rating"><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star-half-stroke"></i><i className="fa-regular fa-star"></i><span>(35)</span></div>
-                      <p className="product-price">$25.00</p>
-                  </div>
-              </div>
-              <div className="product-card">
-                  <div className="img-placeholder"><i className="fa-regular fa-heart card-heart"></i><img src="" alt="" /></div>
-                  <div className="product-info">
-                      <h3 className="product-title">Γυναικεία Τσάντα Γυμναστηρίου</h3>
-                      <div className="product-rating"><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><span>(45)</span></div>
-                      <p className="product-price">$55.00</p>
-                  </div>
-              </div>
+               {womensProducts.map((prod) => (
+                  <ProductCard key={prod.id} product={prod} />
+              ))}
           </div>
 
           {/* Tab 3: Παιδικά */}
           <div className={`product-grid tab-content ${activeTab === 'kids-products' ? 'active-content' : ''}`}>
-              <div className="product-card">
-                  <div className="img-placeholder"><i className="fa-regular fa-heart card-heart"></i><img src="" alt="" /></div>
-                  <div className="product-info">
-                      <h3 className="product-title">Παιδικά Παπούτσια Μπάσκετ</h3>
-                      <div className="product-rating"><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-regular fa-star"></i><span>(20)</span></div>
-                      <p className="product-price">$60.00</p>
-                  </div>
-              </div>
-              <div className="product-card">
-                  <div className="img-placeholder"><i className="fa-regular fa-heart card-heart"></i><img src="" alt="" /></div>
-                  <div className="product-info">
-                      <h3 className="product-title">Παιδικό Σετ Φόρμας</h3>
-                      <div className="product-rating"><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><span>(55)</span></div>
-                      <p className="product-price">$35.00</p>
-                  </div>
-              </div>
-              <div className="product-card">
-                  <div className="img-placeholder"><i className="fa-regular fa-heart card-heart"></i><img src="" alt="" /></div>
-                  <div className="product-info">
-                      <h3 className="product-title">Παιδικό T-Shirt Βαμβακερό</h3>
-                      <div className="product-rating"><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star-half-stroke"></i><i className="fa-regular fa-star"></i><span>(15)</span></div>
-                      <p className="product-price">$15.00</p>
-                  </div>
-              </div>
-              <div className="product-card">
-                  <div className="img-placeholder"><i className="fa-regular fa-heart card-heart"></i><img src="" alt="" /></div>
-                  <div className="product-info">
-                      <h3 className="product-title">Παιδικό Μπουφάν Αντιανεμικό</h3>
-                      <div className="product-rating"><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><span>(32)</span></div>
-                      <p className="product-price">$50.00</p>
-                  </div>
-              </div>
+               {kidsProducts.map((prod) => (
+                  <ProductCard key={prod.id} product={prod} />
+              ))}
           </div>
       </div>
 
@@ -310,69 +201,13 @@ export default function Home() {
       <div className="featured-products-section">
           <div className="section-header">
               <h2 className="section-title">Shoes</h2>
-              <a href="#" className="view-all">View All &rarr;</a>
+              <a href="/products" className="view-all">View All &rarr;</a>
           </div>
           
           <div className="product-grid">
-              <div className="product-card">
-                  <div className="img-placeholder">
-                      <i className="fa-regular fa-heart card-heart"></i>
-                      <img src="" alt="Running Shoes" />
-                  </div>
-                  <div className="product-info">
-                      <h3 className="product-title">Nike Air Zoom Running Shoes</h3>
-                      <div className="product-rating">
-                          <i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i>
-                          <span>(150)</span>
-                      </div>
-                      <p className="product-price">$129.99</p>
-                  </div>
-              </div>
-
-              <div className="product-card">
-                  <div className="img-placeholder">
-                      <i className="fa-regular fa-heart card-heart"></i>
-                      <img src="" alt="Basketball Shoes" />
-                  </div>
-                  <div className="product-info">
-                      <h3 className="product-title">Adidas Pro Basketball Shoes</h3>
-                      <div className="product-rating">
-                          <i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star-half-stroke"></i>
-                          <span>(95)</span>
-                      </div>
-                      <p className="product-price">$145.00</p>
-                  </div>
-              </div>
-
-              <div className="product-card">
-                  <div className="img-placeholder">
-                      <i className="fa-regular fa-heart card-heart"></i>
-                      <img src="" alt="Trail Running Shoes" />
-                  </div>
-                  <div className="product-info">
-                      <h3 className="product-title">ASICS Trail Running Shoes</h3>
-                      <div className="product-rating">
-                          <i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-regular fa-star"></i>
-                          <span>(80)</span>
-                      </div>
-                      <p className="product-price">$110.00</p>
-                  </div>
-              </div>
-
-              <div className="product-card">
-                  <div className="img-placeholder">
-                      <i className="fa-regular fa-heart card-heart"></i>
-                      <img src="" alt="Training Shoes" />
-                  </div>
-                  <div className="product-info">
-                      <h3 className="product-title">Puma Daily Training Sneakers</h3>
-                      <div className="product-rating">
-                          <i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i>
-                          <span>(210)</span>
-                      </div>
-                      <p className="product-price">$85.50</p>
-                  </div>
-              </div>
+              {featuredShoes.map((prod) => (
+                  <ProductCard key={prod.id} product={prod} />
+              ))}
           </div>
       </div>
 
