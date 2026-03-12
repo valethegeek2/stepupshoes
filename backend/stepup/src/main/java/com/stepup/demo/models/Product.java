@@ -1,5 +1,6 @@
 package com.stepup.demo.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -19,14 +20,16 @@ public class Product {
     private Long productId;
 
     private String name;
-
-    @Column(columnDefinition = "TEXT")
     private String description;
+    private String brand;
+    private String productImage; // Save image filename
 
     @Column(length = 255)
     private String tags;
-
     private float basePrice;
+
+    private Long reviews;
+    private Long rating;
 
     @Enumerated(EnumType.STRING)
     private Gender gender;
@@ -34,10 +37,10 @@ public class Product {
     @Column (name = "is_active")
     private Boolean isActive;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "category_id")
     private Category category;
 
-    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<ProductVariant> variants;
 }

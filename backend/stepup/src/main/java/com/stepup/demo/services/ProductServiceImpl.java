@@ -6,13 +6,20 @@ import com.stepup.demo.models.Product;
 import com.stepup.demo.models.ProductVariant;
 import com.stepup.demo.models.dtos.ProductSearchResponseDTO;
 import com.stepup.demo.models.dtos.VariantDTO;
+import com.stepup.demo.repository.CategoryRepository;
 import com.stepup.demo.repository.ProductRepository;
 import com.stepup.demo.repository.ProductSpecification;
 import com.stepup.demo.repository.ProductVariantRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import jakarta.transaction.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -20,11 +27,16 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Transactional
-
-public class ProductServiceImpl {
+public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
     private final ProductVariantRepository productVariantRepository;
+
+    @Autowired
+    private FileService fileService;
+
+    @Value("${project.image}")
+    private String path;
 
 
     @Override
@@ -129,6 +141,29 @@ public class ProductServiceImpl {
             throw new EntityNotFoundException("Variant not found with id: " + variantId);
         }
         productVariantRepository.deleteById(variantId);
+    }
+
+    @Override
+    public Product updateProductImage(Long productId, MultipartFile image) throws IOException {
+        // Get the product from DB
+        Product productFromDB = productRepository.findById(productId)
+                .orElseThrow(() -> new EntityNotFoundException("Product not found with productId="+ productId));
+        // Upload image to server (into a /image dir)
+        // Get the filename of uploaded image
+        //String path = "./images";
+        String filename = fileService.uploadImage(path, image);
+        // Update the new filename to the product
+        productFromDB.setProductImage(filename);
+        // Save product
+        Product savedProduct = productRepository.save(productFromDB);
+
+        return savedProduct;
+    }
+
+    @Override
+    public List<String> getAllProductImages() {
+        List<String> imagesList = productRepository.findAllProductImages();
+        return imagesList;
     }
 
     private ProductSearchResponseDTO mapToDto(Product p) {

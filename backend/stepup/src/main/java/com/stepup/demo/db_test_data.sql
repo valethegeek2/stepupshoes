@@ -3,10 +3,10 @@
 -- Each product belongs to a category.
 -- Add more categories later by copying the INSERT line.
 -- ====================================================
-INSERT INTO categories (name, description) VALUES
-('Shoes', 'All types of running, casual, and sports shoes'),
-('Clothing', 'Sportswear: t-shirts, jackets, hoodies'),
-('Accessories', 'Bags, socks, hats, sports accessories');
+INSERT INTO categories (name) VALUES
+('Shoes'),
+('Clothing'),
+('Accessories');
 
 -- ====================================================
 -- 2) Products
