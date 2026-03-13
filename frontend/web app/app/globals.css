@@ -833,3 +833,183 @@
 .pagination-select:focus {
     border-color: #000;
 }
+
+
+/* =========================================
+   Navbar Badge (Το 9+)
+   ========================================= */
+.nav-icon-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: #333;
+}
+
+.icon-badge {
+    position: absolute;
+    top: -8px;
+    right: -10px;
+    background-color: #d10000;
+    color: #fff;
+    font-size: 10px;
+    font-weight: bold;
+    border-radius: 50%;
+    width: 18px;
+    height: 18px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* =========================================
+   Wishlist Page Layout (Από φωτογραφία Intersport)
+   ========================================= */
+.wishlist-container {
+    padding: 20px 40px 80px 40px;
+    max-width: 1600px;
+    margin: 0 auto;
+}
+
+.wishlist-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+    margin-bottom: 30px;
+}
+
+.wishlist-page-title {
+    font-size: 32px;
+    color: #1a3c82;
+    margin: 0;
+}
+
+/* Πράσινα Κουμπιά (Add to cart) */
+.add-all-cart-btn, .add-to-cart-btn {
+    background-color: #2bd67b;
+    color: #fff;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 25px;
+    font-weight: bold;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.add-all-cart-btn:hover, .add-to-cart-btn:hover {
+    background-color: #24b869;
+}
+
+/* Επικεφαλίδες Πίνακα (Προϊόν - Τιμή) */
+.wishlist-table-header {
+    display: flex;
+    border-bottom: 2px solid #1a3c82;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+.col-product {
+    flex: 1;
+    font-weight: bold;
+    color: #1a3c82;
+    font-size: 16px;
+}
+
+.col-price {
+    width: 400px; /* Για να ευθυγραμμιστεί με τα δεξιά */
+    font-weight: bold;
+    color: #1a3c82;
+    font-size: 16px;
+}
+
+/* Οι γραμμές των προϊόντων */
+.wishlist-item-row {
+    display: flex;
+    align-items: center;
+    padding: 20px 0;
+    border-bottom: 2px solid #1a3c82;
+}
+
+.wishlist-item-left {
+    flex: 1;
+    display: flex;
+    gap: 20px;
+}
+
+.wishlist-img-box {
+    width: 120px;
+    height: 120px;
+    background-color: #f8f9fa;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.wishlist-img-box img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.wishlist-item-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+}
+
+.wishlist-item-brand {
+    color: #1a3c82;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.wishlist-item-name {
+    color: #1a3c82;
+    font-size: 14px;
+    text-decoration: none;
+}
+
+.wishlist-item-name:hover {
+    text-decoration: underline;
+}
+
+.wishlist-item-attr {
+    color: #666;
+    font-size: 12px;
+    margin-top: 5px;
+}
+
+.wishlist-item-price {
+    width: 150px;
+    font-size: 18px;
+    font-weight: bold;
+    color: #1a3c82;
+}
+
+.wishlist-item-actions {
+    width: 250px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.remove-item-btn {
+    background: none;
+    border: none;
+    color: #666;
+    font-size: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: color 0.2s;
+}
+
+.remove-item-btn:hover {
+    color: #d10000;
+}

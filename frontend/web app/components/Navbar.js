@@ -1,12 +1,20 @@
 "use client";
 import { useState } from "react";
 import Link from "next/link";
+// Το νέο import για να μιλάει το Navbar με τη Wishlist
+import { useWishlist } from "../context/WishlistContext"; 
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   // Μια μικρή συνάρτηση για να κλείνει το μενού όταν πατάμε ένα link
   const closeMenu = () => setIsMenuOpen(false);
+
+  // --- ΝΕΟ: Διαβάζουμε πόσα αντικείμενα έχει η Wishlist ---
+  const { wishlist } = useWishlist();
+  const wishlistCount = wishlist?.length || 0; 
+  // Αν είναι πάνω από 9, δείξε "9+"
+  const displayCount = wishlistCount > 9 ? "9+" : wishlistCount;
 
   return (
     <div className="nav">
@@ -29,7 +37,12 @@ export default function Navbar() {
       </div>
 
       <div className="nav-right">
-        <i className="fa-regular fa-heart"></i>
+        {/* --- ΝΕΟ: Η καρδιά που σε πάει στη Wishlist και έχει το σηματάκι (Badge) --- */}
+        <Link href="/wishlist" className="nav-icon-wrapper" onClick={closeMenu}>
+          <i className="fa-regular fa-heart"></i>
+          {wishlistCount > 0 && <span className="icon-badge">{displayCount}</span>}
+        </Link>
+
         <i className="fa-solid fa-cart-shopping"></i>
         <p>Sign In</p>
         <button className="sign-up-btn">Sign Up</button>
