@@ -2,6 +2,7 @@ package com.stepup.demo.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 
 import java.util.Set;
@@ -29,7 +30,8 @@ public class Product {
     private float basePrice;
 
     private Long reviews;
-    private Long rating;
+
+    private float rating;
 
     @Enumerated(EnumType.STRING)
     private Gender gender;

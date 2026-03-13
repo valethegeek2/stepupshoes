@@ -47,6 +47,7 @@ public class ProductController {
     ) {
         return ResponseEntity.ok(productService.searchProducts(name, tags, category, size, gender));
     }
+    
 
 
     @PostMapping

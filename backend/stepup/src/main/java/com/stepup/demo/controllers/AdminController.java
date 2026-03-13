@@ -1,20 +1,20 @@
 package com.stepup.demo.controllers;
 
 import com.stepup.demo.AppConstants;
-import com.stepup.demo.models.Category;
-import com.stepup.demo.models.Product;
-import com.stepup.demo.models.dtos.PagedResponse;
-import com.stepup.demo.services.AdminService;
-import com.stepup.demo.services.CategoryService;
-import com.stepup.demo.services.ProductService;
+import com.stepup.demo.models.*;
+import com.stepup.demo.models.dtos.*;
+import com.stepup.demo.services.*;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -28,25 +28,45 @@ public class AdminController {
     private ProductService productService;
     @Autowired
     private CategoryService categoryService;
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private AuthService authService;
+    @Autowired
+    private ModelMapper modelMapper;
 
     // ======================== PRODUCTS ==============================
     @GetMapping("/products")
-    public ResponseEntity<PagedResponse<Product, Long>> getAllProducts(
+    public ResponseEntity<PagedResponse<ProductDTO, Long>> getAllProducts(
             @RequestParam(name="pageNumber", defaultValue = AppConstants.PAGE_NUMBER, required = false) Integer pageNumber,
             @RequestParam(name="pageSize", defaultValue = AppConstants.PAGE_SIZE, required = false) Integer pageSize,
             @RequestParam(name="sortBy", defaultValue = AppConstants.SORT_PRODUCTS_BY, required = false) String sortBy,
             @RequestParam(name="sortOrder", defaultValue = AppConstants.SORT_ORDER, required = false) String sortOrder
     ) {
-        return ResponseEntity.ok(adminService.getAllProducts(pageNumber, pageSize, sortBy, sortOrder));
+        PagedResponse<Product, Long> pagedResponse = adminService.getAllProducts(pageNumber, pageSize, sortBy, sortOrder);
+        PagedResponse<ProductDTO, Long> dtoResponse = new  PagedResponse<>();
+        dtoResponse.setContents(pagedResponse.getContents().stream()
+                .map(product -> modelMapper.map(product, ProductDTO.class))
+                .toList());
+        dtoResponse.setPageNumber(pagedResponse.getPageNumber());
+        dtoResponse.setPageSize(pagedResponse.getPageSize());
+        dtoResponse.setTotalElements(pagedResponse.getTotalElements());
+        dtoResponse.setTotalPages(pagedResponse.getTotalPages());
+        dtoResponse.setLastPage(pagedResponse.isLastPage());
+        return new ResponseEntity<>(dtoResponse, HttpStatus.OK);
     }
     @PostMapping("/products")
-    public ResponseEntity<Product> createProduct(@RequestBody Product product) {
-        return new ResponseEntity<>(productService.createProduct(product), HttpStatus.CREATED);
+    public ResponseEntity<ProductDTO> createProduct(@RequestBody ProductDTO productDTO) {
+        Product product = modelMapper.map(productDTO, Product.class);
+        ProductDTO response = modelMapper.map(productService.createProduct(product), ProductDTO.class);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @PutMapping("/products/{productId}")
-    public ResponseEntity<Product> updateProduct(@RequestBody Product product, @PathVariable long productId) {
-        return new ResponseEntity<>(productService.updateProduct(productId, product), HttpStatus.OK);
+    public ResponseEntity<ProductDTO> updateProduct(@RequestBody ProductDTO productDTO, @PathVariable long productId) {
+        Product updatedProduct = modelMapper.map(productDTO, Product.class);
+        ProductDTO response = modelMapper.map(productService.updateProduct(productId, updatedProduct), ProductDTO.class);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @DeleteMapping("/products/{productId}")
@@ -55,7 +75,7 @@ public class AdminController {
         return new ResponseEntity<>(productId, HttpStatus.OK);
     }
 
-    @PutMapping("/products/{productId}/image")
+    @PutMapping("/products/images")
     public ResponseEntity<Product> uploadImage(
             @PathVariable Long productId,
             @RequestParam("image") MultipartFile image) throws IOException {
@@ -67,36 +87,115 @@ public class AdminController {
     public ResponseEntity<List<String>> getAllProductImages() {
         List<String> listOfImages = productService.getAllProductImages();
 
-        return new ResponseEntity<List<String>>(listOfImages,  HttpStatus.OK);
+        return new ResponseEntity<>(listOfImages,  HttpStatus.OK);
     }
 
     // ===============================================================
 
+    // =================== PRODUCT VARIANTS ==========================
+
+    @GetMapping("/products/{productId}/productVariants")
+    public ResponseEntity<PagedResponse<VariantDTO, Long>> getAllProductVariants(@PathVariable long productId) {
+
+        return null;
+    }
+
+
     // ======================== CATEGORIES ===========================
     @GetMapping("/categories")
-    public ResponseEntity<PagedResponse<Category, Long>> getAllCategories(
+    public ResponseEntity<PagedResponse<CategoryDTO, Long>> getAllCategories(
             @RequestParam(name="pageNumber", defaultValue = AppConstants.PAGE_NUMBER, required = false) Integer pageNumber,
             @RequestParam(name="pageSize", defaultValue = AppConstants.PAGE_SIZE, required = false) Integer pageSize,
-            @RequestParam(name="sortBy", defaultValue = AppConstants.SORT_PRODUCTS_BY, required = false) String sortBy,
+            @RequestParam(name="sortBy", defaultValue = AppConstants.SORT_CATEGORIES_BY, required = false) String sortBy,
             @RequestParam(name="sortOrder", defaultValue = AppConstants.SORT_ORDER, required = false) String sortOrder
     ) {
-        return ResponseEntity.ok(adminService.getAllCategories(pageNumber, pageSize, sortBy, sortOrder));
+        PagedResponse<Category, Long> categoriesResponse = adminService.getAllCategories(pageNumber, pageSize, sortBy, sortOrder);
+        PagedResponse<CategoryDTO, Long> dtoResponse =  new  PagedResponse<>();
+        dtoResponse.setContents(categoriesResponse.getContents()
+                .stream()
+                .map(category -> modelMapper.map(category, CategoryDTO.class))
+                .toList());
+        return new ResponseEntity<>(dtoResponse, HttpStatus.OK);
     }
-    @PostMapping("/category")
-    public ResponseEntity<Category> createCategory(@RequestBody Category category) {
-        return new ResponseEntity<>(categoryService.createCategory(category), HttpStatus.CREATED);
+    @PostMapping("/categories")
+    public ResponseEntity<CategoryDTO> createCategory(@RequestBody CategoryDTO category) {
+        Category newCategory = modelMapper.map(category, Category.class);
+        CategoryDTO response = modelMapper.map(categoryService.createCategory(newCategory),  CategoryDTO.class);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
-    @PutMapping("/category/{categoryId}")
-    public ResponseEntity<Category> updateCategory(@RequestBody Category category, @PathVariable long categoryId) {
-        return new ResponseEntity<>(categoryService.updateCategory(category, categoryId), HttpStatus.OK);
+    @PutMapping("/categories/{categoryId}")
+    public ResponseEntity<CategoryDTO> updateCategory(@RequestBody CategoryDTO category, @PathVariable long categoryId) {
+        Category updateCategory = modelMapper.map(category, Category.class);
+        CategoryDTO response = modelMapper.map(categoryService.updateCategory(updateCategory, categoryId), CategoryDTO.class);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @DeleteMapping("/category/{categoryId}")
+    @DeleteMapping("/categories/{categoryId}")
     public ResponseEntity<HttpStatus> deleteCategory(@PathVariable long categoryId) {
         categoryService.deleteCategory(categoryId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
     // ===============================================================
+
+    // ======================== USERS ===========================
+    @GetMapping("/users")
+    public ResponseEntity<PagedResponse<UserDTO, Long>> getAllUsers(
+            @RequestParam(name="pageNumber", defaultValue = AppConstants.PAGE_NUMBER, required = false) Integer pageNumber,
+            @RequestParam(name="pageSize", defaultValue = AppConstants.PAGE_SIZE, required = false) Integer pageSize,
+            @RequestParam(name="sortBy", defaultValue = AppConstants.SORT_USERS_BY, required = false) String sortBy,
+            @RequestParam(name="sortOrder", defaultValue = AppConstants.SORT_ORDER, required = false) String sortOrder
+    ) {
+        PagedResponse<User, Long> usersList = userService.getAllUsers(pageNumber, pageSize, sortBy, sortOrder);
+        PagedResponse<UserDTO, Long> dtoResponse =  new  PagedResponse<>();
+        dtoResponse.setContents(usersList.getContents().stream().map(user -> modelMapper.map(user, UserDTO.class)).toList());
+        dtoResponse.setTotalPages(usersList.getTotalPages());
+        dtoResponse.setTotalElements(usersList.getTotalElements());
+        dtoResponse.setPageSize(usersList.getPageSize());
+        dtoResponse.setPageNumber(usersList.getPageNumber());
+        dtoResponse.setLastPage(usersList.isLastPage());
+        return new ResponseEntity<>(dtoResponse, HttpStatus.OK);
+    }
+    @GetMapping("/users/roles")
+    public ResponseEntity<List<Role>> getAllRoles() {
+        return new ResponseEntity<>(Arrays.stream(Role.values()).toList(), HttpStatus.OK);
+    }
+    @PostMapping("/users")
+    public ResponseEntity<RegisterResponse> createUser(@RequestBody RegisterRequestDTO registerRequestDTO) {
+        return new ResponseEntity<>(authService.register(registerRequestDTO), HttpStatus.CREATED);
+    }
+
+    @PutMapping("/users/{userId}")
+    public ResponseEntity<UserDTO> updateUser(@RequestBody UserDTO user, @PathVariable long userId) {
+        User newUser = modelMapper.map(user, User.class);
+        UserDTO response = modelMapper.map(userService.updateUser(newUser, userId), UserDTO.class);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/users/{userId}")
+    public ResponseEntity<HttpStatus> deleteUser(@PathVariable long userId) {
+        userService.deleteUser(userId);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+    // ===============================================================
+
+
+    // ======================== USER PROFILES ===========================
+    @GetMapping("/users/profiles")
+    public ResponseEntity<PagedResponse<UserProfile, Long>> getAllUserProfiles(
+            @RequestParam(name="pageNumber", defaultValue = AppConstants.PAGE_NUMBER, required = false) Integer pageNumber,
+            @RequestParam(name="pageSize", defaultValue = AppConstants.PAGE_SIZE, required = false) Integer pageSize,
+            @RequestParam(name="sortBy", defaultValue = AppConstants.SORT_PROFILES_BY, required = false) String sortBy,
+            @RequestParam(name="sortOrder", defaultValue = AppConstants.SORT_ORDER, required = false) String sortOrder
+    ) {
+        return new ResponseEntity<>(userService.getAllUserProfiles(pageNumber, pageSize, sortBy, sortOrder), HttpStatus.OK);
+    }
+
+    @PutMapping("/users/{userId}/profiles")
+    public ResponseEntity<UserProfileDTO> updateUserProfile(@RequestBody UserProfile userProfile, @PathVariable long userId) {
+        UserProfile updatedProfile = userService.updateProfile(userProfile, userId);
+        UserProfileDTO response = modelMapper.map(updatedProfile, UserProfileDTO.class);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 
 }
