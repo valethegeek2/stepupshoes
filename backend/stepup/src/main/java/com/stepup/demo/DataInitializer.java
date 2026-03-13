@@ -135,7 +135,7 @@ public class DataInitializer {
             ProductVariant p5_v1 = new ProductVariant();
             // Product Variants for Product 6
             ProductVariant p6_v1 = new ProductVariant();
-
+            // @TODO: make the rest of the variants
 
 
             // Product 1
@@ -148,6 +148,8 @@ public class DataInitializer {
             p1.setGender(Gender.MEN);
             p1.setIsActive(true);
             p1.setProductImage("default.png");
+            p1.setReviews(34L);
+            p1.setRating(4.3F);
 
             // Product 2
             p2.setCategory(c_shoes);
@@ -159,6 +161,8 @@ public class DataInitializer {
             p2.setGender(Gender.MEN);
             p2.setIsActive(true);
             p2.setProductImage("default.png");
+            p2.setReviews(68L);
+            p2.setRating(3.4F);
 
             // Product 3
             p3.setCategory(c_clothes);
@@ -170,6 +174,8 @@ public class DataInitializer {
             p3.setGender(Gender.UNISEX);
             p3.setIsActive(true);
             p3.setProductImage("default.png");
+            p3.setReviews(55L);
+            p3.setRating(5.0F);
 
             // Product 4
             p4.setCategory(c_clothes);
@@ -181,6 +187,8 @@ public class DataInitializer {
             p4.setGender(Gender.WOMEN);
             p4.setIsActive(true);
             p4.setProductImage("default.png");
+            p4.setReviews(6L);
+            p4.setRating(4.0F);
 
             // Product 5
             p5.setCategory(c_shoes);
@@ -192,6 +200,8 @@ public class DataInitializer {
             p5.setGender(Gender.WOMEN);
             p5.setIsActive(true);
             p5.setProductImage("default.png");
+            p5.setReviews(12L);
+            p5.setRating(2.4F);
 
             // Product 6
             p6.setCategory(c_accessories);
@@ -203,6 +213,8 @@ public class DataInitializer {
             p6.setGender(Gender.UNISEX);
             p6.setIsActive(true);
             p6.setProductImage("default.png");
+            p6.setReviews(12L);
+            p6.setRating(2.0F);
 
             // Product 7
             p7.setCategory(c_accessories);
@@ -212,7 +224,7 @@ public class DataInitializer {
             p7.setTags("disney,school,backpack,girls");
             p7.setBasePrice(39.99F);
             p7.setGender(Gender.GIRLS);
-            p7.setIsActive(true);
+            p7.setIsActive(false);
             p7.setProductImage("default.png");
 
             List<Product> shoeProducts = new ArrayList<>();
