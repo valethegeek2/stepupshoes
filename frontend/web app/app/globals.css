@@ -228,70 +228,6 @@
     color: #f59e0b;
 }
 
-/* =========================================
-   Παραθυράκι 3ου Επιπέδου (Μέσα στα Παπούτσια)
-   ========================================= */
-.has-third-level {
-    position: static; 
-}
-
-/* Style για το link "Παπούτσια" ώστε να γίνεται μπλε στο hover */
-.has-third-level > a {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 15px;
-    margin: -10px -15px; /* Κρατάει τις σωστές αποστάσεις στο ul */
-    border-radius: 4px;
-}
-
-.has-third-level > a i {
-    font-size: 12px;
-}
-
-.has-third-level:hover > a {
-    background-color: #1a3c82;
-    color: #fff !important; /* Λευκά γράμματα στο hover */
-}
-
-/* Το λευκό παραθυράκι του 3ου επιπέδου */
-.third-level-panel {
-    position: absolute;
-    top: 0;
-    left: 400px; /* Εμφανίζεται αμέσως μετά το 2ο επίπεδο (που έχει width 400) */
-    width: 350px;
-    height: 100%;
-    background-color: #fff; /* Λευκό φόντο */
-    display: none; /* Αρχικά κρυμμένο */
-    padding: 30px;
-    box-shadow: 5px 0 15px rgba(0,0,0,0.05);
-    border-left: 1px solid #eaeaea; /* Λεπτή διαχωριστική γραμμή */
-    z-index: 10;
-}
-
-/* Εμφάνιση του 3ου επιπέδου όταν κάνουμε hover στο "Παπούτσια" */
-.has-third-level:hover .third-level-panel {
-    display: block;
-}
-
-/* Λίστα του 3ου επιπέδου (Τρέξιμο, Sneakers κλπ) */
-.third-level-list {
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-.third-level-list li a {
-    color: #1a3c82 !important; /* Σκούρο μπλε γράμματα όπως Intersport */
-    font-size: 15px;
-}
-
-.third-level-list li a:hover {
-    color: #f59e0b !important; /* Πορτοκαλί στο hover */
-    text-decoration: underline;
-}
-
 /* --- Κεντρική Εικόνα (Hero Section) --- */
 .hero-section {
     position: relative;
@@ -689,4 +625,211 @@
 
 .legal-links p {
     word-spacing: 2px;
+}
+
+
+/* =========================================
+   Product Listing Page (PLP) - Σελίδα Προϊόντων
+   ========================================= */
+.plp-container {
+    padding: 20px 40px 80px 40px;
+    max-width: 1600px;
+    margin: 0 auto;
+}
+
+/* --- Breadcrumbs --- */
+.breadcrumbs {
+    font-size: 13px;
+    color: #555;
+    margin-bottom: 20px;
+    font-weight: 600;
+}
+
+.breadcrumbs a {
+    color: black;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.breadcrumbs a:hover {
+    text-decoration: underline;
+}
+
+.breadcrumbs span {
+    margin: 0 8px;
+    color: #999;
+}
+
+/* --- Επικεφαλίδα Σελίδας --- */
+.plp-header {
+    display: flex;
+    align-items: flex-end;
+    margin-bottom: 30px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid black;
+}
+
+.plp-title {
+    font-size: 32px;
+    color: black;
+    margin: 0;
+}
+
+.plp-count {
+    font-size: 16px;
+    color: #d10000;
+    font-weight: bold;
+    margin-left: 15px;
+    margin-bottom: 5px;
+}
+
+/* --- Κεντρικό Layout (Sidebar + Grid) --- */
+.plp-content {
+    display: flex;
+    gap: 40px;
+    align-items: flex-start;
+}
+
+/* --- Αριστερή Στήλη (Filters) --- */
+.plp-sidebar {
+    width: 250px;
+    flex-shrink: 0;
+    position: sticky;
+    top: 90px; /* Για να μένει σταθερό όταν σκρολάρεις */
+}
+
+.filter-group {
+    margin-bottom: 30px;
+}
+
+.filter-title {
+    font-size: 16px;
+    color: black;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+    font-weight: bold;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.filter-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.filter-list li {
+    font-size: 14px;
+    color:black;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.filter-list li:hover {
+    color: #f59e0b;
+}
+
+.filter-list li.active-category {
+    color: #f59e0b; /* Το πορτοκαλί σου χρώμα */
+    font-weight: bold;
+}
+
+/* Στυλ για Checkboxes (Φύλο κλπ) */
+.checkbox-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    color: #444;
+    cursor: pointer;
+}
+
+.checkbox-item input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    accent-color: #1a3c82;
+    cursor: pointer;
+}
+
+.checkbox-item span.count {
+    color: #999;
+    font-size: 13px;
+}
+
+/* --- Δεξιά Στήλη (Προϊόντα) --- */
+.plp-main {
+    flex-grow: 1;
+}
+
+.plp-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.sort-dropdown {
+    padding: 8px 15px;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    outline: none;
+    font-size: 14px;
+    color: #333;
+    cursor: pointer;
+}
+
+.plp-grid {
+    display: grid;
+    /* 3 προϊόντα ανά σειρά επειδή έχουμε και το sidebar αριστερά */
+    grid-template-columns: repeat(3, 1fr); 
+    gap: 30px;
+}
+
+/* --- Pagination (Σελιδοποίηση) --- */
+.pagination-container {
+    display: flex;
+    flex-direction: row; 
+    align-items: center;
+    gap: 12px;
+    white-space: nowrap; 
+}
+
+.pagination-text {
+    font-size: 15px;
+    color: #000; /* Έγινε μαύρο */
+}
+
+.pagination-select-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.pagination-select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    
+    background-color: transparent;
+    border: 1px solid #b5b5b5; 
+    border-radius: 20px; 
+    padding: 6px 35px 6px 15px; 
+    font-size: 15px;
+    color: #000; /* Έγινε μαύρο */
+    font-weight: 700;
+    cursor: pointer;
+    outline: none;
+    
+    /* Έκανα και το βελάκι μαύρο (άλλαξα το stroke σε %23000000) */
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000000' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 12px;
+    transition: border-color 0.2s ease;
+}
+
+/* Όταν πατάει ο χρήστης το κουτάκι, το περίγραμμα γίνεται μαύρο αντί για μπλε */
+.pagination-select:focus {
+    border-color: #000;
 }

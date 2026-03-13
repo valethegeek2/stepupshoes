@@ -47,66 +47,17 @@ export default function Navbar() {
                 <div className="mega-menu-subpanel">
                     <h3 className="subpanel-title">ΑΝΔΡΙΚΑ <i className="fa-solid fa-chevron-right"></i></h3>
                     <ul className="subpanel-list">
-                        <li className="has-third-level">
-                            <Link href="/products/mens/shoes" onClick={closeMenu}>Παπούτσια <i className="fa-solid fa-chevron-right"></i></Link>
-                            <div className="third-level-panel">
-                                <ul className="third-level-list">
-                                    <li><Link href="/products/mens/shoes" onClick={closeMenu}>Όλα τα Παπούτσια</Link></li>
-                                    <li><a href="#" onClick={closeMenu}>Νέες Αφίξεις</a></li>
-                                    <li><a href="#" onClick={closeMenu}>Τρέξιμο</a></li>
-                                    <li><a href="#" onClick={closeMenu}>Trail Running</a></li>
-                                    <li><a href="#" onClick={closeMenu}>Sneakers</a></li>
-                                    <li><a href="#" onClick={closeMenu}>Training</a></li>
-                                    <li><a href="#" onClick={closeMenu}>Ποδοσφαιρικά</a></li>
-                                    <li><a href="#" onClick={closeMenu}>Μπάσκετ</a></li>
-                                </ul>
-                            </div>
+                        <li>
+                            <Link href="/products/mens/shoes" onClick={closeMenu}>Παπούτσια</Link>
                         </li>
-                        <li className="has-third-level">
-                            <Link href="/products/mens/clothing" onClick={closeMenu}>Ρούχα <i className="fa-solid fa-chevron-right"></i></Link>
-                            <div className="third-level-panel">
-                                <ul className="third-level-list">
-                                    <li><Link href="/products/mens/clothing" onClick={closeMenu}>Όλα τα Ρούχα</Link></li>
-                                    <li><a href="#" onClick={closeMenu}>Νέες Αφίξεις</a></li>
-                                    <li><a href="#" onClick={closeMenu}>Μεγάλα Μεγέθη</a></li>
-                                    <li><a href="#" onClick={closeMenu}>Μπλούζες</a></li>
-                                    <li><a href="#" onClick={closeMenu}>Φούτερ | Hoodies</a></li>
-                                    <li><a href="#" onClick={closeMenu}>Ζακέτες</a></li>
-                                    <li><a href="#" onClick={closeMenu}>Fleece</a></li>
-                                    <li><a href="#" onClick={closeMenu}>Φόρμες</a></li>
-                                    <li><a href="#" onClick={closeMenu}>Παντελόνια</a></li>
-                                </ul>
-                            </div>
+                        <li>
+                            <Link href="/products/mens/clothing" onClick={closeMenu}>Ρούχα</Link>
                         </li>
-                        <li className="has-third-level">
-                            <Link href="/products/mens/accessories" onClick={closeMenu}>Αξεσουάρ <i className="fa-solid fa-chevron-right"></i></Link>
-                            <div className="third-level-panel">
-                                <ul className="third-level-list">
-                                    <li><Link href="/products/mens/accessories" onClick={closeMenu}>Όλα τα Αξεσουάρ</Link></li>
-                                    <li><a href="#" onClick={closeMenu}>Γαντια</a></li>
-                                    <li><a href="#" onClick={closeMenu}>Τσάντες - Σακίδια</a></li>
-                                    <li><a href="#" onClick={closeMenu}>Μπουκάλια | Θερμός | Shaker</a></li>
-                                    <li><a href="#" onClick={closeMenu}>Εσωρουχα</a></li>
-                                    <li><a href="#" onClick={closeMenu}>Καλτσες</a></li>
-                                </ul>
-                            </div>
+                        <li>
+                            <Link href="/products/mens/accessories" onClick={closeMenu}>Αξεσουάρ</Link>
                         </li>
-                        <li className="has-third-level">
-                            <a href="#">Brand <i className="fa-solid fa-chevron-right"></i></a>
-                            <div className="third-level-panel">
-                                <ul className="third-level-list">
-                                    <li><a href="#" onClick={closeMenu}>Όλα τα Brands</a></li>
-                                    <li><a href="#" onClick={closeMenu}>adidas</a></li>
-                                    <li><a href="#" onClick={closeMenu}>Nike</a></li>
-                                    <li><a href="#" onClick={closeMenu}>Bodytalk</a></li>
-                                    <li><a href="#" onClick={closeMenu}>Reebok</a></li>
-                                    <li><a href="#" onClick={closeMenu}>New Balance</a></li>
-                                    <li><a href="#" onClick={closeMenu}>Columbia</a></li>
-                                    <li><a href="#" onClick={closeMenu}>The North Face</a></li>
-                                    <li><a href="#" onClick={closeMenu}>Asics</a></li>
-                                    <li><a href="#" onClick={closeMenu}>Puma</a></li>
-                                </ul>
-                            </div>
+                        <li>
+                            <Link href="/products/mens/brands" onClick={closeMenu}>Brands</Link>
                         </li>
                     </ul>
                 </div>
@@ -120,66 +71,17 @@ export default function Navbar() {
                 <div className="mega-menu-subpanel">
                     <h3 className="subpanel-title">ΓΥΝΑΙΚΕΙΑ <i className="fa-solid fa-chevron-right"></i></h3>
                     <ul className="subpanel-list">
-                        <li className="has-third-level">
-                            <Link href="/products/womens/shoes" onClick={closeMenu}>Παπούτσια <i className="fa-solid fa-chevron-right"></i></Link>
-                            <div className="third-level-panel">
-                                <ul className="third-level-list">
-                                    <li><Link href="/products/womens/shoes" onClick={closeMenu}>Όλα τα Παπούτσια</Link></li>
-                                    <li><a href="#" onClick={closeMenu}>Νέες Αφίξεις</a></li>
-                                    <li><a href="#" onClick={closeMenu}>Τρέξιμο</a></li>
-                                    <li><a href="#" onClick={closeMenu}>Trail Running</a></li>
-                                    <li><a href="#" onClick={closeMenu}>Sneakers</a></li>
-                                    <li><a href="#" onClick={closeMenu}>Training</a></li>
-                                    <li><a href="#" onClick={closeMenu}>Ποδοσφαιρικά</a></li>
-                                    <li><a href="#" onClick={closeMenu}>Μπάσκετ</a></li>
-                                </ul>
-                            </div>
+                        <li>
+                            <Link href="/products/womens/shoes" onClick={closeMenu}>Παπούτσια</Link>
                         </li>
-                        <li className="has-third-level">
-                            <Link href="/products/womens/clothing" onClick={closeMenu}>Ρούχα <i className="fa-solid fa-chevron-right"></i></Link>
-                            <div className="third-level-panel">
-                                <ul className="third-level-list">
-                                    <li><Link href="/products/womens/clothing" onClick={closeMenu}>Όλα τα Ρούχα</Link></li>
-                                    <li><a href="#" onClick={closeMenu}>Νέες Αφίξεις</a></li>
-                                    <li><a href="#" onClick={closeMenu}>Μεγάλα Μεγέθη</a></li>
-                                    <li><a href="#" onClick={closeMenu}>Μπλούζες</a></li>
-                                    <li><a href="#" onClick={closeMenu}>Φούτερ | Hoodies</a></li>
-                                    <li><a href="#" onClick={closeMenu}>Ζακέτες</a></li>
-                                    <li><a href="#" onClick={closeMenu}>Fleece</a></li>
-                                    <li><a href="#" onClick={closeMenu}>Φόρμες</a></li>
-                                    <li><a href="#" onClick={closeMenu}>Παντελόνια</a></li>
-                                </ul>
-                            </div>
+                        <li>
+                            <Link href="/products/womens/clothing" onClick={closeMenu}>Ρούχα</Link>
                         </li>
-                        <li className="has-third-level">
-                            <Link href="/products/womens/accessories" onClick={closeMenu}>Αξεσουάρ <i className="fa-solid fa-chevron-right"></i></Link>
-                            <div className="third-level-panel">
-                                <ul className="third-level-list">
-                                    <li><Link href="/products/womens/accessories" onClick={closeMenu}>Όλα τα Αξεσουάρ</Link></li>
-                                    <li><a href="#" onClick={closeMenu}>Γαντια</a></li>
-                                    <li><a href="#" onClick={closeMenu}>Τσάντες - Σακίδια</a></li>
-                                    <li><a href="#" onClick={closeMenu}>Μπουκάλια | Θερμός | Shaker</a></li>
-                                    <li><a href="#" onClick={closeMenu}>Εσωρουχα</a></li>
-                                    <li><a href="#" onClick={closeMenu}>Καλτσες</a></li>
-                                </ul>
-                            </div>
+                        <li>
+                            <Link href="/products/womens/accessories" onClick={closeMenu}>Αξεσουάρ</Link>
                         </li>
-                        <li className="has-third-level">
-                            <a href="#">Brand <i className="fa-solid fa-chevron-right"></i></a>
-                            <div className="third-level-panel">
-                                <ul className="third-level-list">
-                                    <li><a href="#" onClick={closeMenu}>Όλα τα Brands</a></li>
-                                    <li><a href="#" onClick={closeMenu}>adidas</a></li>
-                                    <li><a href="#" onClick={closeMenu}>Nike</a></li>
-                                    <li><a href="#" onClick={closeMenu}>Bodytalk</a></li>
-                                    <li><a href="#" onClick={closeMenu}>Reebok</a></li>
-                                    <li><a href="#" onClick={closeMenu}>New Balance</a></li>
-                                    <li><a href="#" onClick={closeMenu}>Columbia</a></li>
-                                    <li><a href="#" onClick={closeMenu}>The North Face</a></li>
-                                    <li><a href="#" onClick={closeMenu}>Asics</a></li>
-                                    <li><a href="#" onClick={closeMenu}>Puma</a></li>
-                                </ul>
-                            </div>
+                        <li>
+                            <Link href="/products/womens/brands" onClick={closeMenu}>Brands</Link>
                         </li>
                     </ul>
                 </div>
@@ -193,70 +95,20 @@ export default function Navbar() {
                 <div className="mega-menu-subpanel">
                     <h3 className="subpanel-title">ΠΑΙΔΙΚΑ <i className="fa-solid fa-chevron-right"></i></h3>
                     <ul className="subpanel-list">
-                        <li className="has-third-level">
-                            <Link href="/products/kids/shoes" onClick={closeMenu}>Αγόρι παπούτσια <i className="fa-solid fa-chevron-right"></i></Link>
-                            <div className="third-level-panel">
-                                <ul className="third-level-list">
-                                    <li><Link href="/products/kids/shoes" onClick={closeMenu}>Όλα τα Παπούτσια</Link></li>
-                                    <li><a href="#" onClick={closeMenu}>Νέες Αφίξεις</a></li>
-                                    <li><a href="#" onClick={closeMenu}>Τρέξιμο</a></li>
-                                    <li><a href="#" onClick={closeMenu}>Trail Running</a></li>
-                                    <li><a href="#" onClick={closeMenu}>Sneakers</a></li>
-                                    <li><a href="#" onClick={closeMenu}>Training</a></li>
-                                    <li><a href="#" onClick={closeMenu}>Ποδοσφαιρικά</a></li>
-                                    <li><a href="#" onClick={closeMenu}>Μπάσκετ</a></li>
-                                </ul>
-                            </div>
+                        <li>
+                            <Link href="/products/kids/shoes" onClick={closeMenu}>Αγόρι παπούτσια</Link>
                         </li>
-                        <li className="has-third-level">
-                            <Link href="/products/kids/clothing" onClick={closeMenu}>Αγόρι ρούχα <i className="fa-solid fa-chevron-right"></i></Link>
-                            <div className="third-level-panel">
-                                <ul className="third-level-list">
-                                    <li><Link href="/products/kids/clothing" onClick={closeMenu}>Όλα τα Ρούχα</Link></li>
-                                    <li><a href="#" onClick={closeMenu}>Νέες Αφίξεις</a></li>
-                                    <li><a href="#" onClick={closeMenu}>Μεγάλα Μεγέθη</a></li>
-                                    <li><a href="#" onClick={closeMenu}>Μπλούζες</a></li>
-                                    <li><a href="#" onClick={closeMenu}>Φούτερ | Hoodies</a></li>
-                                    <li><a href="#" onClick={closeMenu}>Ζακέτες</a></li>
-                                    <li><a href="#" onClick={closeMenu}>Fleece</a></li>
-                                    <li><a href="#" onClick={closeMenu}>Φόρμες</a></li>
-                                    <li><a href="#" onClick={closeMenu}>Παντελόνια</a></li>
-                                </ul>
-                            </div>
+                        <li>
+                            <Link href="/products/kids/clothing" onClick={closeMenu}>Αγόρι ρούχα</Link>
                         </li>
-                        <li className="has-third-level">
-                            <Link href="/products/kids/accessories" onClick={closeMenu}>Αγόρι αξεσουάρ <i className="fa-solid fa-chevron-right"></i></Link>
-                            <div className="third-level-panel">
-                                <ul className="third-level-list">
-                                    <li><Link href="/products/kids/accessories" onClick={closeMenu}>Όλα τα Αξεσουάρ</Link></li>
-                                    <li><a href="#" onClick={closeMenu}>Γαντια</a></li>
-                                    <li><a href="#" onClick={closeMenu}>Τσάντες - Σακίδια</a></li>
-                                    <li><a href="#" onClick={closeMenu}>Μπουκάλια | Θερμός | Shaker</a></li>
-                                    <li><a href="#" onClick={closeMenu}>Εσωρουχα</a></li>
-                                    <li><a href="#" onClick={closeMenu}>Καλτσες</a></li>
-                                </ul>
-                            </div>
+                        <li>
+                            <Link href="/products/kids/accessories" onClick={closeMenu}>Αγόρι αξεσουάρ</Link>
                         </li>
-                        
-                        {/* Σημείωση: Για τα κορίτσια χρησιμοποιούμε τα ίδια URLs προς το παρόν για ευκολία, 
-                            ή μπορείς αργότερα να τα κάνεις /products/girls/shoes κλπ */}
-                        <li className="has-third-level">
-                            <Link href="/products/kids/shoes" onClick={closeMenu}>Κορίτσι παπούτσια <i className="fa-solid fa-chevron-right"></i></Link>
-                            <div className="third-level-panel">
-                                <ul className="third-level-list">
-                                    <li><Link href="/products/kids/shoes" onClick={closeMenu}>Όλα τα Παπούτσια</Link></li>
-                                    <li><a href="#" onClick={closeMenu}>Νέες Αφίξεις</a></li>
-                                </ul>
-                            </div>
+                        <li>
+                            <Link href="/products/kids/shoes" onClick={closeMenu}>Κορίτσι παπούτσια</Link>
                         </li>
-                        <li className="has-third-level">
-                            <Link href="/products/kids/clothing" onClick={closeMenu}>Κορίτσι ρούχα <i className="fa-solid fa-chevron-right"></i></Link>
-                            <div className="third-level-panel">
-                                <ul className="third-level-list">
-                                    <li><Link href="/products/kids/clothing" onClick={closeMenu}>Όλα τα Ρούχα</Link></li>
-                                    <li><a href="#" onClick={closeMenu}>Νέες Αφίξεις</a></li>
-                                </ul>
-                            </div>
+                        <li>
+                            <Link href="/products/kids/clothing" onClick={closeMenu}>Κορίτσι ρούχα</Link>
                         </li>
                     </ul>
                 </div>
