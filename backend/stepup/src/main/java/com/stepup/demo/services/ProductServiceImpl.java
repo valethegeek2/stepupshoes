@@ -92,6 +92,9 @@ public class ProductServiceImpl implements ProductService {
         existing.setBasePrice(updatedProduct.getBasePrice());
         existing.setGender(updatedProduct.getGender());
         existing.setCategory(updatedProduct.getCategory());
+        existing.setBrand(updatedProduct.getBrand());
+        existing.setReviews(updatedProduct.getReviews());
+        existing.setRating(updatedProduct.getRating());
 
         if (updatedProduct.getIsActive() != null) {
             existing.setIsActive(updatedProduct.getIsActive());

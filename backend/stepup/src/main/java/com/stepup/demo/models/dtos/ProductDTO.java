@@ -2,20 +2,15 @@ package com.stepup.demo.models.dtos;
 
 import com.stepup.demo.models.Category;
 import com.stepup.demo.models.Gender;
-import com.stepup.demo.models.Product;
-import com.stepup.demo.models.ProductVariant;
-import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Set;
-
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-public class AdminProductDTO {
+@NoArgsConstructor
+public class ProductDTO {
     private Long productId;
     private String name;
     private String description;
@@ -27,6 +22,7 @@ public class AdminProductDTO {
     private Long reviews;
     private Long rating;
     private Gender gender;
-    private Boolean isActive;
     private Category category;
+    private Integer numberOfVariants;
+    private Boolean isActive;
 }
