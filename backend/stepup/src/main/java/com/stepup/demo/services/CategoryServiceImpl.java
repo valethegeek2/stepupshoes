@@ -2,6 +2,7 @@ package com.stepup.demo.services;
 
 import com.stepup.demo.models.Category;
 import com.stepup.demo.repository.CategoryRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,10 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public Category createCategory(Category category) {
+        Category categoryFromDB = categoryRepository.findByName(category.getName());
+        if(categoryFromDB != null) {
+            throw new EntityNotFoundException("Category with name " + category.getName() + " already exists");
+        }
         Category newCategory = categoryRepository.save(category);
         return newCategory;
     }

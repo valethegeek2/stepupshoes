@@ -16,4 +16,6 @@ public interface UserService {
     UserProfile updateProfile(UserProfile userProfile, long userId);
 
     void deleteProfile(long userId);
+
+    UserProfile getUserProfile(long userId);
 }
