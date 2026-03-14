@@ -33,6 +33,8 @@ public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
     private final ProductVariantRepository productVariantRepository;
+    @Autowired
+    private CategoryRepository categoryRepository;
 
     @Autowired
     private FileService fileService;
@@ -78,6 +80,12 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Product createProduct(Product product) {
+        Category productCategory = product.getCategory();
+        Category categoryFromDB = categoryRepository.findByName(productCategory.getName());
+        if(categoryFromDB == null) {
+            throw new EntityNotFoundException("Could not find category with name: " + productCategory.getName());
+        }
+        product.setCategory(categoryFromDB);
         product.setIsActive(true);
         return productRepository.save(product);
     }
@@ -87,13 +95,17 @@ public class ProductServiceImpl implements ProductService {
     public Product updateProduct(Long id, Product updatedProduct) {
         Product existing = productRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Product not found with id: " + id));
-
+        Category productCategory = updatedProduct.getCategory();
+        Category categoryFromDB = categoryRepository.findByName(productCategory.getName());
+        if(categoryFromDB == null) {
+            throw new EntityNotFoundException("Could not find category with name: " + productCategory.getName());
+        }
         existing.setName(updatedProduct.getName());
         existing.setDescription(updatedProduct.getDescription());
         existing.setTags(updatedProduct.getTags());
         existing.setBasePrice(updatedProduct.getBasePrice());
         existing.setGender(updatedProduct.getGender());
-        existing.setCategory(updatedProduct.getCategory());
+        existing.setCategory(categoryFromDB);
         existing.setBrand(updatedProduct.getBrand());
         existing.setReviews(updatedProduct.getReviews());
         existing.setRating(updatedProduct.getRating());
