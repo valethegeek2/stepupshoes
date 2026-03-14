@@ -247,9 +247,6 @@ public class DataInitializer {
             categoryRepository.save(c_clothes);
             categoryRepository.save(c_accessories);
 
-            productVariantRepository.save(p1_v1);
-            productVariantRepository.save(p1_v2);
-
             // Save products to database
             productRepository.save(p1);
             productRepository.save(p2);
@@ -258,6 +255,11 @@ public class DataInitializer {
             productRepository.save(p5);
             productRepository.save(p6);
             productRepository.save(p7);
+
+            productVariantRepository.save(p1_v1);
+            productVariantRepository.save(p1_v2);
+
+
 
 
 

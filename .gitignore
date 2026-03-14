@@ -29,8 +29,6 @@ gradle-app.setting
 /.idea
 
 # Playwright
-package-lock.json
-package.json
 node_modules/
 /test-results/
 /playwright-report/
