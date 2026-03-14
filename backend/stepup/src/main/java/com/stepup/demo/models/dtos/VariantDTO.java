@@ -14,6 +14,6 @@ public class VariantDTO {
     private String color;
     private String size;
     private Integer stock;
-    private float finalPrice;
+    private float priceAdjustment;
     private boolean is_available;
 }

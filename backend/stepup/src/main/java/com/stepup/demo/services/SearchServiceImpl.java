@@ -61,7 +61,7 @@ public class SearchServiceImpl implements SearchService {
                 .filter(v -> Boolean.TRUE.equals(v.getIsAvailable()))
                 .map(v -> {
                     VariantDTO dto = modelMapper.map(v, VariantDTO.class);
-                    dto.setFinalPrice(p.getBasePrice() + v.getPriceAdjustment());
+                    dto.setPriceAdjustment(v.getPriceAdjustment());
                     return dto;
                 })
                 .toList();

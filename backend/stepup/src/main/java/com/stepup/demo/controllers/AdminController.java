@@ -7,6 +7,7 @@ import com.stepup.demo.services.*;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -75,7 +76,7 @@ public class AdminController {
         return new ResponseEntity<>(productId, HttpStatus.OK);
     }
 
-    @PutMapping("/products/images")
+    @PutMapping("/products/{productId}/images")
     public ResponseEntity<Product> uploadImage(
             @PathVariable Long productId,
             @RequestParam("image") MultipartFile image) throws IOException {
@@ -95,9 +96,36 @@ public class AdminController {
     // =================== PRODUCT VARIANTS ==========================
 
     @GetMapping("/products/{productId}/productVariants")
-    public ResponseEntity<PagedResponse<VariantDTO, Long>> getAllProductVariants(@PathVariable long productId) {
+    public ResponseEntity<List<VariantDTO>> getAllProductVariantsByProductId(@PathVariable long productId) {
+        List<ProductVariant> variants = productService.getAllProductVariantsByProductId(productId);
+        List<VariantDTO> variantDTOS = variants.stream()
+                .map(variant -> modelMapper.map(variant, VariantDTO.class))
+                .toList();
+        return new ResponseEntity<>(variantDTOS, HttpStatus.OK);
+    }
 
-        return null;
+    @PostMapping("/products/{productId}/productVariants")
+    public ResponseEntity<VariantDTO> createProductVariant(@PathVariable long productId,
+                                                           @RequestBody VariantDTO variantDTO) {
+        ProductVariant productVariant = modelMapper.map(variantDTO, ProductVariant.class);
+        ProductVariant updatedVariant = productService.addVariant(productId, productVariant);
+        VariantDTO response = modelMapper.map(updatedVariant, VariantDTO.class);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
+    }
+
+    @PutMapping("/products/productVariants/{variantId}")
+    public ResponseEntity<VariantDTO> updateProductVariant(@RequestBody VariantDTO variantDTO,
+                                                               @PathVariable long variantId) {
+        ProductVariant productVariant = modelMapper.map(variantDTO, ProductVariant.class);
+        ProductVariant updatedVariant = productService.updateVariant(variantId, productVariant);
+        VariantDTO response = modelMapper.map(updatedVariant, VariantDTO.class);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/products/productVariants/{variantId}")
+    public ResponseEntity<HttpStatus> deleteProductVariant(@PathVariable long variantId) {
+        productService.deleteVariant(variantId);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 
