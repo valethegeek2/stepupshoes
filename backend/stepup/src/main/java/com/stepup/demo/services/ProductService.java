@@ -2,6 +2,7 @@ package com.stepup.demo.services;
 
 import com.stepup.demo.models.Product;
 import com.stepup.demo.models.ProductVariant;
+import com.stepup.demo.models.dtos.PagedResponse;
 import com.stepup.demo.models.dtos.ProductSearchResponseDTO;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -32,6 +33,11 @@ public interface ProductService {
 
     void deleteProduct(Long id);
 
+    PagedResponse<ProductVariant, Long> getAllProductVariants(Integer pageNumber, Integer pageSize, String sortBy, String sortOrder);
+
+    List<ProductVariant> getAllProductVariantsByProductId(Long productId);
+
+    ProductVariant getProductVariantById(Long id);
 
     ProductVariant addVariant(Long productId, ProductVariant variant);
 

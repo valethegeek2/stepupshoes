@@ -35,7 +35,7 @@ public class ProductSearchResponseDTO {
                         .color(v.getColor())
                         .size(v.getSize())
                         .stock(v.getStock())
-                        .finalPrice(p.getBasePrice() + v.getPriceAdjustment())
+                        .priceAdjustment(v.getPriceAdjustment())
                         .build())
                 .toList();
 

@@ -4,6 +4,8 @@ import com.stepup.demo.models.Category;
 import com.stepup.demo.models.Gender;
 import com.stepup.demo.models.Product;
 import com.stepup.demo.models.ProductVariant;
+import com.stepup.demo.models.dtos.PagedResponse;
+import com.stepup.demo.models.dtos.ProductDTO;
 import com.stepup.demo.models.dtos.ProductSearchResponseDTO;
 import com.stepup.demo.models.dtos.VariantDTO;
 import com.stepup.demo.repository.CategoryRepository;
@@ -112,6 +114,26 @@ public class ProductServiceImpl implements ProductService {
         productRepository.save(product);
     }
 
+    @Override
+    public PagedResponse<ProductVariant, Long> getAllProductVariants(Integer pageNumber, Integer pageSize, String sortBy, String sortOrder) {
+        PagedResponse<ProductVariant, Long> pagedResponse = new PagedResponse<>();
+        pagedResponse.setJpaRepository(productVariantRepository);
+        pagedResponse.processNextPage(pageNumber, pageSize, sortBy, sortOrder);
+        return pagedResponse;
+    }
+
+    @Override
+    public List<ProductVariant> getAllProductVariantsByProductId(Long productId) {
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new EntityNotFoundException("Product not found with id: " + productId));
+        return productVariantRepository.findByProduct(product);
+    }
+
+    @Override
+    public ProductVariant getProductVariantById(Long id) {
+        return null;
+    }
+
 
     @Override
     public ProductVariant addVariant(Long productId, ProductVariant variant) {
@@ -180,7 +202,7 @@ public class ProductServiceImpl implements ProductService {
                                 .color(v.getColor())
                                 .size(v.getSize())
                                 .stock(v.getStock())
-                                .finalPrice(p.getBasePrice() + v.getPriceAdjustment())
+                                .priceAdjustment(v.getPriceAdjustment())
                                 .is_available(true)
                                 .build())
                         .toList();

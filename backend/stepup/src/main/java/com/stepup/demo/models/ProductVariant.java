@@ -25,7 +25,7 @@ public class ProductVariant {
     private Boolean isAvailable;
     private String variantImage;
 
-    @ManyToOne(fetch = FetchType.LAZY,  cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnore
     @JoinColumn(name = "product_id")
     private Product product;
