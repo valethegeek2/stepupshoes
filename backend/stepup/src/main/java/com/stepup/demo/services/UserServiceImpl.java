@@ -81,4 +81,13 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new EntityNotFoundException("Could not find profile for user with id:"+userId));
         userProfileRepository.delete(deletedProfile);
     }
+
+    @Override
+    public UserProfile getUserProfile(long userId) {
+        User userFromDB = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("Could not find user with id:"+userId));
+        UserProfile userProfile = userProfileRepository.findByUser(userFromDB)
+                .orElseThrow(() -> new EntityNotFoundException("Could not find profile for user with id:"+userId));
+        return userProfile;
+    }
 }

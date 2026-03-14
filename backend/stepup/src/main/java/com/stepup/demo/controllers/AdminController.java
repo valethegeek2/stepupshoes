@@ -210,13 +210,28 @@ public class AdminController {
 
     // ======================== USER PROFILES ===========================
     @GetMapping("/users/profiles")
-    public ResponseEntity<PagedResponse<UserProfile, Long>> getAllUserProfiles(
+    public ResponseEntity<PagedResponse<UserProfileDTO, Long>> getAllUserProfiles(
             @RequestParam(name="pageNumber", defaultValue = AppConstants.PAGE_NUMBER, required = false) Integer pageNumber,
             @RequestParam(name="pageSize", defaultValue = AppConstants.PAGE_SIZE, required = false) Integer pageSize,
             @RequestParam(name="sortBy", defaultValue = AppConstants.SORT_PROFILES_BY, required = false) String sortBy,
             @RequestParam(name="sortOrder", defaultValue = AppConstants.SORT_ORDER, required = false) String sortOrder
     ) {
-        return new ResponseEntity<>(userService.getAllUserProfiles(pageNumber, pageSize, sortBy, sortOrder), HttpStatus.OK);
+        PagedResponse<UserProfile, Long> pageResponse = userService.getAllUserProfiles(pageNumber, pageSize, sortBy, sortOrder);
+        PagedResponse<UserProfileDTO, Long> response = new  PagedResponse<>();
+        response.setContents(pageResponse.getContents().stream()
+                .map(userProfile ->  modelMapper.map(userProfile, UserProfileDTO.class)).toList());
+        response.setTotalPages(pageResponse.getTotalPages());
+        response.setTotalElements(pageResponse.getTotalElements());
+        response.setPageSize(pageResponse.getPageSize());
+        response.setPageNumber(pageResponse.getPageNumber());
+        response.setLastPage(pageResponse.isLastPage());
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping("/users/{userId}/profiles")
+    public ResponseEntity<UserProfileDTO> getUserProfile(@PathVariable long userId) {
+        UserProfile profile = userService.getUserProfile(userId);
+        return new ResponseEntity<>(modelMapper.map(profile, UserProfileDTO.class), HttpStatus.OK);
     }
 
     @PutMapping("/users/{userId}/profiles")
