@@ -67,7 +67,7 @@ public class SearchServiceImpl implements SearchService {
                 .toList();
 
         return ProductSearchResponseDTO.builder()
-                .productId(p.getProductId())
+                .id(p.getId())
                 .name(p.getName())
                 .description(p.getDescription())
                 .basePrice(p.getBasePrice())

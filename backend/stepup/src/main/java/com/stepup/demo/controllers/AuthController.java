@@ -33,8 +33,8 @@ public class AuthController {
 
         return ResponseEntity.ok(authService.login(request));
     }
-    @GetMapping("/test-auth")
-    public String test(Authentication auth) {
-        return auth.getName();
-    }
+//    @GetMapping("/test-auth")
+//    public String test(Authentication auth) {
+//        return auth.getName();
+//    }
 }

@@ -5,8 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
@@ -16,7 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 public class ProductSearchResponseDTO {
 
-    private Long productId;
+    private Long id;
     private String name;
     private String description;
     private String tags;
@@ -31,7 +29,7 @@ public class ProductSearchResponseDTO {
                 .stream()
                 .filter(v -> Boolean.TRUE.equals(v.getIsAvailable()))
                 .map(v -> VariantDTO.builder()
-                        .variantId(v.getVariantId())
+                        .id(v.getId())
                         .color(v.getColor())
                         .size(v.getSize())
                         .stock(v.getStock())
@@ -40,7 +38,7 @@ public class ProductSearchResponseDTO {
                 .toList();
 
         return ProductSearchResponseDTO.builder()
-                .productId(p.getProductId())
+                .id(p.getId())
                 .name(p.getName())
                 .description(p.getDescription())
                 .basePrice(p.getBasePrice())

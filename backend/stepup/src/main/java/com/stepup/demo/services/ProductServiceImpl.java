@@ -1,11 +1,9 @@
 package com.stepup.demo.services;
 
 import com.stepup.demo.models.Category;
-import com.stepup.demo.models.Gender;
 import com.stepup.demo.models.Product;
 import com.stepup.demo.models.ProductVariant;
 import com.stepup.demo.models.dtos.PagedResponse;
-import com.stepup.demo.models.dtos.ProductDTO;
 import com.stepup.demo.models.dtos.ProductSearchResponseDTO;
 import com.stepup.demo.models.dtos.VariantDTO;
 import com.stepup.demo.repository.CategoryRepository;
@@ -23,8 +21,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -210,7 +206,7 @@ public class ProductServiceImpl implements ProductService {
                         .stream()
                         .filter(v -> Boolean.TRUE.equals(v.getIsAvailable()))
                         .map(v -> VariantDTO.builder()
-                                .variantId(v.getVariantId())
+                                .id(v.getId())
                                 .color(v.getColor())
                                 .size(v.getSize())
                                 .stock(v.getStock())
@@ -220,7 +216,7 @@ public class ProductServiceImpl implements ProductService {
                         .toList();
 
         return ProductSearchResponseDTO.builder()
-                .productId(p.getProductId())
+                .id(p.getId())
                 .name(p.getName())
                 .description(p.getDescription())
                 .tags(p.getTags())
