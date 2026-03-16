@@ -6,8 +6,7 @@ import ProductCard from "../components/ProductCard";
 export default function Home() {
   const [activeTab, setActiveTab] = useState("mens-products");
 
-  // --- Προσωρινά Στατικά Δεδομένα για την Αρχική ---
-  // (Μέχρι να συνδέσουμε τα δικά σου mock data)
+  
 
   const featuredProducts = [
     { id: 1, title: "Pro Running Shoes High Quality Value Buy", price: "89.99", reviews: 50, rating: 5 },
