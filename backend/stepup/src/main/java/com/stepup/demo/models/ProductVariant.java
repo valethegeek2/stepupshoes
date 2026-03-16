@@ -16,7 +16,7 @@ public class ProductVariant {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long variantId;
+    private Long id;
 
     private String color;
     private String size;
