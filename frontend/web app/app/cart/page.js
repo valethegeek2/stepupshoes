@@ -1,8 +1,11 @@
 "use client";
 import Link from "next/link";
-import { useCart } from "../../context/CartContext.js";
+// 1. Προσθέσαμε το useRouter
+import { useRouter } from "next/navigation"; 
+import { useCart } from "../../context/CartContext";
 
 export default function CartPage() {
+  const router = useRouter(); // 2. Το δηλώνουμε εδώ
   const { cart, removeFromCart, updateQuantity, clearCart, cartCount, cartSubtotal } = useCart();
 
   // Υπολογισμοί όπως στη φωτογραφία
@@ -96,7 +99,11 @@ export default function CartPage() {
               <span>€ {total.toFixed(2)}</span>
             </div>
 
-            <button className="checkout-btn">
+            {/* 3. Βάλαμε το onClick στο δικό σου κουμπί! */}
+            <button 
+              className="checkout-btn" 
+              onClick={() => router.push("/checkout")}
+            >
               <i className="fa-solid fa-lock"></i> Proceed to Checkout
             </button>
 
