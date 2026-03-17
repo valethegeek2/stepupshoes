@@ -1,8 +1,10 @@
 import "./globals.css";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-// 1. Φέρνουμε τον Provider που φτιάξαμε
 import { WishlistProvider } from "../context/WishlistContext";
+import { CartProvider } from "../context/CartContext.js";
+// 1. Φέρνουμε τον AuthProvider
+import { AuthProvider } from "../context/AuthContext"; 
 
 export const metadata = {
   title: "Sportwear",
@@ -16,12 +18,16 @@ export default function RootLayout({ children }) {
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
       </head>
       <body>
-        {/* 2. Αγκαλιάζουμε τα πάντα με τον Provider */}
-        <WishlistProvider>
-          <Navbar />
-          <main>{children}</main>
-          <Footer />
-        </WishlistProvider>
+        {/* 2. Τον βάζουμε πρώτο-πρώτο */}
+        <AuthProvider>
+          <CartProvider>
+            <WishlistProvider>
+              <Navbar />
+              <main>{children}</main>
+              <Footer />
+            </WishlistProvider>
+          </CartProvider>
+        </AuthProvider>
       </body>
     </html>
   );
