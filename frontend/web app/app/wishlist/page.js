@@ -1,9 +1,19 @@
 "use client";
 import Link from "next/link";
 import { useWishlist } from "../../context/WishlistContext";
+import { useCart } from "../../context/CartContext.js";
 
 export default function WishlistPage() {
   const { wishlist, removeFromWishlist } = useWishlist();
+  const { addToCart } = useCart();
+
+  // Η συνάρτηση για το μεγάλο κουμπί "Μεταφορά όλων"
+  const handleAddAllToCart = () => {
+    wishlist.forEach((item) => {
+      addToCart(item);               // 1. Το βάζει στο καλάθι
+      removeFromWishlist(item.id);   // 2. Το βγάζει από τη Wishlist
+    });
+  };
 
   return (
     <div className="wishlist-container">
@@ -19,7 +29,9 @@ export default function WishlistPage() {
       <div className="wishlist-header-row">
         <h1 className="wishlist-page-title">WISHLIST</h1>
         {wishlist.length > 0 && (
-          <button className="add-all-cart-btn">ΜΕΤΑΦΟΡΑ ΟΛΩΝ ΣΤΟ ΚΑΛΑΘΙ</button>
+          <button className="add-all-cart-btn" onClick={handleAddAllToCart}>
+            ΜΕΤΑΦΟΡΑ ΟΛΩΝ ΣΤΟ ΚΑΛΑΘΙ
+          </button>
         )}
       </div>
 
@@ -29,7 +41,6 @@ export default function WishlistPage() {
       ) : (
         <div className="wishlist-content">
           
-          {/* Οι επικεφαλίδες όπως στη φωτογραφία */}
           <div className="wishlist-table-header">
             <span className="col-product">Προϊόν</span>
             <span className="col-price">Τιμή</span>
@@ -49,7 +60,6 @@ export default function WishlistPage() {
                     <Link href={`/product/${item.id}`} className="wishlist-item-name">
                       {item.title}
                     </Link>
-                    {/* Αν είχαμε Χρώμα/Μέγεθος στα δεδομένα, θα μπαίνανε εδώ */}
                     <p className="wishlist-item-attr">GREEN / M</p>
                   </div>
                 </div>
@@ -64,7 +74,17 @@ export default function WishlistPage() {
                   <button className="remove-item-btn" onClick={() => removeFromWishlist(item.id)}>
                     <i className="fa-regular fa-trash-can"></i> Αφαίρεση
                   </button>
-                  <button className="add-to-cart-btn">ΠΡΟΣΘΗΚΗ ΣΤΟ ΚΑΛΑΘΙ</button>
+                  
+                  {/* --- ΝΕΟ: Κάνει προσθήκη ΚΑΙ αφαίρεση ταυτόχρονα --- */}
+                  <button 
+                    className="add-to-cart-btn" 
+                    onClick={() => {
+                      addToCart(item);               // 1. Μπαίνει στο καλάθι
+                      removeFromWishlist(item.id);   // 2. Εξαφανίζεται από εδώ
+                    }}
+                  >
+                    ΠΡΟΣΘΗΚΗ ΣΤΟ ΚΑΛΑΘΙ
+                  </button>
                 </div>
               </div>
             ))}

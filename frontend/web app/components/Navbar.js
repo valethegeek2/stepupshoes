@@ -1,25 +1,38 @@
 "use client";
 import { useState } from "react";
 import Link from "next/link";
-// Το νέο import για να μιλάει το Navbar με τη Wishlist
+import { usePathname } from "next/navigation";
 import { useWishlist } from "../context/WishlistContext"; 
+import { useCart } from "../context/CartContext.js";
+import { useAuth } from "../context/AuthContext";
 
 export default function Navbar() {
+  const pathname = usePathname(); 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  
+  // ΝΕΟ: State για να ανοίγει/κλείνει το μενού του χρήστη
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
 
-  // Μια μικρή συνάρτηση για να κλείνει το μενού όταν πατάμε ένα link
+  const hideOnRoutes = ["/signin", "/signup", "/forgot-password"];
+  if (hideOnRoutes.includes(pathname)) {
+    return null; 
+  }
+
   const closeMenu = () => setIsMenuOpen(false);
 
-  // --- ΝΕΟ: Διαβάζουμε πόσα αντικείμενα έχει η Wishlist ---
   const { wishlist } = useWishlist();
   const wishlistCount = wishlist?.length || 0; 
-  // Αν είναι πάνω από 9, δείξε "9+"
-  const displayCount = wishlistCount > 9 ? "9+" : wishlistCount;
+  const displayWishlist = wishlistCount > 9 ? "9+" : wishlistCount;
+
+  const { cartCount } = useCart();
+  const displayCart = cartCount > 9 ? "9+" : cartCount;
+
+  // ΝΕΟ: Διαβάζουμε αν υπάρχει συνδεδεμένος user και τη συνάρτηση αποσύνδεσης
+  const { user, logout } = useAuth();
 
   return (
     <div className="nav">
       <div className="nav-left">
-        {/* Κάνοντας κλικ στο Logo θα πηγαίνει στην Αρχική (/) */}
         <Link href="/" style={{ textDecoration: 'none' }} onClick={closeMenu}>
           <h1>Sportwear</h1>
         </Link>
@@ -37,22 +50,54 @@ export default function Navbar() {
       </div>
 
       <div className="nav-right">
-        {/* --- ΝΕΟ: Η καρδιά που σε πάει στη Wishlist και έχει το σηματάκι (Badge) --- */}
         <Link href="/wishlist" className="nav-icon-wrapper" onClick={closeMenu}>
           <i className="fa-regular fa-heart"></i>
-          {wishlistCount > 0 && <span className="icon-badge">{displayCount}</span>}
+          {wishlistCount > 0 && <span className="icon-badge">{displayWishlist}</span>}
         </Link>
 
-        <i className="fa-solid fa-cart-shopping"></i>
-        <p>Sign In</p>
-        <button className="sign-up-btn">Sign Up</button>
+        <Link href="/cart" className="nav-icon-wrapper" onClick={closeMenu}>
+          <i className="fa-solid fa-cart-shopping"></i>
+          {cartCount > 0 && <span className="icon-badge">{displayCart}</span>}
+        </Link>
+
+        {/* --- ΛΟΓΙΚΗ USER: Αν είναι συνδεδεμένος δείξε το εικονίδιο, αλλιώς τα κουμπιά! --- */}
+        {user ? (
+          <div className="user-menu-container">
+            <button className="nav-icon-wrapper" style={{ border: 'none', background: 'none', cursor: 'pointer', outline: 'none' }} onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}>
+              <i className="fa-regular fa-user"></i>
+            </button>
+            
+            {/* Το πλαίσιο που ανοίγει από κάτω */}
+            {isUserMenuOpen && (
+              <div className="user-dropdown">
+                <p className="dropdown-username">Hello, <strong>{user.username}</strong></p>
+                <button 
+                  className="dropdown-logout-btn" 
+                  onClick={() => { 
+                    logout(); 
+                    setIsUserMenuOpen(false); 
+                  }}
+                >
+                  <i className="fa-solid fa-arrow-right-from-bracket"></i> Log out
+                </button>
+              </div>
+            )}
+          </div>
+        ) : (
+          <>
+            <Link href="/signin" style={{ textDecoration: 'none', color: '#333', fontWeight: '500', fontSize: '16px' }} onClick={closeMenu}>
+              Sign In
+            </Link>
+            <Link href="/signup" className="sign-up-btn" style={{ textDecoration: 'none', display: 'inline-block', textAlign: 'center' }} onClick={closeMenu}>
+              Sign Up
+            </Link>
+          </>
+        )}
       </div>
 
       {/* Mega Menu */}
       <div className={`mega-menu-container ${isMenuOpen ? 'active' : ''}`}>
         <ul className="mega-menu-sidebar">
-            
-            {/* ================= ΑΝΔΡΙΚΑ ================= */}
             <li className="mega-menu-item">
                 <Link href="/products/mens" className="mega-menu-link" onClick={closeMenu}>
                   ΑΝΔΡΙΚΑ <i className="fa-solid fa-chevron-right"></i>
@@ -60,23 +105,12 @@ export default function Navbar() {
                 <div className="mega-menu-subpanel">
                     <h3 className="subpanel-title">ΑΝΔΡΙΚΑ <i className="fa-solid fa-chevron-right"></i></h3>
                     <ul className="subpanel-list">
-                        <li>
-                            <Link href="/products/mens/shoes" onClick={closeMenu}>Παπούτσια</Link>
-                        </li>
-                        <li>
-                            <Link href="/products/mens/clothing" onClick={closeMenu}>Ρούχα</Link>
-                        </li>
-                        <li>
-                            <Link href="/products/mens/accessories" onClick={closeMenu}>Αξεσουάρ</Link>
-                        </li>
-                        <li>
-                            <Link href="/products/mens/brands" onClick={closeMenu}>Brands</Link>
-                        </li>
+                        <li><Link href="/products/mens" onClick={closeMenu}>Παπούτσια</Link></li>
+                        <li><Link href="/products/mens" onClick={closeMenu}>Ρούχα</Link></li>
+                        <li><Link href="/products/mens" onClick={closeMenu}>Αξεσουάρ</Link></li>
                     </ul>
                 </div>
             </li>
-
-            {/* ================= ΓΥΝΑΙΚΕΙΑ ================= */}
             <li className="mega-menu-item">
                 <Link href="/products/womens" className="mega-menu-link" onClick={closeMenu}>
                   ΓΥΝΑΙΚΕΙΑ <i className="fa-solid fa-chevron-right"></i>
@@ -84,23 +118,12 @@ export default function Navbar() {
                 <div className="mega-menu-subpanel">
                     <h3 className="subpanel-title">ΓΥΝΑΙΚΕΙΑ <i className="fa-solid fa-chevron-right"></i></h3>
                     <ul className="subpanel-list">
-                        <li>
-                            <Link href="/products/womens/shoes" onClick={closeMenu}>Παπούτσια</Link>
-                        </li>
-                        <li>
-                            <Link href="/products/womens/clothing" onClick={closeMenu}>Ρούχα</Link>
-                        </li>
-                        <li>
-                            <Link href="/products/womens/accessories" onClick={closeMenu}>Αξεσουάρ</Link>
-                        </li>
-                        <li>
-                            <Link href="/products/womens/brands" onClick={closeMenu}>Brands</Link>
-                        </li>
+                        <li><Link href="/products/womens" onClick={closeMenu}>Παπούτσια</Link></li>
+                        <li><Link href="/products/womens" onClick={closeMenu}>Ρούχα</Link></li>
+                        <li><Link href="/products/womens" onClick={closeMenu}>Αξεσουάρ</Link></li>
                     </ul>
                 </div>
             </li>
-
-            {/* ================= ΠΑΙΔΙΚΑ ================= */}
             <li className="mega-menu-item">
                 <Link href="/products/kids" className="mega-menu-link" onClick={closeMenu}>
                   ΠΑΙΔΙΚΑ <i className="fa-solid fa-chevron-right"></i>
@@ -108,26 +131,13 @@ export default function Navbar() {
                 <div className="mega-menu-subpanel">
                     <h3 className="subpanel-title">ΠΑΙΔΙΚΑ <i className="fa-solid fa-chevron-right"></i></h3>
                     <ul className="subpanel-list">
-                        <li>
-                            <Link href="/products/kids/shoes" onClick={closeMenu}>Αγόρι παπούτσια</Link>
-                        </li>
-                        <li>
-                            <Link href="/products/kids/clothing" onClick={closeMenu}>Αγόρι ρούχα</Link>
-                        </li>
-                        <li>
-                            <Link href="/products/kids/accessories" onClick={closeMenu}>Αγόρι αξεσουάρ</Link>
-                        </li>
-                        <li>
-                            <Link href="/products/kids/shoes" onClick={closeMenu}>Κορίτσι παπούτσια</Link>
-                        </li>
-                        <li>
-                            <Link href="/products/kids/clothing" onClick={closeMenu}>Κορίτσι ρούχα</Link>
-                        </li>
+                        <li><Link href="/products/kids" onClick={closeMenu}>Αγόρι παπούτσια</Link></li>
+                        <li><Link href="/products/kids" onClick={closeMenu}>Αγόρι ρούχα</Link></li>
+                        <li><Link href="/products/kids" onClick={closeMenu}>Κορίτσι παπούτσια</Link></li>
+                        <li><Link href="/products/kids" onClick={closeMenu}>Κορίτσι ρούχα</Link></li>
                     </ul>
                 </div>
             </li>
-
-            {/* ================= ΑΞΕΣΟΥΑΡ ================= */}
             <li className="mega-menu-item">
                 <Link href="/products/accessories" className="mega-menu-link" onClick={closeMenu}>
                   ΑΞΕΣΟΥΑΡ <i className="fa-solid fa-chevron-right"></i>
