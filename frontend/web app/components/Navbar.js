@@ -10,7 +10,6 @@ export default function Navbar() {
   const pathname = usePathname(); 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   
-  // ΝΕΟ: State για να ανοίγει/κλείνει το μενού του χρήστη
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
 
   const hideOnRoutes = ["/signin", "/signup", "/forgot-password"];
@@ -27,7 +26,6 @@ export default function Navbar() {
   const { cartCount } = useCart();
   const displayCart = cartCount > 9 ? "9+" : cartCount;
 
-  // ΝΕΟ: Διαβάζουμε αν υπάρχει συνδεδεμένος user και τη συνάρτηση αποσύνδεσης
   const { user, logout } = useAuth();
 
   return (
@@ -50,6 +48,11 @@ export default function Navbar() {
       </div>
 
       <div className="nav-right">
+        
+        <Link href="/orders" className="nav-icon-wrapper" onClick={closeMenu} title="Οι Παραγγελίες μου">
+          <i className="fa-solid fa-box-open"></i>
+        </Link>
+
         <Link href="/wishlist" className="nav-icon-wrapper" onClick={closeMenu}>
           <i className="fa-regular fa-heart"></i>
           {wishlistCount > 0 && <span className="icon-badge">{displayWishlist}</span>}
@@ -60,17 +63,18 @@ export default function Navbar() {
           {cartCount > 0 && <span className="icon-badge">{displayCart}</span>}
         </Link>
 
-        {/* --- ΛΟΓΙΚΗ USER: Αν είναι συνδεδεμένος δείξε το εικονίδιο, αλλιώς τα κουμπιά! --- */}
         {user ? (
           <div className="user-menu-container">
             <button className="nav-icon-wrapper" style={{ border: 'none', background: 'none', cursor: 'pointer', outline: 'none' }} onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}>
               <i className="fa-regular fa-user"></i>
             </button>
             
-            {/* Το πλαίσιο που ανοίγει από κάτω */}
             {isUserMenuOpen && (
               <div className="user-dropdown">
                 <p className="dropdown-username">Hello, <strong>{user.username}</strong></p>
+                
+                {/* ΑΦΑΙΡΕΘΗΚΕ ΤΟ MY ORDERS ΑΠΟ ΕΔΩ! */}
+
                 <button 
                   className="dropdown-logout-btn" 
                   onClick={() => { 

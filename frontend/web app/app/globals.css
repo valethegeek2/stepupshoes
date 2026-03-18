@@ -1999,3 +1999,188 @@
 .payment-option-box.active .payment-option-header p {
     color: #f59e0b;
 }
+
+/* =========================================
+   Orders Page (Table Design)
+   ========================================= */
+.orders-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    min-height: 60vh;
+}
+
+/* Breadcrumbs & Title */
+.orders-page-header {
+    margin-bottom: 30px;
+}
+
+.orders-page-header .breadcrumb {
+    font-size: 14px;
+    color: #111;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.orders-page-header .breadcrumb a {
+    color: #111;
+    text-decoration: none;
+}
+
+.orders-page-header .breadcrumb span {
+    color: #666;
+}
+
+.orders-page-header .main-title {
+    font-size: 32px;
+    font-weight: 800;
+    color:black; /* Ένα σκούρο μπλε όπως στη φώτο σου με το wishlist */
+    margin: 0;
+}
+
+/* Κάρτα Πίνακα */
+.orders-table-card {
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+    border: 1px solid #eaeaea;
+    overflow: hidden;
+}
+
+/* Search Bar */
+.table-top-bar {
+    padding: 20px;
+    border-bottom: 1px solid #eaeaea;
+    display: flex;
+    justify-content: flex-start;
+}
+
+.table-search {
+    display: flex;
+    align-items: center;
+    background-color: #f8f9fa;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 10px 15px;
+    width: 300px;
+}
+
+.table-search i {
+    color: #888;
+    margin-right: 10px;
+}
+
+.table-search input {
+    border: none;
+    background: transparent;
+    outline: none;
+    width: 100%;
+    font-size: 14px;
+}
+
+/* Πίνακας */
+.table-responsive {
+    overflow-x: auto;
+}
+
+.orders-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.orders-table th {
+    text-align: left;
+    padding: 15px 20px;
+    font-size: 12px;
+    font-weight: 700;
+    color: #888;
+    background-color: #fafafa;
+    border-bottom: 1px solid #eaeaea;
+}
+
+.orders-table td {
+    padding: 20px;
+    border-bottom: 1px solid #eaeaea;
+    font-size: 14px;
+    color: #111;
+    vertical-align: middle;
+}
+
+.orders-table tr:last-child td {
+    border-bottom: none;
+}
+
+.orders-table tr:hover {
+    background-color: #fcfcfc;
+}
+
+/* Βοηθητικές Κλάσεις Κειμένου */
+.fw-bold { font-weight: bold; }
+.text-gray { color: #666 !important; }
+
+/* Badges Κατάστασης */
+.status-badge {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.bg-success { background-color: #dcfce7; color: #166534; }
+.bg-danger { background-color: #fee2e2; color: #991b1b; }
+.bg-warning { background-color: #fef3c7; color: #92400e; }
+
+/* Pagination */
+.pagination-container {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 20px;
+    border-top: 1px solid #eaeaea;
+    gap: 15px;
+}
+
+.page-btn {
+    background: none;
+    border: none;
+    color: #666;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.page-btn:disabled {
+    color: #ccc;
+    cursor: not-allowed;
+}
+
+.page-numbers {
+    display: flex;
+    gap: 5px;
+}
+
+.page-number {
+    width: 35px;
+    height: 35px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    background-color: #fff;
+    color: #333;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+/* Το πορτοκαλί σου χρώμα όταν η σελίδα είναι επιλεγμένη! */
+.page-number.active {
+    background-color: #f59e0b;
+    border-color: #f59e0b;
+    color: #fff;
+}
+
+.page-number:hover:not(.active) {
+    background-color: #f8f9fa;
+}
