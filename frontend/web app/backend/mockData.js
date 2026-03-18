@@ -1,5 +1,5 @@
 export var mockToken = null;
-const Products = [
+const ProductsDTO = [
 	{
 		"id": 1,
 		"name": "Xtra Boost",
@@ -37,7 +37,7 @@ const Products = [
 		"isActive": true
 	}
 ];
-const Variants = [
+const VariantsDTO = [
 	{
 		"id": 0,
 		"color": "Blue",
@@ -55,7 +55,7 @@ const Variants = [
 		"is_available": true
 	}
 ];
-const Categories = [
+const CategoriesDTO = [
 	{
 		"id": 0,
 		"name": "Shoes"
@@ -77,7 +77,7 @@ const Categories = [
 		"name": "Accessories/Gym Tools"
 	}
 ];
-const Users = [
+const UsersDTO = [
 	{
 		"id": 0,
 		"username": "admin",
@@ -97,10 +97,10 @@ const Users = [
 ];
 export const mockDB = {
 	"Comment": "These are example data for the Objects served by the endpoints",
-	products: Products,
-	categories: Categories,
-	users: Users,
-	variants: Variants,
+	products: ProductsDTO,
+	categories: CategoriesDTO,
+	users: UsersDTO,
+	variants: VariantsDTO,
 	"RegisterRequestDTO": {
 		"username": "user",
 		"email": "my@email.com",
@@ -115,108 +115,108 @@ export const mockDB = {
 	}
 }
 
-export async function login(username="admin", password="admin123") {
-  if(username === "admin" && password === "admin123"){
-    mockToken = "token";
-    return username;
-  }
-  throw new Error("Username not found");
-}
+// export async function login(username="admin", password="admin123") {
+//   if(username === "admin" && password === "admin123"){
+//     mockToken = "token";
+//     return username;
+//   }
+//   throw new Error("Username not found");
+// }
 
-function delay(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
+// function delay(ms) {
+//   return new Promise(resolve => setTimeout(resolve, ms));
+// }
 
-// GET /products
-export async function getProducts(page = 0, size = 10) {
+// // GET /products
+// export async function getProducts(page = 0, size = 10) {
 
-	if(!mockToken){
-    throw new Error("Not logged in");
-  }
+// 	if(!mockToken){
+//     throw new Error("Not logged in");
+//   }
 
-  await delay(200);
+//   await delay(200);
 
-  const start = page * size;
-  const end = start + size;
+//   const start = page * size;
+//   const end = start + size;
 
-  const contents = mockDB.products.slice(start, end);
+//   const contents = mockDB.products.slice(start, end);
 
-  return {
-    contents,
-    pageNumber: page,
-    pageSize: size,
-    totalPages: Math.ceil(mockDB.products.length / size),
-    totalElements: mockDB.products.length,
-    lastPage: end >= mockDB.products.length
-  };
-}
-
-
-// GET /products/{id}
-export async function getProduct(id) {
-
-  await delay(100);
-
-  return mockDB.products.find(
-    p => p.productId === id
-  );
-}
+//   return {
+//     contents,
+//     pageNumber: page,
+//     pageSize: size,
+//     totalPages: Math.ceil(mockDB.products.length / size),
+//     totalElements: mockDB.products.length,
+//     lastPage: end >= mockDB.products.length
+//   };
+// }
 
 
-// POST /products
-export async function createProduct(product) {
-  if(!mockToken){
-    throw new Error("Not logged in");
-  }
-  await delay(150);
+// // GET /products/{id}
+// export async function getProduct(id) {
 
-  const newId = Math.max(...mockDB.products.map(p => p.id)) + 1;
+//   await delay(100);
 
-  const newProduct = {
-    ...product,
-    id: newId
-  };
-
-  mockDB.products.push(newProduct);
-
-  return newProduct;
-}
+//   return mockDB.products.find(
+//     p => p.productId === id
+//   );
+// }
 
 
-// PUT /products/{id}
-export async function updateProduct(id, updatedData) {
+// // POST /products
+// export async function createProduct(product) {
+//   if(!mockToken){
+//     throw new Error("Not logged in");
+//   }
+//   await delay(150);
 
-  await delay(150);
+//   const newId = Math.max(...mockDB.products.map(p => p.id)) + 1;
 
-  const index = mockDB.products.findIndex(
-    p => p.productId === id
-  );
+//   const newProduct = {
+//     ...product,
+//     id: newId
+//   };
 
-  if (index === -1) {
-    throw new Error("Product not found");
-  }
+//   mockDB.products.push(newProduct);
 
-  mockDB.products[index] = {
-    ...mockDB.products[index],
-    ...updatedData
-  };
-
-  return mockDB.products[index];
-}
+//   return newProduct;
+// }
 
 
-// DELETE /products/{id}
-export async function deleteProduct(id) {
+// // PUT /products/{id}
+// export async function updateProduct(id, updatedData) {
 
-  await delay(100);
+//   await delay(150);
 
-  const index = mockDB.products.findIndex(
-    p => p.productId === id
-  );
+//   const index = mockDB.products.findIndex(
+//     p => p.productId === id
+//   );
 
-  if (index !== -1) {
-    mockDB.products.splice(index, 1);
-  }
+//   if (index === -1) {
+//     throw new Error("Product not found");
+//   }
 
-  return { message: "Deleted" };
-}
+//   mockDB.products[index] = {
+//     ...mockDB.products[index],
+//     ...updatedData
+//   };
+
+//   return mockDB.products[index];
+// }
+
+
+// // DELETE /products/{id}
+// export async function deleteProduct(id) {
+
+//   await delay(100);
+
+//   const index = mockDB.products.findIndex(
+//     p => p.productId === id
+//   );
+
+//   if (index !== -1) {
+//     mockDB.products.splice(index, 1);
+//   }
+
+//   return { message: "Deleted" };
+// }
