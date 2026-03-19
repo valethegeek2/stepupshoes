@@ -12,6 +12,7 @@ export default function Navbar() {
   
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
 
+  // Κρύβουμε το Navbar σε συγκεκριμένες σελίδες
   const hideOnRoutes = ["/signin", "/signup", "/forgot-password"];
   if (hideOnRoutes.includes(pathname)) {
     return null; 
@@ -49,20 +50,31 @@ export default function Navbar() {
 
       <div className="nav-right">
         
+        {/* Εικονίδιο Επεξεργασίας Προϊόντων - ΦΑΙΝΕΤΑΙ ΜΟΝΟ ΣΤΟΝ ADMIN */}
+        {user && user.role === "admin" && (
+          <Link href="/admin/products" className="nav-icon-wrapper" onClick={closeMenu} title="Επεξεργασία Προϊόντων">
+            <i className="fa-solid fa-pen-to-square" style={{ color: "#f59e0b" }}></i>
+          </Link>
+        )}
+
+        {/* Εικονίδιο Παραγγελιών - Πάντα ορατό, αριστερά από τη Wishlist */}
         <Link href="/orders" className="nav-icon-wrapper" onClick={closeMenu} title="Οι Παραγγελίες μου">
           <i className="fa-solid fa-box-open"></i>
         </Link>
 
+        {/* Wishlist */}
         <Link href="/wishlist" className="nav-icon-wrapper" onClick={closeMenu}>
           <i className="fa-regular fa-heart"></i>
           {wishlistCount > 0 && <span className="icon-badge">{displayWishlist}</span>}
         </Link>
 
+        {/* Καλάθι */}
         <Link href="/cart" className="nav-icon-wrapper" onClick={closeMenu}>
           <i className="fa-solid fa-cart-shopping"></i>
           {cartCount > 0 && <span className="icon-badge">{displayCart}</span>}
         </Link>
 
+        {/* Προφίλ Χρήστη ή Κουμπιά Σύνδεσης/Εγγραφής */}
         {user ? (
           <div className="user-menu-container">
             <button className="nav-icon-wrapper" style={{ border: 'none', background: 'none', cursor: 'pointer', outline: 'none' }} onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}>
@@ -72,8 +84,6 @@ export default function Navbar() {
             {isUserMenuOpen && (
               <div className="user-dropdown">
                 <p className="dropdown-username">Hello, <strong>{user.username}</strong></p>
-                
-                {/* ΑΦΑΙΡΕΘΗΚΕ ΤΟ MY ORDERS ΑΠΟ ΕΔΩ! */}
 
                 <button 
                   className="dropdown-logout-btn" 
