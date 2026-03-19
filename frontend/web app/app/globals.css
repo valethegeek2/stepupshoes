@@ -2184,3 +2184,76 @@
 .page-number:hover:not(.active) {
     background-color: #f8f9fa;
 }
+
+/* =========================================
+   Admin Products Extras (Table Updates)
+   ========================================= */
+
+/* Κάνουμε το top bar flex για να χωρίσει το search bar και το κουμπί */
+.table-top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Το Μπλε Κουμπί Προσθήκης (Όπως στη φώτο) */
+.add-product-btn {
+    background-color: #3b82f6; /* Μπλε χρώμα */
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: background-color 0.2s;
+}
+
+.add-product-btn:hover {
+    background-color: #2563eb;
+}
+
+/* Το κελί με την εικόνα του προϊόντος */
+.product-cell {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.product-cell img {
+    width: 45px;
+    height: 45px;
+    border-radius: 8px;
+    object-fit: contain;
+    background-color: #f8f9fa;
+    border: 1px solid #eaeaea;
+}
+
+/* Κουμπιά Action (Μολύβι & Κάδος) */
+.action-btns {
+    display: flex;
+    gap: 15px;
+}
+
+.action-btn {
+    background: none;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    transition: transform 0.2s, opacity 0.2s;
+}
+
+.action-btn:hover {
+    transform: scale(1.1);
+}
+
+.edit-btn {
+    color: #3b82f6; /* Μπλε μολυβάκι */
+}
+
+.delete-btn {
+    color: #ef4444; /* Κόκκινος κάδος */
+}
