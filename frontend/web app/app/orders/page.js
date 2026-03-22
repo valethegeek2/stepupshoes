@@ -1,15 +1,22 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation"; // Προσθέσαμε το router
 import { useAuth } from "../../context/AuthContext";
 import { ordersData } from "../../data/orders";
 
 export default function OrdersPage() {
+  const router = useRouter(); // Αρχικοποίηση του router
   const { user } = useAuth();
   
+  const [ordersList, setOrdersList] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10; 
+
+  useEffect(() => {
+    setOrdersList(ordersData);
+  }, []);
 
   if (!user) {
     return (
@@ -22,22 +29,39 @@ export default function OrdersPage() {
     );
   }
 
-  // 1. ΕΛΕΓΧΟΣ ΡΟΛΟΥ
-  let displayOrders = user.role === "admin" 
-    ? ordersData 
-    : ordersData.filter(order => order.username === user.username);
+  // Συνάρτηση Ακύρωσης ΜΟΝΟ για τον απλό πελάτη
+  const handleCancelOrder = (orderId, currentStatus) => {
+    const allowedStatuses = ["Σε εκκρεμότητα", "Επιβεβαιωμένη"];
+    
+    if (allowedStatuses.includes(currentStatus)) {
+      if (window.confirm("Είστε σίγουροι ότι θέλετε να ακυρώσετε αυτή την παραγγελία;")) {
+        setOrdersList(prev => prev.map(order => 
+          order.id === orderId ? { ...order, status: "Ακυρώθηκε" } : order
+        ));
+      }
+    } else {
+      alert("Δεν μπορεί να ακυρωθεί η παραγγελία στο στάδιο που βρίσκεται.");
+    }
+  };
 
-  // 2. ΕΞΥΠΝΗ ΑΝΑΖΗΤΗΣΗ
+  const getStatusBadgeClass = (status) => {
+    if (status === 'Παραδόθηκε') return 'bg-success'; 
+    if (status === 'Ακυρώθηκε' || status === 'Απέτυχε') return 'bg-danger'; 
+    return 'bg-warning'; 
+  };
+
+  let displayOrders = user.role === "admin" 
+    ? ordersList 
+    : ordersList.filter(order => order.username === user.username);
+
   if (searchTerm) {
     displayOrders = displayOrders.filter(order => {
       const matchId = order.id.toLowerCase().includes(searchTerm.toLowerCase());
       const matchUsername = user.role === "admin" && order.username.toLowerCase().includes(searchTerm.toLowerCase());
-      
       return matchId || matchUsername;
     });
   }
 
-  // 3. Λογική Pagination (Σελιδοποίησης)
   const totalPages = Math.ceil(displayOrders.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const currentOrders = displayOrders.slice(startIndex, startIndex + itemsPerPage);
@@ -50,7 +74,6 @@ export default function OrdersPage() {
   return (
     <div className="orders-container">
       
-      {/* Breadcrumb & Title */}
       <div className="orders-page-header">
         <p className="breadcrumb">
           <Link href="/">Αρχική</Link> - <span>ΠΑΡΑΓΓΕΛΙΕΣ</span>
@@ -60,7 +83,6 @@ export default function OrdersPage() {
 
       <div className="orders-table-card">
         
-        {/* Search Bar */}
         <div className="table-top-bar">
           <div className="table-search">
             <i className="fa-solid fa-magnifying-glass"></i>
@@ -73,21 +95,18 @@ export default function OrdersPage() {
           </div>
         </div>
 
-        {/* Ο Πίνακας */}
         <div className="table-responsive">
           <table className="orders-table">
             <thead>
               <tr>
                 <th>ORDER ID</th>
-                
-                {/* ΝΕΑ ΣΤΗΛΗ: Εμφανίζεται ΜΟΝΟ στους Admins */}
                 {user.role === "admin" && <th>CUSTOMER</th>}
-                
                 <th>DATE</th>
                 <th>TOTAL</th>
                 <th>STATUS</th>
                 <th>ITEMS</th>
                 <th>PAYMENT METHOD</th>
+                <th>ACTION</th>
               </tr>
             </thead>
             <tbody>
@@ -96,28 +115,49 @@ export default function OrdersPage() {
                   <tr key={order.id}>
                     <td className="fw-bold">{order.id}</td>
                     
-                    {/* CUSTOMER: Εμφανίζεται ΜΟΝΟ στους Admins - Μαύρα γράμματα, χωρίς το @ */}
                     {user.role === "admin" && (
                       <td className="fw-bold" style={{ color: "#111" }}>{order.username}</td>
                     )}
 
                     <td className="text-gray">{order.date}</td>
                     <td className="fw-bold">€ {order.total.toFixed(2)}</td>
+                    
                     <td>
-                      <span className={`status-badge ${
-                        order.status === 'Ολοκληρώθηκε' ? 'bg-success' : 
-                        order.status === 'Ακυρώθηκε' || order.status === 'Επιστράφηκε' ? 'bg-danger' : 'bg-warning'
-                      }`}>
+                      <span className={`status-badge ${getStatusBadgeClass(order.status)}`}>
                         {order.status}
                       </span>
                     </td>
+                    
                     <td className="text-gray">{order.items.length} items</td>
                     <td className="text-gray">{order.paymentMethod}</td>
+                    
+                    {/* --- Η ΑΛΛΑΓΗ ΣΤΟ ACTION ΚΕΛΙ --- */}
+                    <td>
+                      {user.role === "admin" ? (
+                        /* ΚΟΥΜΠΙ EDIT ΓΙΑ ΤΟΝ ADMIN */
+                        <button 
+                          className="edit-order-btn"
+                          onClick={() => router.push(`/orders/edit/${order.id}`)}
+                        >
+                          <i className="fa-solid fa-pen"></i> Edit
+                        </button>
+                      ) : (
+                        /* ΚΟΥΜΠΙ CANCEL ΓΙΑ ΤΟΝ ΠΕΛΑΤΗ */
+                        <button 
+                          className="cancel-order-btn"
+                          onClick={() => handleCancelOrder(order.id, order.status)}
+                          title="Ακύρωση Παραγγελίας"
+                        >
+                          <i className="fa-solid fa-xmark"></i> Cancel
+                        </button>
+                      )}
+                    </td>
+
                   </tr>
                 ))
               ) : (
                 <tr>
-                  <td colSpan={user.role === "admin" ? "7" : "6"} style={{ textAlign: "center", padding: "40px", color: "#666" }}>
+                  <td colSpan={user.role === "admin" ? "8" : "7"} style={{ textAlign: "center", padding: "40px", color: "#666" }}>
                     Δεν βρέθηκαν παραγγελίες.
                   </td>
                 </tr>
@@ -126,7 +166,6 @@ export default function OrdersPage() {
           </table>
         </div>
 
-        {/* Pagination (Σελιδοποίηση) */}
         {totalPages > 1 && (
           <div className="pagination-container">
             <button 

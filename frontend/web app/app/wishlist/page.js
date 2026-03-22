@@ -1,19 +1,52 @@
 "use client";
 import Link from "next/link";
 import { useWishlist } from "../../context/WishlistContext";
-import { useCart } from "../../context/CartContext.js";
+import { useCart } from "../../context/CartContext";
+import { useAuth } from "../../context/AuthContext"; 
+// --- ΝΕΟ: Εισάγουμε τα δεδομένα των προϊόντων για τον έλεγχο αποθέματος ---
+import { productsData } from "../../data/product";
 
 export default function WishlistPage() {
   const { wishlist, removeFromWishlist } = useWishlist();
   const { addToCart } = useCart();
+  const { user } = useAuth();
 
-  // Η συνάρτηση για το μεγάλο κουμπί "Μεταφορά όλων"
+  // --- ΝΕΟ: Η μεταφορά όλων στο καλάθι ελέγχει πλέον και το απόθεμα! ---
   const handleAddAllToCart = () => {
+    let addedCount = 0;
+    let outOfStockCount = 0;
+
     wishlist.forEach((item) => {
-      addToCart(item);               // 1. Το βάζει στο καλάθι
-      removeFromWishlist(item.id);   // 2. Το βγάζει από τη Wishlist
+      const originalProduct = productsData.find(p => p.id === item.id);
+      const isOutOfStock = originalProduct ? originalProduct.quantity === 0 : false;
+
+      // Προσθέτει στο καλάθι ΜΟΝΟ όσα έχουν απόθεμα
+      if (!isOutOfStock) {
+        addToCart(item);               
+        removeFromWishlist(item.id);   
+        addedCount++;
+      } else {
+        outOfStockCount++;
+      }
     });
+
+    if (outOfStockCount > 0) {
+      alert(`Προστέθηκαν ${addedCount} προϊόντα στο καλάθι. ${outOfStockCount} προϊόντα δεν προστέθηκαν γιατί έχουν εξαντληθεί.`);
+    } else if (addedCount > 0) {
+      alert("Όλα τα προϊόντα προστέθηκαν στο καλάθι σας με επιτυχία!");
+    }
   };
+
+  if (!user) {
+    return (
+      <div className="wishlist-container" style={{ textAlign: "center", padding: "100px 20px", minHeight: "60vh" }}>
+        <h2 style={{ marginBottom: "20px" }}>Πρέπει να συνδεθείτε για να δείτε τη λίστα επιθυμιών σας.</h2>
+        <Link href="/signin" className="summary-btn" style={{ display: "inline-block", width: "auto", padding: "15px 30px", textDecoration: "none" }}>
+          Σύνδεση
+        </Link>
+      </div>
+    );
+  }
 
   return (
     <div className="wishlist-container">
@@ -47,47 +80,67 @@ export default function WishlistPage() {
           </div>
 
           <div className="wishlist-items-list">
-            {wishlist.map((item) => (
-              <div className="wishlist-item-row" key={item.id}>
-                
-                {/* Αριστερά: Φωτό και Πληροφορίες */}
-                <div className="wishlist-item-left">
-                  <div className="wishlist-img-box">
-                    <img src={item.image || ""} alt={item.title} />
-                  </div>
-                  <div className="wishlist-item-info">
-                    <p className="wishlist-item-brand">{item.brand || "Sportwear"}</p>
-                    <Link href={`/product/${item.id}`} className="wishlist-item-name">
-                      {item.title}
-                    </Link>
-                    <p className="wishlist-item-attr">GREEN / M</p>
-                  </div>
-                </div>
+            {wishlist.map((item) => {
+              // --- ΝΕΟ: Βρίσκουμε αν το συγκεκριμένο προϊόν είναι Out of Stock ---
+              const originalProduct = productsData.find(p => p.id === item.id);
+              const isOutOfStock = originalProduct ? originalProduct.quantity === 0 : false;
 
-                {/* Μέση: Τιμή */}
-                <div className="wishlist-item-price">
-                  € {item.price}
-                </div>
-
-                {/* Δεξιά: Κουμπιά */}
-                <div className="wishlist-item-actions">
-                  <button className="remove-item-btn" onClick={() => removeFromWishlist(item.id)}>
-                    <i className="fa-regular fa-trash-can"></i> Αφαίρεση
-                  </button>
+              return (
+                <div className="wishlist-item-row" key={item.id}>
                   
-                  {/* --- ΝΕΟ: Κάνει προσθήκη ΚΑΙ αφαίρεση ταυτόχρονα --- */}
-                  <button 
-                    className="add-to-cart-btn" 
-                    onClick={() => {
-                      addToCart(item);               // 1. Μπαίνει στο καλάθι
-                      removeFromWishlist(item.id);   // 2. Εξαφανίζεται από εδώ
-                    }}
-                  >
-                    ΠΡΟΣΘΗΚΗ ΣΤΟ ΚΑΛΑΘΙ
-                  </button>
+                  {/* Αριστερά: Φωτό και Πληροφορίες */}
+                  <div className="wishlist-item-left">
+                    <div className="wishlist-img-box">
+                      <img src={item.image || ""} alt={item.title} />
+                    </div>
+                    <div className="wishlist-item-info">
+                      <p className="wishlist-item-brand">{item.brand || "Sportwear"}</p>
+                      <Link href={`/product/${item.id}`} className="wishlist-item-name">
+                        {item.title}
+                      </Link>
+                      
+                      {/* Προαιρετικό: Ένα μικρό σηματάκι αν είναι εξαντλημένο */}
+                      {isOutOfStock && (
+                        <p style={{ color: '#d10000', fontSize: '12px', fontWeight: 'bold', marginTop: '5px' }}>
+                          Εξαντλήθηκε
+                        </p>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Μέση: Τιμή */}
+                  <div className="wishlist-item-price">
+                    € {Number(item.price).toFixed(2)}
+                  </div>
+
+                  {/* Δεξιά: Κουμπιά */}
+                  <div className="wishlist-item-actions">
+                    <button className="remove-item-btn" onClick={() => removeFromWishlist(item.id)}>
+                      <i className="fa-regular fa-trash-can"></i> Αφαίρεση
+                    </button>
+                    
+                    {/* --- ΝΕΟ: Το κουμπί προσθήκης γκριζάρει και κλειδώνει αν το stock είναι 0 --- */}
+                    <button 
+                      className="add-to-cart-btn" 
+                      onClick={() => {
+                        if (!isOutOfStock) {
+                          addToCart(item);               
+                          removeFromWishlist(item.id);   
+                        }
+                      }}
+                      disabled={isOutOfStock}
+                      style={{
+                        backgroundColor: isOutOfStock ? '#ccc' : '',
+                        cursor: isOutOfStock ? 'not-allowed' : 'pointer',
+                        opacity: isOutOfStock ? 0.6 : 1
+                      }}
+                    >
+                      {isOutOfStock ? "OUT OF STOCK" : "ΠΡΟΣΘΗΚΗ ΣΤΟ ΚΑΛΑΘΙ"}
+                    </button>
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       )}

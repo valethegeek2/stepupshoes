@@ -1,20 +1,19 @@
 "use client";
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useAuth } from "../../../context/AuthContext";
-// Εισάγουμε τα mock δεδομένα των προϊόντων σου
-import { productsData as products } from "../../../data/product";
+import { productsData as products } from "../../../data/product"; 
 
 export default function AdminProductsPage() {
+  const router = useRouter();
   const { user } = useAuth();
   
-  // Φορτώνουμε τα προϊόντα στο state για να μπορούμε να τα κάνουμε delete
   const [productList, setProductList] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10; 
 
-  // Αρχικοποίηση δεδομένων (Προσθέτουμε τυχαία quantity & brand αν δεν υπάρχουν)
   useEffect(() => {
     const initializedProducts = products.map(p => ({
       ...p,
@@ -24,7 +23,6 @@ export default function AdminProductsPage() {
     setProductList(initializedProducts);
   }, []);
 
-  // Έλεγχος ασφαλείας: ΜΟΝΟ admin μπαίνουν εδώ!
   if (!user || user.role !== "admin") {
     return (
       <div className="orders-container" style={{ textAlign: "center", padding: "100px 20px" }}>
@@ -36,14 +34,12 @@ export default function AdminProductsPage() {
     );
   }
 
-  // 1. Λειτουργία Διαγραφής (Delete)
   const handleDelete = (id) => {
     if (window.confirm("Είστε σίγουροι ότι θέλετε να διαγράψετε αυτό το προϊόν;")) {
       setProductList(prev => prev.filter(p => p.id !== id));
     }
   };
 
-  // 2. ΕΞΥΠΝΗ ΑΝΑΖΗΤΗΣΗ
   let displayProducts = productList;
   if (searchTerm) {
     displayProducts = displayProducts.filter(product => 
@@ -52,7 +48,6 @@ export default function AdminProductsPage() {
     );
   }
 
-  // 3. Λογική Pagination (Σελιδοποίησης)
   const totalPages = Math.ceil(displayProducts.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const currentProducts = displayProducts.slice(startIndex, startIndex + itemsPerPage);
@@ -65,7 +60,6 @@ export default function AdminProductsPage() {
   return (
     <div className="orders-container">
       
-      {/* Breadcrumb & Title */}
       <div className="orders-page-header">
         <p className="breadcrumb">
           <Link href="/">Αρχική</Link> - <span>ΠΡΟΪΟΝΤΑ</span>
@@ -75,7 +69,6 @@ export default function AdminProductsPage() {
 
       <div className="orders-table-card">
         
-        {/* Top Bar με Search και Add Product Button */}
         <div className="table-top-bar">
           <div className="table-search">
             <i className="fa-solid fa-magnifying-glass"></i>
@@ -87,12 +80,14 @@ export default function AdminProductsPage() {
             />
           </div>
 
-          <button className="add-product-btn" onClick={() => alert("Εδώ θα πηγαίνει στη φόρμα νέου προϊόντος!")}>
+          <button 
+            className="add-product-btn" 
+            onClick={() => router.push("/admin/products/new")}
+          >
             <i className="fa-solid fa-plus"></i> Add Product
           </button>
         </div>
 
-        {/* Ο Πίνακας */}
         <div className="table-responsive">
           <table className="orders-table">
             <thead>
@@ -100,6 +95,7 @@ export default function AdminProductsPage() {
                 <th>ID</th>
                 <th>PRODUCT</th>
                 <th>CATEGORY</th>
+                <th>GENDER</th> {/* Προστέθηκε το GENDER */}
                 <th>BRAND</th>
                 <th>QUANTITY</th>
                 <th>PRICE</th>
@@ -116,7 +112,6 @@ export default function AdminProductsPage() {
                     <tr key={product.id}>
                       <td className="text-gray fw-bold">#{product.id}</td>
                       
-                      {/* Κελί Προϊόντος με Εικόνα */}
                       <td>
                         <div className="product-cell">
                           <img src={product.image || "https://via.placeholder.com/40"} alt={product.title} />
@@ -125,24 +120,34 @@ export default function AdminProductsPage() {
                       </td>
 
                       <td className="text-gray">{product.category}</td>
+                      <td className="text-gray" style={{ textTransform: 'capitalize' }}>{product.gender}</td> {/* Προστέθηκε το GENDER */}
                       <td className="text-gray">{product.brand}</td>
                       <td className="fw-bold">{product.quantity}</td>
                       <td className="fw-bold">€ {Number(product.price).toFixed(2)}</td>
                       
-                      {/* Status Badge */}
                       <td>
                         <span className={`status-badge ${isOutOfStock ? 'bg-danger' : 'bg-success'}`}>
                           {isOutOfStock ? "Out of Stock" : "In Stock"}
                         </span>
                       </td>
 
-                      {/* Action Buttons */}
                       <td>
                         <div className="action-btns">
-                          <button className="action-btn edit-btn" title="Επεξεργασία">
+                          {/* Κουμπί Επεξεργασίας */}
+                          <button 
+                            className="action-btn edit-btn" 
+                            title="Επεξεργασία" 
+                            onClick={() => router.push(`/admin/products/edit/${product.id}`)}
+                          >
                             <i className="fa-solid fa-pen"></i>
                           </button>
-                          <button className="action-btn delete-btn" title="Διαγραφή" onClick={() => handleDelete(product.id)}>
+                          
+                          {/* Κουμπί Διαγραφής */}
+                          <button 
+                            className="action-btn delete-btn" 
+                            title="Διαγραφή" 
+                            onClick={() => handleDelete(product.id)}
+                          >
                             <i className="fa-solid fa-trash-can"></i>
                           </button>
                         </div>
@@ -152,7 +157,7 @@ export default function AdminProductsPage() {
                 })
               ) : (
                 <tr>
-                  <td colSpan="8" style={{ textAlign: "center", padding: "40px", color: "#666" }}>
+                  <td colSpan="9" style={{ textAlign: "center", padding: "40px", color: "#666" }}> {/* Αλλάξαμε το colSpan σε 9 επειδή προσθέσαμε στήλη */}
                     Δεν βρέθηκαν προϊόντα.
                   </td>
                 </tr>
@@ -161,7 +166,6 @@ export default function AdminProductsPage() {
           </table>
         </div>
 
-        {/* Pagination */}
         {totalPages > 1 && (
           <div className="pagination-container">
             <button 

@@ -1,18 +1,20 @@
 "use client";
 import { useState } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+// Προσθέσαμε το useRouter για να κάνουμε την ανακατεύθυνση
+import { usePathname, useRouter } from "next/navigation";
 import { useWishlist } from "../context/WishlistContext"; 
 import { useCart } from "../context/CartContext.js";
 import { useAuth } from "../context/AuthContext";
 
 export default function Navbar() {
   const pathname = usePathname(); 
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const router = useRouter(); // <--- ΝΕΟ
   
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState(""); // <--- ΝΕΟ: Κρατάει τι γράφει ο χρήστης
 
-  // Κρύβουμε το Navbar σε συγκεκριμένες σελίδες
   const hideOnRoutes = ["/signin", "/signup", "/forgot-password"];
   if (hideOnRoutes.includes(pathname)) {
     return null; 
@@ -29,6 +31,16 @@ export default function Navbar() {
 
   const { user, logout } = useAuth();
 
+  // --- ΝΕΑ ΣΥΝΑΡΤΗΣΗ ΑΝΑΖΗΤΗΣΗΣ ---
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (searchTerm.trim() !== "") {
+      // Τον στέλνει στη σελίδα products με παράμετρο search
+      router.push(`/products?search=${encodeURIComponent(searchTerm.trim())}`);
+      setSearchTerm(""); // Αδειάζει τη μπάρα μετά την αναζήτηση
+    }
+  };
+
   return (
     <div className="nav">
       <div className="nav-left">
@@ -43,38 +55,39 @@ export default function Navbar() {
         </button>
       </div>
       
-      <div className="search-container">
+      {/* --- ΝΕΑ ΜΠΑΡΑ ΑΝΑΖΗΤΗΣΗΣ --- */}
+      <form className="search-container" onSubmit={handleSearch}>
         <i className="fa-solid fa-magnifying-glass"></i>
-        <input type="text" placeholder="Search products..." />
-      </div>
+        <input 
+          type="text" 
+          placeholder="Search products..." 
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+      </form>
 
       <div className="nav-right">
         
-        {/* Εικονίδιο Επεξεργασίας Προϊόντων - ΦΑΙΝΕΤΑΙ ΜΟΝΟ ΣΤΟΝ ADMIN */}
         {user && user.role === "admin" && (
           <Link href="/admin/products" className="nav-icon-wrapper" onClick={closeMenu} title="Επεξεργασία Προϊόντων">
             <i className="fa-solid fa-pen-to-square" style={{ color: "#f59e0b" }}></i>
           </Link>
         )}
 
-        {/* Εικονίδιο Παραγγελιών - Πάντα ορατό, αριστερά από τη Wishlist */}
         <Link href="/orders" className="nav-icon-wrapper" onClick={closeMenu} title="Οι Παραγγελίες μου">
           <i className="fa-solid fa-box-open"></i>
         </Link>
 
-        {/* Wishlist */}
         <Link href="/wishlist" className="nav-icon-wrapper" onClick={closeMenu}>
           <i className="fa-regular fa-heart"></i>
           {wishlistCount > 0 && <span className="icon-badge">{displayWishlist}</span>}
         </Link>
 
-        {/* Καλάθι */}
         <Link href="/cart" className="nav-icon-wrapper" onClick={closeMenu}>
           <i className="fa-solid fa-cart-shopping"></i>
           {cartCount > 0 && <span className="icon-badge">{displayCart}</span>}
         </Link>
 
-        {/* Προφίλ Χρήστη ή Κουμπιά Σύνδεσης/Εγγραφής */}
         {user ? (
           <div className="user-menu-container">
             <button className="nav-icon-wrapper" style={{ border: 'none', background: 'none', cursor: 'pointer', outline: 'none' }} onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}>
@@ -84,7 +97,6 @@ export default function Navbar() {
             {isUserMenuOpen && (
               <div className="user-dropdown">
                 <p className="dropdown-username">Hello, <strong>{user.username}</strong></p>
-
                 <button 
                   className="dropdown-logout-btn" 
                   onClick={() => { 
@@ -109,63 +121,28 @@ export default function Navbar() {
         )}
       </div>
 
-      {/* Mega Menu */}
+      {/* ΑΠΛΟΠΟΙΗΜΕΝΟ ΜΕΝΟΥ (1 Επίπεδο) */}
       <div className={`mega-menu-container ${isMenuOpen ? 'active' : ''}`}>
         <ul className="mega-menu-sidebar">
             <li className="mega-menu-item">
-                <Link href="/products/mens" className="mega-menu-link" onClick={closeMenu}>
-                  ΑΝΔΡΙΚΑ <i className="fa-solid fa-chevron-right"></i>
+                <Link href="/products/shoes" className="mega-menu-link" onClick={closeMenu}>
+                  ΠΑΠΟΥΤΣΙΑ
                 </Link>
-                <div className="mega-menu-subpanel">
-                    <h3 className="subpanel-title">ΑΝΔΡΙΚΑ <i className="fa-solid fa-chevron-right"></i></h3>
-                    <ul className="subpanel-list">
-                        <li><Link href="/products/mens" onClick={closeMenu}>Παπούτσια</Link></li>
-                        <li><Link href="/products/mens" onClick={closeMenu}>Ρούχα</Link></li>
-                        <li><Link href="/products/mens" onClick={closeMenu}>Αξεσουάρ</Link></li>
-                    </ul>
-                </div>
             </li>
             <li className="mega-menu-item">
-                <Link href="/products/womens" className="mega-menu-link" onClick={closeMenu}>
-                  ΓΥΝΑΙΚΕΙΑ <i className="fa-solid fa-chevron-right"></i>
+                <Link href="/products/clothing" className="mega-menu-link" onClick={closeMenu}>
+                  ΡΟΥΧΑ
                 </Link>
-                <div className="mega-menu-subpanel">
-                    <h3 className="subpanel-title">ΓΥΝΑΙΚΕΙΑ <i className="fa-solid fa-chevron-right"></i></h3>
-                    <ul className="subpanel-list">
-                        <li><Link href="/products/womens" onClick={closeMenu}>Παπούτσια</Link></li>
-                        <li><Link href="/products/womens" onClick={closeMenu}>Ρούχα</Link></li>
-                        <li><Link href="/products/womens" onClick={closeMenu}>Αξεσουάρ</Link></li>
-                    </ul>
-                </div>
             </li>
             <li className="mega-menu-item">
-                <Link href="/products/kids" className="mega-menu-link" onClick={closeMenu}>
-                  ΠΑΙΔΙΚΑ <i className="fa-solid fa-chevron-right"></i>
+                <Link href="/products/gym-equipment" className="mega-menu-link" onClick={closeMenu}>
+                  ΟΡΓΑΝΑ ΓΥΜΝΑΣΤΙΚΗΣ
                 </Link>
-                <div className="mega-menu-subpanel">
-                    <h3 className="subpanel-title">ΠΑΙΔΙΚΑ <i className="fa-solid fa-chevron-right"></i></h3>
-                    <ul className="subpanel-list">
-                        <li><Link href="/products/kids" onClick={closeMenu}>Αγόρι παπούτσια</Link></li>
-                        <li><Link href="/products/kids" onClick={closeMenu}>Αγόρι ρούχα</Link></li>
-                        <li><Link href="/products/kids" onClick={closeMenu}>Κορίτσι παπούτσια</Link></li>
-                        <li><Link href="/products/kids" onClick={closeMenu}>Κορίτσι ρούχα</Link></li>
-                    </ul>
-                </div>
             </li>
             <li className="mega-menu-item">
                 <Link href="/products/accessories" className="mega-menu-link" onClick={closeMenu}>
-                  ΑΞΕΣΟΥΑΡ <i className="fa-solid fa-chevron-right"></i>
+                  ΑΞΕΣΟΥΑΡ
                 </Link>
-                <div className="mega-menu-subpanel">
-                    <h3 className="subpanel-title">ΑΞΕΣΟΥΑΡ <i className="fa-solid fa-chevron-right"></i></h3>
-                    <ul className="subpanel-list">
-                        <li><Link href="/products/accessories" onClick={closeMenu}>Όργανα Γυμναστικής</Link></li>
-                        <li><Link href="/products/accessories" onClick={closeMenu}>Τσάντες - Σακίδια</Link></li>
-                        <li><Link href="/products/accessories" onClick={closeMenu}>Μπουκάλια | Θερμός | Shaker</Link></li>
-                        <li><Link href="/products/accessories" onClick={closeMenu}>Ποδόσφαιρο | Soccer</Link></li>
-                        <li><Link href="/products/accessories" onClick={closeMenu}>Μπάσκετ | Basket</Link></li>
-                    </ul>
-                </div>
             </li>
         </ul>
       </div>
