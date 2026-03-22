@@ -33,6 +33,7 @@ export default function CheckoutPage() {
         <div className="checkout-form-section">
           <h2 className="checkout-title">Στοιχεία παραγγελίας</h2>
           
+
           <form className="checkout-form" onSubmit={handleProceedToPayment}>
             <div className="form-row">
               <div className="input-group">

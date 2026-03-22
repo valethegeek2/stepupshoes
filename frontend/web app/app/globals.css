@@ -122,7 +122,7 @@
 }
 
 /* =========================================
-   Mega Menu Sidebar & Subcategories
+   Mega Menu Sidebar
    ========================================= */
 .mega-menu-container {
     position: absolute;
@@ -169,63 +169,9 @@
     transition: all 0.2s ease;
 }
 
-.mega-menu-link i {
-    font-size: 12px;
-}
-
 .mega-menu-item:hover .mega-menu-link {
     background-color: #f4f5f7;
     color: #1a3c82;
-}
-
-/* --- Παραθυράκι 2ου Επιπέδου (Δεξιά από το Sidebar) --- */
-.mega-menu-subpanel {
-    position: absolute;
-    top: 0;
-    left: 280px;
-    width: 400px;
-    height: 100%;
-    background-color: #f4f5f7;
-    display: none;
-    padding: 30px;
-    box-shadow: 5px 0 15px rgba(0,0,0,0.05);
-}
-
-.mega-menu-item:hover .mega-menu-subpanel {
-    display: block; 
-}
-
-.subpanel-title {
-    color: #1a3c82;
-    font-size: 18px;
-    margin-bottom: 25px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    text-transform: uppercase;
-}
-
-.subpanel-title i {
-    font-size: 14px;
-    color: #f59e0b;
-}
-
-.subpanel-list {
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-.subpanel-list li a {
-    color: #444;
-    text-decoration: none;
-    font-size: 15px;
-    transition: color 0.2s;
-}
-
-.subpanel-list li a:hover {
-    color: #f59e0b;
 }
 
 /* --- Κεντρική Εικόνα (Hero Section) --- */
@@ -1013,6 +959,8 @@
 .remove-item-btn:hover {
     color: #d10000;
 }
+
+
 /* =========================================
    Shopping Cart Page
    ========================================= */
@@ -1299,6 +1247,7 @@
     font-size: 18px;
     color: #555;
 }
+
 
 /* =========================================
    Authentication Pages (Sign In / Sign Up)
@@ -1674,8 +1623,6 @@
     gap: 30px;
 }
 
-
-
 /* =========================================
    User Dropdown Menu
    ========================================= */
@@ -1746,6 +1693,7 @@
 .user-menu-container .nav-icon-wrapper i {
     font-size: 24px; /* Μπορείς να το κάνεις 26px, 28px κλπ. μέχρι να σου αρέσει */
 }
+
 
 /* =========================================
    Checkout Page
@@ -1843,6 +1791,7 @@
     border-color: #f59e0b;
 }
 
+/* ΔΕΞΙΑ: Σύνοψη */
 /* ΔΕΞΙΑ: Νέο Order Summary */
 .checkout-summary-section {
     flex: 1;
@@ -1943,6 +1892,8 @@
 .feature-item i {
     font-size: 16px;
 }
+
+
 /* =========================================
    Payment Page Styles
    ========================================= */
@@ -1958,7 +1909,7 @@
 /* ΟΤΑΝ ΕΙΝΑΙ ΕΠΙΛΕΓΜΕΝΟ: Παίρνει το χρώμα του κουμπιού σου! */
 .payment-option-box.active {
     border: 2px solid #f59e0b; /* Πορτοκαλί border */
-    background-color: #fff9f0; /* Πολύ αχνό πορτοκαλί background για να ξεχωρίζει */
+    background-color: #fff !important; /* Το αναγκάζουμε να είναι ολόλευκο! */
 }
 
 .payment-option-box:hover:not(.active) {
@@ -1999,6 +1950,7 @@
 .payment-option-box.active .payment-option-header p {
     color: #f59e0b;
 }
+
 
 /* =========================================
    Orders Page (Table Design)
@@ -2119,6 +2071,48 @@
 .text-gray { color: #666 !important; }
 
 /* Badges Κατάστασης */
+/* Κουμπί Ακύρωσης Παραγγελίας */
+.cancel-order-btn {
+    background-color: #fee2e2;
+    color: #ef4444;
+    border: 1px solid #fca5a5;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s;
+}
+/* Κουμπί Επεξεργασίας Παραγγελίας (Για τον Admin) */
+.edit-order-btn {
+    background-color: #eff6ff; /* Απαλό γαλάζιο φόντο */
+    color: #3b82f6; /* Έντονο μπλε γράμματα */
+    border: 1px solid #bfdbfe; /* Γαλάζιο περίγραμμα */
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s;
+}
+
+.edit-order-btn:hover {
+    background-color: #3b82f6;
+    color: #fff;
+    border-color: #3b82f6;
+}
+
+.cancel-order-btn:hover {
+    background-color: #ef4444;
+    color: #fff;
+    border-color: #ef4444;
+}
 .status-badge {
     padding: 6px 12px;
     border-radius: 20px;
@@ -2188,17 +2182,14 @@
 /* =========================================
    Admin Products Extras (Table Updates)
    ========================================= */
-
-/* Κάνουμε το top bar flex για να χωρίσει το search bar και το κουμπί */
 .table-top-bar {
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
-/* Το Μπλε Κουμπί Προσθήκης (Όπως στη φώτο) */
 .add-product-btn {
-    background-color: #3b82f6; /* Μπλε χρώμα */
+    background-color: #3b82f6; 
     color: #fff;
     border: none;
     padding: 10px 20px;
@@ -2216,7 +2207,6 @@
     background-color: #2563eb;
 }
 
-/* Το κελί με την εικόνα του προϊόντος */
 .product-cell {
     display: flex;
     align-items: center;
@@ -2232,7 +2222,6 @@
     border: 1px solid #eaeaea;
 }
 
-/* Κουμπιά Action (Μολύβι & Κάδος) */
 .action-btns {
     display: flex;
     gap: 15px;
@@ -2251,9 +2240,162 @@
 }
 
 .edit-btn {
-    color: #3b82f6; /* Μπλε μολυβάκι */
+    color: #3b82f6; 
 }
 
 .delete-btn {
-    color: #ef4444; /* Κόκκινος κάδος */
+    color: #ef4444; 
+}
+
+/* =========================================
+   Admin Add/Edit Product Form (Vertical)
+   ========================================= */
+.admin-form-container {
+    max-width: 1000px; /* Το άφησα μεγάλο για το title */
+    margin: 0 auto;
+    padding: 40px 20px;
+    min-height: 60vh;
+}
+
+.admin-form-card {
+    background-color: #fff;
+    border-radius: 12px;
+    padding: 40px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+    border: 1px solid #eaeaea;
+}
+
+/* ΝΕΟ: Η κάθετη διάταξη */
+.vertical-form-layout {
+    display: flex;
+    flex-direction: column;
+    gap: 10px; /* Κενό ανάμεσα στα στοιχεία */
+}
+
+.section-title {
+    font-size: 18px;
+    color: #111;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #eaeaea;
+    padding-bottom: 10px;
+}
+
+.admin-input-group {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+}
+
+.form-row-2 {
+    display: flex;
+    gap: 20px;
+    width: 100%;
+}
+
+.form-row-2 .admin-input-group {
+    flex: 1;
+}
+
+/* Mobile responsive για τα πεδία που είναι δίπλα-δίπλα */
+@media (max-width: 600px) {
+    .form-row-2 {
+        flex-direction: column;
+        gap: 0;
+    }
+}
+
+.admin-input-group label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #333;
+}
+
+.admin-input-group input,
+.admin-input-group textarea,
+.admin-input-group select {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s;
+    background-color: #fafafa;
+}
+
+.admin-input-group input:focus,
+.admin-input-group textarea:focus,
+.admin-input-group select:focus {
+    border-color: #3b82f6;
+    background-color: #fff;
+}
+
+.help-text {
+    font-size: 12px;
+    color: #888;
+    margin: 0;
+}
+
+.image-preview {
+    margin-top: 10px;
+    width: 120px;
+    height: 120px;
+    border: 1px dashed #ccc;
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    background-color: #f8f9fa;
+}
+
+.image-preview img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: cover;
+}
+
+.admin-form-actions {
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px solid #eaeaea;
+    display: flex;
+    justify-content: flex-end; /* Κουμπιά στα δεξιά */
+    gap: 15px;
+}
+
+.cancel-btn {
+    background-color: #fff;
+    color: #555;
+    border: 1px solid #ddd;
+    padding: 12px 25px;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.cancel-btn:hover {
+    background-color: #f5f5f5;
+    color: #111;
+}
+
+.save-btn {
+    background-color: #3b82f6; 
+    color: #fff;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: background-color 0.2s;
+}
+
+.save-btn:hover {
+    background-color: #2563eb;
 }

@@ -1,13 +1,27 @@
-"use client"; // Χρειάζεται πλέον επειδή έχουμε κλικ και state
+"use client"; 
 import Link from "next/link";
 import { useWishlist } from "../context/WishlistContext";
+import { useCart } from "../context/CartContext";
 
 export default function ProductCard({ product }) {
   const { wishlist, toggleWishlist } = useWishlist();
+  const { cart, removeFromCart } = useCart();
+
   if (!product) return null;
 
-  // Ελέγχουμε αν αυτό το προϊόν είναι ήδη μέσα στη Wishlist
   const isWishlisted = wishlist.some((item) => item.id === product.id);
+  const isInCart = cart.some((item) => item.id === product.id);
+
+  const handleWishlistClick = (e) => {
+    e.preventDefault(); 
+
+    toggleWishlist(product);
+
+    // Αφαιρείται αθόρυβα από το καλάθι χωρίς κανένα alert!
+    if (!isWishlisted && isInCart) {
+      removeFromCart(product.id);
+    }
+  };
 
   const fullStars = Math.floor(product.rating || 5);
   const hasHalfStar = (product.rating % 1) !== 0;
@@ -15,14 +29,17 @@ export default function ProductCard({ product }) {
 
   return (
     <div className="product-card">
-      <div className="img-placeholder">
-        {/* Αν είναι στη wishlist, βάζουμε fa-solid (γεμάτη) και κόκκινο χρώμα */}
+      <div className="img-placeholder" style={{ position: 'relative' }}>
+        
         <i 
           className={`card-heart ${isWishlisted ? 'fa-solid' : 'fa-regular'} fa-heart`}
           style={{ color: isWishlisted ? '#f00' : '' }}
-          onClick={() => toggleWishlist(product)} // Όταν πατιέται, καλεί τη συνάρτηση μας
+          onClick={handleWishlistClick}
         ></i>
-        <img src={product.image || ""} alt={product.title} />
+
+        <Link href={`/product/${product.id}`}>
+          <img src={product.image || "https://via.placeholder.com/300"} alt={product.title} />
+        </Link>
       </div>
       
       <div className="product-info">
@@ -35,7 +52,10 @@ export default function ProductCard({ product }) {
           {[...Array(emptyStars)].map((_, i) => <i key={`empty-${i}`} className="fa-regular fa-star"></i>)}
           <span>({product.reviews || 0})</span>
         </div>
-        <p className="product-price">€ {product.price}</p>
+        
+        <p className="product-price">
+          € {Number(product.price).toFixed(2)}
+        </p>
       </div>
     </div>
   );
