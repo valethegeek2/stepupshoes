@@ -5,10 +5,10 @@ import com.stepup.demo.models.dtos.CartItemResponseDTO;
 import com.stepup.demo.services.CartService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
 import org.springframework.security.core.Authentication;
-
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -18,28 +18,26 @@ import java.util.List;
 public class CartController {
 
     @Autowired
-    private final CartService cartService;
+    private CartService cartService;
 
     @GetMapping
-    public List<CartItemResponseDTO> getCart(Authentication auth) {
-        return cartService.getCartItems(auth.getName());
+    public ResponseEntity<List<CartItemResponseDTO>> getCart(Authentication auth) {
+        return new ResponseEntity<>(cartService.getCartItems(auth.getName()), HttpStatus.OK);
     }
 
     @PostMapping
     public ResponseEntity<Void> addToCart(
             @RequestBody AddToCartRequestDTO request,
             Authentication auth) {
-
         cartService.addToCart(auth.getName(), request);
-        return ResponseEntity.ok().build();
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @DeleteMapping("/{variantId}")
     public ResponseEntity<Void> removeFromCart(
             @PathVariable Long variantId,
             Authentication auth) {
-
         cartService.removeFromCart(auth.getName(), variantId);
-        return ResponseEntity.noContent().build();
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

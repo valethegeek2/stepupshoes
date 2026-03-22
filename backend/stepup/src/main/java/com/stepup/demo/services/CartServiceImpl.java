@@ -8,6 +8,7 @@ import com.stepup.demo.models.dtos.CartItemResponseDTO;
 import com.stepup.demo.repository.CartItemRepository;
 import com.stepup.demo.repository.ProductVariantRepository;
 import com.stepup.demo.repository.UserRepository;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -27,7 +28,7 @@ public class CartServiceImpl implements CartService {
     public List<CartItemResponseDTO> getCartItems(String username) {
 
         User user = userRepository.findByUsername(username)
-                .orElseThrow();
+                .orElseThrow(() -> new EntityNotFoundException("User not found: " + username));
 
         return cartItemRepository.findByUser(user)
                 .stream()
@@ -39,16 +40,21 @@ public class CartServiceImpl implements CartService {
     public void addToCart(String username, AddToCartRequestDTO req) {
 
         User user = userRepository.findByUsername(username)
-                .orElseThrow();
+                .orElseThrow(() -> new EntityNotFoundException("User not found: " + username));
 
         ProductVariant variant = variantRepository.findById(req.getVariantId())
-                .orElseThrow();
+                .orElseThrow(() -> new EntityNotFoundException("Variant not found with id: " + req.getVariantId()));
 
         if (req.getQuantity() <= 0)
-            throw new IllegalArgumentException("Quantity must be positive");
+            throw new IllegalArgumentException("Quantity must be greater than zero");
+
+        if (!Boolean.TRUE.equals(variant.getIsAvailable()))
+            throw new IllegalStateException("Variant is no longer available: " + req.getVariantId());
 
         if (req.getQuantity() > variant.getStock())
-            throw new IllegalArgumentException("Not enough stock");
+            throw new IllegalArgumentException(
+                    "Not enough stock. Requested: " + req.getQuantity()
+                    + ", available: " + variant.getStock());
 
         CartItem item = cartItemRepository
                 .findByUserAndVariant(user, variant)
@@ -63,8 +69,10 @@ public class CartServiceImpl implements CartService {
         } else {
             int newQty = item.getQuantity() + req.getQuantity();
             if (newQty > variant.getStock())
-                throw new IllegalArgumentException("Not enough stock");
-
+                throw new IllegalArgumentException(
+                        "Not enough stock. Already in cart: " + item.getQuantity()
+                        + ", requested extra: " + req.getQuantity()
+                        + ", available: " + variant.getStock());
             item.setQuantity(newQty);
         }
 
@@ -75,10 +83,13 @@ public class CartServiceImpl implements CartService {
     public void removeFromCart(String username, Long variantId) {
 
         User user = userRepository.findByUsername(username)
-                .orElseThrow();
+                .orElseThrow(() -> new EntityNotFoundException("User not found: " + username));
 
         ProductVariant variant = variantRepository.findById(variantId)
-                .orElseThrow();
+                .orElseThrow(() -> new EntityNotFoundException("Variant not found with id: " + variantId));
+
+        if (cartItemRepository.findByUserAndVariant(user, variant).isEmpty())
+            throw new EntityNotFoundException("Cart item not found for variant id: " + variantId);
 
         cartItemRepository.deleteByUserAndVariant(user, variant);
     }
@@ -88,7 +99,7 @@ public class CartServiceImpl implements CartService {
                 + item.getVariant().getPriceAdjustment();
 
         return CartItemResponseDTO.builder()
-                .variantId(item.getVariant().getId())
+                .variantId(item.getVariant().getVariantId())
                 .productName(item.getVariant().getProduct().getName())
                 .color(item.getVariant().getColor())
                 .size(item.getVariant().getSize())
