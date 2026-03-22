@@ -29,7 +29,6 @@ public class OrderServiceImpl implements OrderService {
     private UserRepository userRepository;
     @Autowired
     private ModelMapper modelMapper;
-
     @Override
     public OrderDTO placeOrder(String username, PlaceOrderRequestDTO request) {
 
@@ -74,7 +73,6 @@ public class OrderServiceImpl implements OrderService {
 
         orderRepository.save(order);
 
-        // 6. Deduct stock from each variant
         for (CartItem item : cartItems) {
             ProductVariant variant = item.getVariant();
             int updatedStock = variant.getStock() - item.getQuantity();
@@ -89,7 +87,6 @@ public class OrderServiceImpl implements OrderService {
         return modelMapper.map(order, OrderDTO.class);
     }
 
-
     @Override
     public List<OrderDTO> getOrdersByUser(String username) {
         User user = userRepository.findByUsername(username)
@@ -100,7 +97,6 @@ public class OrderServiceImpl implements OrderService {
                 .map(order -> modelMapper.map(order, OrderDTO.class))
                 .toList();
     }
-
 
     @Override
     public OrderDTO getOrderById(Long orderId, String username) {
@@ -123,6 +119,13 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public OrderDTO getOrderByIdAdmin(Long orderId) {
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new EntityNotFoundException("Order not found with id: " + orderId));
+        return modelMapper.map(order, OrderDTO.class);
+    }
+
+    @Override
     public OrderDTO updateOrderStatus(Long orderId, String status) {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new EntityNotFoundException("Order not found with id: " + orderId));
@@ -134,5 +137,13 @@ public class OrderServiceImpl implements OrderService {
         }
 
         return modelMapper.map(orderRepository.save(order), OrderDTO.class);
+    }
+
+    @Override
+    public void deleteOrder(Long orderId) {
+        if (!orderRepository.existsById(orderId)) {
+            throw new EntityNotFoundException("Order not found with id: " + orderId);
+        }
+        orderRepository.deleteById(orderId);
     }
 }

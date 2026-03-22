@@ -13,7 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
+import com.stepup.demo.models.dtos.OrderDTO;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
@@ -35,6 +35,8 @@ public class AdminController {
     private AuthService authService;
     @Autowired
     private ModelMapper modelMapper;
+    @Autowired
+    private OrderService orderService;
 
     // ======================== PRODUCTS ==============================
     @GetMapping("/products")
@@ -240,5 +242,50 @@ public class AdminController {
         UserProfileDTO response = modelMapper.map(updatedProfile, UserProfileDTO.class);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+            // ======================== ORDERS ===========================
+
+    @GetMapping("/orders")
+    public ResponseEntity<PagedResponse<OrderDTO, Long>> getAllOrders(
+            @RequestParam(name = "pageNumber", defaultValue = AppConstants.PAGE_NUMBER, required = false) Integer pageNumber,
+            @RequestParam(name = "pageSize",   defaultValue = AppConstants.PAGE_SIZE,   required = false) Integer pageSize,
+            @RequestParam(name = "sortBy",     defaultValue = AppConstants.SORT_ORDERS_BY, required = false) String sortBy,
+            @RequestParam(name = "sortOrder",  defaultValue = AppConstants.SORT_ORDER,  required = false) String sortOrder
+    ) {
+        PagedResponse<Order, Long> pagedResponse = orderService.getAllOrders(pageNumber, pageSize, sortBy, sortOrder);
+        PagedResponse<OrderDTO, Long> dtoResponse = new PagedResponse<>();
+        dtoResponse.setContents(pagedResponse.getContents().stream()
+                .map(order -> modelMapper.map(order, OrderDTO.class))
+                .toList());
+        dtoResponse.setPageNumber(pagedResponse.getPageNumber());
+        dtoResponse.setPageSize(pagedResponse.getPageSize());
+        dtoResponse.setTotalElements(pagedResponse.getTotalElements());
+        dtoResponse.setTotalPages(pagedResponse.getTotalPages());
+        dtoResponse.setLastPage(pagedResponse.isLastPage());
+        return new ResponseEntity<>(dtoResponse, HttpStatus.OK);
+    }
+
+    @GetMapping("/orders/{orderId}")
+    public ResponseEntity<OrderDTO> getOrderById(@PathVariable long orderId) {
+        return new ResponseEntity<>(orderService.getOrderByIdAdmin(orderId), HttpStatus.OK);
+    }
+
+    @PutMapping("/orders/{orderId}/status")
+    public ResponseEntity<OrderDTO> updateOrderStatus(
+            @PathVariable long orderId,
+            @RequestParam String status
+    ) {
+        return new ResponseEntity<>(orderService.updateOrderStatus(orderId, status), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/orders/{orderId}")
+    public ResponseEntity<HttpStatus> deleteOrder(@PathVariable long orderId) {
+        orderService.deleteOrder(orderId);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    // ===============================================================
+
+    
 
 }
