@@ -1,23 +1,36 @@
 "use client";
 import Link from "next/link";
-// 1. Προσθέσαμε το useRouter
 import { useRouter } from "next/navigation"; 
 import { useCart } from "../../context/CartContext";
+import { useAuth } from "../../context/AuthContext";
+// --- ΝΕΟ: Εισάγουμε τα προϊόντα για να ξέρουμε το απόθεμα! ---
+import { productsData } from "../../data/product";
 
 export default function CartPage() {
-  const router = useRouter(); // 2. Το δηλώνουμε εδώ
+  const router = useRouter(); 
   const { cart, removeFromCart, updateQuantity, clearCart, cartCount, cartSubtotal } = useCart();
+  
+  const { user } = useAuth();
 
-  // Υπολογισμοί όπως στη φωτογραφία
-  const shipping = 0; // Δωρεάν
-  const taxRate = 0.24; // 24% ΦΠΑ (ή ό,τι θέλεις)
+  const shipping = 0; 
+  const taxRate = 0.24; 
   const tax = cartSubtotal * taxRate;
   const total = cartSubtotal + shipping + tax;
+
+  if (!user) {
+    return (
+      <div className="cart-page-container" style={{ textAlign: "center", padding: "100px 20px", minHeight: "60vh" }}>
+        <h2 style={{ marginBottom: "20px" }}>Πρέπει να συνδεθείτε για να δείτε το καλάθι σας.</h2>
+        <Link href="/signin" className="summary-btn" style={{ display: "inline-block", width: "auto", padding: "15px 30px", textDecoration: "none" }}>
+          Σύνδεση
+        </Link>
+      </div>
+    );
+  }
 
   return (
     <div className="cart-page-container">
       
-      {/* Επικεφαλίδα */}
       <div className="cart-header-top">
         <div>
           <h1 className="cart-title">Shopping Cart</h1>
@@ -36,7 +49,6 @@ export default function CartPage() {
       ) : (
         <div className="cart-layout">
           
-          {/* ΑΡΙΣΤΕΡΗ ΣΤΗΛΗ: Προϊόντα */}
           <div className="cart-left-col">
             <div className="cart-box-header">
               <h3>Cart Items</h3>
@@ -46,38 +58,61 @@ export default function CartPage() {
             </div>
 
             <div className="cart-items-wrapper">
-              {cart.map((item) => (
-                <div className="cart-item-row" key={item.id}>
-                  {/* Εικόνα */}
-                  <div className="cart-item-img">
-                    <img src={item.image || ""} alt={item.title} />
-                  </div>
-                  
-                  {/* Πληροφορίες & Ποσότητα */}
-                  <div className="cart-item-details">
-                    <div className="item-title-row">
-                      <h4>{item.title}</h4>
-                      <button className="item-trash-btn" onClick={() => removeFromCart(item.id)}>
-                        <i className="fa-regular fa-trash-can"></i>
-                      </button>
+              {cart.map((item) => {
+                // --- ΝΕΟ: Βρίσκουμε το προϊόν στη "βάση" για να δούμε το απόθεμα ---
+                const originalProduct = productsData.find(p => p.id === item.id);
+                
+                // Αν δεν έχεις γράψει quantity στο product.js, βάζουμε ένα προεπιλεγμένο όριο (π.χ. 5) για να μη σπάει
+                const maxStock = originalProduct?.quantity !== undefined ? originalProduct.quantity : 5;
+
+                return (
+                  <div className="cart-item-row" key={item.id}>
+                    <div className="cart-item-img">
+                      <img src={item.image || ""} alt={item.title} />
                     </div>
-                    <p className="item-price-each">€ {item.price.toFixed(2)} each</p>
                     
-                    <div className="item-bottom-row">
-                      <div className="qty-controls">
-                        <button onClick={() => updateQuantity(item.id, -1)}>-</button>
-                        <span>{item.quantity}</span>
-                        <button onClick={() => updateQuantity(item.id, 1)}>+</button>
+                    <div className="cart-item-details">
+                      <div className="item-title-row">
+                        <h4>{item.title}</h4>
+                        <button className="item-trash-btn" onClick={() => removeFromCart(item.id)}>
+                          <i className="fa-regular fa-trash-can"></i>
+                        </button>
                       </div>
-                      <p className="item-total-price">€ {(item.price * item.quantity).toFixed(2)}</p>
+                      <p className="item-price-each">€ {item.price.toFixed(2)} each</p>
+                      
+                      <div className="item-bottom-row">
+                        <div className="qty-controls">
+                          <button onClick={() => updateQuantity(item.id, -1)}>-</button>
+                          <span>{item.quantity}</span>
+                          
+                          {/* --- ΝΕΟ: Το κουμπί + έχει πλέον περιορισμό! --- */}
+                          <button 
+                            onClick={() => {
+                              if (item.quantity < maxStock) {
+                                updateQuantity(item.id, 1);
+                              } else {
+                                alert(`Δυστυχώς, το μέγιστο διαθέσιμο απόθεμα για αυτό το προϊόν είναι ${maxStock} τεμάχια.`);
+                              }
+                            }}
+                            // Αν φτάσει στο όριο, του αλλάζουμε την εμφάνιση για να φαίνεται ανενεργό
+                            style={{ 
+                              opacity: item.quantity >= maxStock ? 0.3 : 1, 
+                              cursor: item.quantity >= maxStock ? 'not-allowed' : 'pointer' 
+                            }}
+                            title={item.quantity >= maxStock ? "Εξαντλήθηκε το απόθεμα" : "Προσθήκη"}
+                          >
+                            +
+                          </button>
+                        </div>
+                        <p className="item-total-price">€ {(item.price * item.quantity).toFixed(2)}</p>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
 
-          {/* ΔΕΞΙΑ ΣΤΗΛΗ: Σύνοψη (Order Summary) */}
           <div className="cart-right-col">
             <h3 className="summary-title">Order Summary</h3>
             
@@ -99,7 +134,6 @@ export default function CartPage() {
               <span>€ {total.toFixed(2)}</span>
             </div>
 
-            {/* 3. Βάλαμε το onClick στο δικό σου κουμπί! */}
             <button 
               className="checkout-btn" 
               onClick={() => router.push("/checkout")}
@@ -107,7 +141,6 @@ export default function CartPage() {
               <i className="fa-solid fa-lock"></i> Proceed to Checkout
             </button>
 
-            {/* Badges Ασφαλείας */}
             <div className="trust-badges">
               <p><i className="fa-solid fa-shield-halved" style={{color: '#2bd67b'}}></i> Secure SSL checkout</p>
               <p><i className="fa-solid fa-truck-fast" style={{color: '#3b82f6'}}></i> Free returns within 30 days</p>

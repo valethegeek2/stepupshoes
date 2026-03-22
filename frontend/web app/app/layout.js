@@ -2,7 +2,7 @@ import "./globals.css";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { WishlistProvider } from "../context/WishlistContext";
-import { CartProvider } from "../context/CartContext.js";
+import { CartProvider } from "../context/CartContext";
 // 1. Φέρνουμε τον AuthProvider
 import { AuthProvider } from "../context/AuthContext"; 
 
