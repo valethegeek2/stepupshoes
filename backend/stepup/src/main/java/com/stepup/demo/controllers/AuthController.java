@@ -8,6 +8,7 @@ import com.stepup.demo.services.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.core.Authentication;
@@ -21,9 +22,9 @@ public class AuthController {
     AuthService authService;
 
     @PostMapping("/register")
-    public ResponseEntity<RegisterResponse> searchProducts(@Valid @RequestBody RegisterRequestDTO registerRequestDTO) {
+    public ResponseEntity<HttpStatus> searchProducts(@Valid @RequestBody RegisterRequestDTO registerRequestDTO) {
         RegisterResponse response = authService.register(registerRequestDTO);
-        return ResponseEntity.ok(response);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PostMapping("/login")

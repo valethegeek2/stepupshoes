@@ -4,21 +4,16 @@ All URIs are relative to *http://localhost:8080*
 
 | Method | HTTP request | Description |
 |------------- | ------------- | -------------|
-| [**addVariant**](ProductControllerApi.md#addvariant) | **POST** /api/products/{productId}/variants |  |
-| [**createProduct1**](ProductControllerApi.md#createproduct1) | **POST** /api/products |  |
-| [**deleteProduct1**](ProductControllerApi.md#deleteproduct1) | **DELETE** /api/products/{id} |  |
-| [**deleteVariant**](ProductControllerApi.md#deletevariant) | **DELETE** /api/products/variants/{variantId} |  |
-| [**getAllProducts1**](ProductControllerApi.md#getallproducts1) | **GET** /api/products |  |
-| [**getProductById**](ProductControllerApi.md#getproductbyid) | **GET** /api/products/{id} |  |
-| [**searchProducts2**](ProductControllerApi.md#searchproducts2) | **GET** /api/products/search |  |
-| [**updateProduct1**](ProductControllerApi.md#updateproduct1) | **PUT** /api/products/{id} |  |
-| [**updateVariant**](ProductControllerApi.md#updatevariant) | **PUT** /api/products/variants/{variantId} |  |
+| [**getAllProductVariantsByProductId1**](ProductControllerApi.md#getallproductvariantsbyproductid1) | **GET** /api/v1/products/{productId}/productVariants |  |
+| [**getAllProducts1**](ProductControllerApi.md#getallproducts1) | **GET** /api/v1/products |  |
+| [**getProductById**](ProductControllerApi.md#getproductbyid) | **GET** /api/v1/products/{id} |  |
+| [**searchProducts2**](ProductControllerApi.md#searchproducts2) | **GET** /api/v1/products/search |  |
 
 
 
-## addVariant
+## getAllProductVariantsByProductId1
 
-> ProductVariant addVariant(productId, productVariant)
+> Array&lt;VariantDTO&gt; getAllProductVariantsByProductId1(productId)
 
 
 
@@ -29,7 +24,7 @@ import {
   Configuration,
   ProductControllerApi,
 } from '';
-import type { AddVariantRequest } from '';
+import type { GetAllProductVariantsByProductId1Request } from '';
 
 async function example() {
   console.log("🚀 Testing  SDK...");
@@ -38,12 +33,10 @@ async function example() {
   const body = {
     // number
     productId: 789,
-    // ProductVariant
-    productVariant: ...,
-  } satisfies AddVariantRequest;
+  } satisfies GetAllProductVariantsByProductId1Request;
 
   try {
-    const data = await api.addVariant(body);
+    const data = await api.getAllProductVariantsByProductId1(body);
     console.log(data);
   } catch (error) {
     console.error(error);
@@ -60,141 +53,10 @@ example().catch(console.error);
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
 | **productId** | `number` |  | [Defaults to `undefined`] |
-| **productVariant** | [ProductVariant](ProductVariant.md) |  | |
 
 ### Return type
 
-[**ProductVariant**](ProductVariant.md)
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
-- **Content-Type**: `application/json`
-- **Accept**: `*/*`
-
-
-### HTTP response details
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-| **200** | OK |  -  |
-
-[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
-
-
-## createProduct1
-
-> Product createProduct1(product)
-
-
-
-### Example
-
-```ts
-import {
-  Configuration,
-  ProductControllerApi,
-} from '';
-import type { CreateProduct1Request } from '';
-
-async function example() {
-  console.log("🚀 Testing  SDK...");
-  const api = new ProductControllerApi();
-
-  const body = {
-    // Product
-    product: ...,
-  } satisfies CreateProduct1Request;
-
-  try {
-    const data = await api.createProduct1(body);
-    console.log(data);
-  } catch (error) {
-    console.error(error);
-  }
-}
-
-// Run the test
-example().catch(console.error);
-```
-
-### Parameters
-
-
-| Name | Type | Description  | Notes |
-|------------- | ------------- | ------------- | -------------|
-| **product** | [Product](Product.md) |  | |
-
-### Return type
-
-[**Product**](Product.md)
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
-- **Content-Type**: `application/json`
-- **Accept**: `*/*`
-
-
-### HTTP response details
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-| **200** | OK |  -  |
-
-[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
-
-
-## deleteProduct1
-
-> deleteProduct1(id)
-
-
-
-### Example
-
-```ts
-import {
-  Configuration,
-  ProductControllerApi,
-} from '';
-import type { DeleteProduct1Request } from '';
-
-async function example() {
-  console.log("🚀 Testing  SDK...");
-  const api = new ProductControllerApi();
-
-  const body = {
-    // number
-    id: 789,
-  } satisfies DeleteProduct1Request;
-
-  try {
-    const data = await api.deleteProduct1(body);
-    console.log(data);
-  } catch (error) {
-    console.error(error);
-  }
-}
-
-// Run the test
-example().catch(console.error);
-```
-
-### Parameters
-
-
-| Name | Type | Description  | Notes |
-|------------- | ------------- | ------------- | -------------|
-| **id** | `number` |  | [Defaults to `undefined`] |
-
-### Return type
-
-`void` (Empty response body)
+[**Array&lt;VariantDTO&gt;**](VariantDTO.md)
 
 ### Authorization
 
@@ -203,72 +65,7 @@ No authorization required
 ### HTTP request headers
 
 - **Content-Type**: Not defined
-- **Accept**: Not defined
-
-
-### HTTP response details
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-| **200** | OK |  -  |
-
-[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
-
-
-## deleteVariant
-
-> deleteVariant(variantId)
-
-
-
-### Example
-
-```ts
-import {
-  Configuration,
-  ProductControllerApi,
-} from '';
-import type { DeleteVariantRequest } from '';
-
-async function example() {
-  console.log("🚀 Testing  SDK...");
-  const api = new ProductControllerApi();
-
-  const body = {
-    // number
-    variantId: 789,
-  } satisfies DeleteVariantRequest;
-
-  try {
-    const data = await api.deleteVariant(body);
-    console.log(data);
-  } catch (error) {
-    console.error(error);
-  }
-}
-
-// Run the test
-example().catch(console.error);
-```
-
-### Parameters
-
-
-| Name | Type | Description  | Notes |
-|------------- | ------------- | ------------- | -------------|
-| **variantId** | `number` |  | [Defaults to `undefined`] |
-
-### Return type
-
-`void` (Empty response body)
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
-- **Content-Type**: Not defined
-- **Accept**: Not defined
+- **Accept**: `*/*`
 
 
 ### HTTP response details
@@ -281,7 +78,7 @@ No authorization required
 
 ## getAllProducts1
 
-> Array&lt;ProductSearchResponseDTO&gt; getAllProducts1()
+> PagedResponseProductDTOLong getAllProducts1(pageNumber, pageSize, sortBy, sortOrder)
 
 
 
@@ -298,8 +95,19 @@ async function example() {
   console.log("🚀 Testing  SDK...");
   const api = new ProductControllerApi();
 
+  const body = {
+    // number (optional)
+    pageNumber: 56,
+    // number (optional)
+    pageSize: 56,
+    // string (optional)
+    sortBy: sortBy_example,
+    // string (optional)
+    sortOrder: sortOrder_example,
+  } satisfies GetAllProducts1Request;
+
   try {
-    const data = await api.getAllProducts1();
+    const data = await api.getAllProducts1(body);
     console.log(data);
   } catch (error) {
     console.error(error);
@@ -312,11 +120,17 @@ example().catch(console.error);
 
 ### Parameters
 
-This endpoint does not need any parameter.
+
+| Name | Type | Description  | Notes |
+|------------- | ------------- | ------------- | -------------|
+| **pageNumber** | `number` |  | [Optional] [Defaults to `0`] |
+| **pageSize** | `number` |  | [Optional] [Defaults to `10`] |
+| **sortBy** | `string` |  | [Optional] [Defaults to `&#39;id&#39;`] |
+| **sortOrder** | `string` |  | [Optional] [Defaults to `&#39;asc&#39;`] |
 
 ### Return type
 
-[**Array&lt;ProductSearchResponseDTO&gt;**](ProductSearchResponseDTO.md)
+[**PagedResponseProductDTOLong**](PagedResponseProductDTOLong.md)
 
 ### Authorization
 
@@ -338,7 +152,7 @@ No authorization required
 
 ## getProductById
 
-> ProductSearchResponseDTO getProductById(id)
+> ProductDTO getProductById(id)
 
 
 
@@ -381,7 +195,7 @@ example().catch(console.error);
 
 ### Return type
 
-[**ProductSearchResponseDTO**](ProductSearchResponseDTO.md)
+[**ProductDTO**](ProductDTO.md)
 
 ### Authorization
 
@@ -403,7 +217,7 @@ No authorization required
 
 ## searchProducts2
 
-> Array&lt;ProductSearchResponseDTO&gt; searchProducts2(name, tags, category, size, gender)
+> PagedResponseProductDTOLong searchProducts2(name, tags, category, size, gender, pageNumber, pageSize, sortBy, sortOrder)
 
 
 
@@ -431,6 +245,14 @@ async function example() {
     size: size_example,
     // string (optional)
     gender: gender_example,
+    // number (optional)
+    pageNumber: 56,
+    // number (optional)
+    pageSize: 56,
+    // string (optional)
+    sortBy: sortBy_example,
+    // string (optional)
+    sortOrder: sortOrder_example,
   } satisfies SearchProducts2Request;
 
   try {
@@ -455,10 +277,14 @@ example().catch(console.error);
 | **category** | `string` |  | [Optional] [Defaults to `undefined`] |
 | **size** | `string` |  | [Optional] [Defaults to `undefined`] |
 | **gender** | `string` |  | [Optional] [Defaults to `undefined`] |
+| **pageNumber** | `number` |  | [Optional] [Defaults to `0`] |
+| **pageSize** | `number` |  | [Optional] [Defaults to `10`] |
+| **sortBy** | `string` |  | [Optional] [Defaults to `&#39;id&#39;`] |
+| **sortOrder** | `string` |  | [Optional] [Defaults to `&#39;asc&#39;`] |
 
 ### Return type
 
-[**Array&lt;ProductSearchResponseDTO&gt;**](ProductSearchResponseDTO.md)
+[**PagedResponseProductDTOLong**](PagedResponseProductDTOLong.md)
 
 ### Authorization
 
@@ -467,142 +293,6 @@ No authorization required
 ### HTTP request headers
 
 - **Content-Type**: Not defined
-- **Accept**: `*/*`
-
-
-### HTTP response details
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-| **200** | OK |  -  |
-
-[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
-
-
-## updateProduct1
-
-> Product updateProduct1(id, product)
-
-
-
-### Example
-
-```ts
-import {
-  Configuration,
-  ProductControllerApi,
-} from '';
-import type { UpdateProduct1Request } from '';
-
-async function example() {
-  console.log("🚀 Testing  SDK...");
-  const api = new ProductControllerApi();
-
-  const body = {
-    // number
-    id: 789,
-    // Product
-    product: ...,
-  } satisfies UpdateProduct1Request;
-
-  try {
-    const data = await api.updateProduct1(body);
-    console.log(data);
-  } catch (error) {
-    console.error(error);
-  }
-}
-
-// Run the test
-example().catch(console.error);
-```
-
-### Parameters
-
-
-| Name | Type | Description  | Notes |
-|------------- | ------------- | ------------- | -------------|
-| **id** | `number` |  | [Defaults to `undefined`] |
-| **product** | [Product](Product.md) |  | |
-
-### Return type
-
-[**Product**](Product.md)
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
-- **Content-Type**: `application/json`
-- **Accept**: `*/*`
-
-
-### HTTP response details
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-| **200** | OK |  -  |
-
-[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
-
-
-## updateVariant
-
-> ProductVariant updateVariant(variantId, productVariant)
-
-
-
-### Example
-
-```ts
-import {
-  Configuration,
-  ProductControllerApi,
-} from '';
-import type { UpdateVariantRequest } from '';
-
-async function example() {
-  console.log("🚀 Testing  SDK...");
-  const api = new ProductControllerApi();
-
-  const body = {
-    // number
-    variantId: 789,
-    // ProductVariant
-    productVariant: ...,
-  } satisfies UpdateVariantRequest;
-
-  try {
-    const data = await api.updateVariant(body);
-    console.log(data);
-  } catch (error) {
-    console.error(error);
-  }
-}
-
-// Run the test
-example().catch(console.error);
-```
-
-### Parameters
-
-
-| Name | Type | Description  | Notes |
-|------------- | ------------- | ------------- | -------------|
-| **variantId** | `number` |  | [Defaults to `undefined`] |
-| **productVariant** | [ProductVariant](ProductVariant.md) |  | |
-
-### Return type
-
-[**ProductVariant**](ProductVariant.md)
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
-- **Content-Type**: `application/json`
 - **Accept**: `*/*`
 
 

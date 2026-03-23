@@ -7,8 +7,6 @@ import com.stepup.demo.services.*;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -43,7 +41,7 @@ public class AdminController {
     public ResponseEntity<PagedResponse<ProductDTO, Long>> getAllProducts(
             @RequestParam(name="pageNumber", defaultValue = AppConstants.PAGE_NUMBER, required = false) Integer pageNumber,
             @RequestParam(name="pageSize", defaultValue = AppConstants.PAGE_SIZE, required = false) Integer pageSize,
-            @RequestParam(name="sortBy", defaultValue = AppConstants.SORT_PRODUCTS_BY, required = false) String sortBy,
+            @RequestParam(name="sortBy", defaultValue = AppConstants.SORT_BY, required = false) String sortBy,
             @RequestParam(name="sortOrder", defaultValue = AppConstants.SORT_ORDER, required = false) String sortOrder
     ) {
         PagedResponse<Product, Long> pagedResponse = adminService.getAllProducts(pageNumber, pageSize, sortBy, sortOrder);
@@ -103,6 +101,7 @@ public class AdminController {
         List<VariantDTO> variantDTOS = variants.stream()
                 .map(variant -> modelMapper.map(variant, VariantDTO.class))
                 .toList();
+
         return new ResponseEntity<>(variantDTOS, HttpStatus.OK);
     }
 
@@ -136,7 +135,7 @@ public class AdminController {
     public ResponseEntity<PagedResponse<CategoryDTO, Long>> getAllCategories(
             @RequestParam(name="pageNumber", defaultValue = AppConstants.PAGE_NUMBER, required = false) Integer pageNumber,
             @RequestParam(name="pageSize", defaultValue = AppConstants.PAGE_SIZE, required = false) Integer pageSize,
-            @RequestParam(name="sortBy", defaultValue = AppConstants.SORT_CATEGORIES_BY, required = false) String sortBy,
+            @RequestParam(name="sortBy", defaultValue = AppConstants.SORT_BY, required = false) String sortBy,
             @RequestParam(name="sortOrder", defaultValue = AppConstants.SORT_ORDER, required = false) String sortOrder
     ) {
         PagedResponse<Category, Long> categoriesResponse = adminService.getAllCategories(pageNumber, pageSize, sortBy, sortOrder);
@@ -145,6 +144,11 @@ public class AdminController {
                 .stream()
                 .map(category -> modelMapper.map(category, CategoryDTO.class))
                 .toList());
+        dtoResponse.setPageNumber(categoriesResponse.getPageNumber());
+        dtoResponse.setPageSize(categoriesResponse.getPageSize());
+        dtoResponse.setTotalElements(categoriesResponse.getTotalElements());
+        dtoResponse.setTotalPages(categoriesResponse.getTotalPages());
+        dtoResponse.setLastPage(categoriesResponse.isLastPage());
         return new ResponseEntity<>(dtoResponse, HttpStatus.OK);
     }
     @PostMapping("/categories")
@@ -173,7 +177,7 @@ public class AdminController {
     public ResponseEntity<PagedResponse<UserDTO, Long>> getAllUsers(
             @RequestParam(name="pageNumber", defaultValue = AppConstants.PAGE_NUMBER, required = false) Integer pageNumber,
             @RequestParam(name="pageSize", defaultValue = AppConstants.PAGE_SIZE, required = false) Integer pageSize,
-            @RequestParam(name="sortBy", defaultValue = AppConstants.SORT_USERS_BY, required = false) String sortBy,
+            @RequestParam(name="sortBy", defaultValue = AppConstants.SORT_BY, required = false) String sortBy,
             @RequestParam(name="sortOrder", defaultValue = AppConstants.SORT_ORDER, required = false) String sortOrder
     ) {
         PagedResponse<User, Long> usersList = userService.getAllUsers(pageNumber, pageSize, sortBy, sortOrder);
@@ -215,7 +219,7 @@ public class AdminController {
     public ResponseEntity<PagedResponse<UserProfileDTO, Long>> getAllUserProfiles(
             @RequestParam(name="pageNumber", defaultValue = AppConstants.PAGE_NUMBER, required = false) Integer pageNumber,
             @RequestParam(name="pageSize", defaultValue = AppConstants.PAGE_SIZE, required = false) Integer pageSize,
-            @RequestParam(name="sortBy", defaultValue = AppConstants.SORT_PROFILES_BY, required = false) String sortBy,
+            @RequestParam(name="sortBy", defaultValue = AppConstants.SORT_BY, required = false) String sortBy,
             @RequestParam(name="sortOrder", defaultValue = AppConstants.SORT_ORDER, required = false) String sortOrder
     ) {
         PagedResponse<UserProfile, Long> pageResponse = userService.getAllUserProfiles(pageNumber, pageSize, sortBy, sortOrder);

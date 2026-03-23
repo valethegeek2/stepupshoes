@@ -46,11 +46,11 @@ public class OrderServiceImpl implements OrderService {
 
             if (!Boolean.TRUE.equals(variant.getIsAvailable())) {
                 throw new IllegalStateException(
-                        "Variant is no longer available: " + variant.getVariantId());
+                        "Variant is no longer available: " + variant.getId());
             }
             if (item.getQuantity() > variant.getStock()) {
                 throw new IllegalStateException(
-                        "Not enough stock for variant: " + variant.getVariantId()
+                        "Not enough stock for variant: " + variant.getId()
                         + ". Requested: " + item.getQuantity()
                         + ", available: " + variant.getStock());
             }

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+/* NOT YET READY */
 @RestController
 @RequestMapping("/api/v2/products")
 public class SearchController {

@@ -16,7 +16,9 @@
 import * as runtime from '../runtime';
 import type {
   CategoryDTO,
+  OrderDTO,
   PagedResponseCategoryDTOLong,
+  PagedResponseOrderDTOLong,
   PagedResponseProductDTOLong,
   PagedResponseUserDTOLong,
   PagedResponseUserProfileDTOLong,
@@ -33,8 +35,12 @@ import type {
 import {
     CategoryDTOFromJSON,
     CategoryDTOToJSON,
+    OrderDTOFromJSON,
+    OrderDTOToJSON,
     PagedResponseCategoryDTOLongFromJSON,
     PagedResponseCategoryDTOLongToJSON,
+    PagedResponseOrderDTOLongFromJSON,
+    PagedResponseOrderDTOLongToJSON,
     PagedResponseProductDTOLongFromJSON,
     PagedResponseProductDTOLongToJSON,
     PagedResponseUserDTOLongFromJSON,
@@ -82,6 +88,10 @@ export interface DeleteCategoryRequest {
     categoryId: number;
 }
 
+export interface DeleteOrderRequest {
+    orderId: number;
+}
+
 export interface DeleteProductRequest {
     productId: number;
 }
@@ -95,6 +105,13 @@ export interface DeleteUserRequest {
 }
 
 export interface GetAllCategoriesRequest {
+    pageNumber?: number;
+    pageSize?: number;
+    sortBy?: string;
+    sortOrder?: string;
+}
+
+export interface GetAllOrdersRequest {
     pageNumber?: number;
     pageSize?: number;
     sortBy?: string;
@@ -126,6 +143,10 @@ export interface GetAllUsersRequest {
     sortOrder?: string;
 }
 
+export interface GetOrderById1Request {
+    orderId: number;
+}
+
 export interface GetUserProfileRequest {
     userId: number;
 }
@@ -133,6 +154,11 @@ export interface GetUserProfileRequest {
 export interface UpdateCategoryRequest {
     categoryId: number;
     categoryDTO: CategoryDTO;
+}
+
+export interface UpdateOrderStatusRequest {
+    orderId: number;
+    status: string;
 }
 
 export interface UpdateProductRequest {
@@ -401,6 +427,53 @@ export class AdminControllerApi extends runtime.BaseAPI {
     }
 
     /**
+     * Creates request options for deleteOrder without sending the request
+     */
+    async deleteOrderRequestOpts(requestParameters: DeleteOrderRequest): Promise<runtime.RequestOpts> {
+        if (requestParameters['orderId'] == null) {
+            throw new runtime.RequiredError(
+                'orderId',
+                'Required parameter "orderId" was null or undefined when calling deleteOrder().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+
+        let urlPath = `/api/v1/admin/orders/{orderId}`;
+        urlPath = urlPath.replace(`{${"orderId"}}`, encodeURIComponent(String(requestParameters['orderId'])));
+
+        return {
+            path: urlPath,
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        };
+    }
+
+    /**
+     */
+    async deleteOrderRaw(requestParameters: DeleteOrderRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<string>> {
+        const requestOptions = await this.deleteOrderRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
+
+        if (this.isJsonMime(response.headers.get('content-type'))) {
+            return new runtime.JSONApiResponse<string>(response);
+        } else {
+            return new runtime.TextApiResponse(response) as any;
+        }
+    }
+
+    /**
+     */
+    async deleteOrder(requestParameters: DeleteOrderRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string> {
+        const response = await this.deleteOrderRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
      * Creates request options for deleteProduct without sending the request
      */
     async deleteProductRequestOpts(requestParameters: DeleteProductRequest): Promise<runtime.RequestOpts> {
@@ -589,6 +662,57 @@ export class AdminControllerApi extends runtime.BaseAPI {
      */
     async getAllCategories(requestParameters: GetAllCategoriesRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PagedResponseCategoryDTOLong> {
         const response = await this.getAllCategoriesRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Creates request options for getAllOrders without sending the request
+     */
+    async getAllOrdersRequestOpts(requestParameters: GetAllOrdersRequest): Promise<runtime.RequestOpts> {
+        const queryParameters: any = {};
+
+        if (requestParameters['pageNumber'] != null) {
+            queryParameters['pageNumber'] = requestParameters['pageNumber'];
+        }
+
+        if (requestParameters['pageSize'] != null) {
+            queryParameters['pageSize'] = requestParameters['pageSize'];
+        }
+
+        if (requestParameters['sortBy'] != null) {
+            queryParameters['sortBy'] = requestParameters['sortBy'];
+        }
+
+        if (requestParameters['sortOrder'] != null) {
+            queryParameters['sortOrder'] = requestParameters['sortOrder'];
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+
+        let urlPath = `/api/v1/admin/orders`;
+
+        return {
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        };
+    }
+
+    /**
+     */
+    async getAllOrdersRaw(requestParameters: GetAllOrdersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PagedResponseOrderDTOLong>> {
+        const requestOptions = await this.getAllOrdersRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => PagedResponseOrderDTOLongFromJSON(jsonValue));
+    }
+
+    /**
+     */
+    async getAllOrders(requestParameters: GetAllOrdersRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PagedResponseOrderDTOLong> {
+        const response = await this.getAllOrdersRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -859,6 +983,49 @@ export class AdminControllerApi extends runtime.BaseAPI {
     }
 
     /**
+     * Creates request options for getOrderById1 without sending the request
+     */
+    async getOrderById1RequestOpts(requestParameters: GetOrderById1Request): Promise<runtime.RequestOpts> {
+        if (requestParameters['orderId'] == null) {
+            throw new runtime.RequiredError(
+                'orderId',
+                'Required parameter "orderId" was null or undefined when calling getOrderById1().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+
+        let urlPath = `/api/v1/admin/orders/{orderId}`;
+        urlPath = urlPath.replace(`{${"orderId"}}`, encodeURIComponent(String(requestParameters['orderId'])));
+
+        return {
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        };
+    }
+
+    /**
+     */
+    async getOrderById1Raw(requestParameters: GetOrderById1Request, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OrderDTO>> {
+        const requestOptions = await this.getOrderById1RequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => OrderDTOFromJSON(jsonValue));
+    }
+
+    /**
+     */
+    async getOrderById1(requestParameters: GetOrderById1Request, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OrderDTO> {
+        const response = await this.getOrderById1Raw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
      * Creates request options for getUserProfile without sending the request
      */
     async getUserProfileRequestOpts(requestParameters: GetUserProfileRequest): Promise<runtime.RequestOpts> {
@@ -951,6 +1118,60 @@ export class AdminControllerApi extends runtime.BaseAPI {
      */
     async updateCategory(requestParameters: UpdateCategoryRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CategoryDTO> {
         const response = await this.updateCategoryRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Creates request options for updateOrderStatus without sending the request
+     */
+    async updateOrderStatusRequestOpts(requestParameters: UpdateOrderStatusRequest): Promise<runtime.RequestOpts> {
+        if (requestParameters['orderId'] == null) {
+            throw new runtime.RequiredError(
+                'orderId',
+                'Required parameter "orderId" was null or undefined when calling updateOrderStatus().'
+            );
+        }
+
+        if (requestParameters['status'] == null) {
+            throw new runtime.RequiredError(
+                'status',
+                'Required parameter "status" was null or undefined when calling updateOrderStatus().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        if (requestParameters['status'] != null) {
+            queryParameters['status'] = requestParameters['status'];
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+
+        let urlPath = `/api/v1/admin/orders/{orderId}/status`;
+        urlPath = urlPath.replace(`{${"orderId"}}`, encodeURIComponent(String(requestParameters['orderId'])));
+
+        return {
+            path: urlPath,
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+        };
+    }
+
+    /**
+     */
+    async updateOrderStatusRaw(requestParameters: UpdateOrderStatusRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<OrderDTO>> {
+        const requestOptions = await this.updateOrderStatusRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => OrderDTOFromJSON(jsonValue));
+    }
+
+    /**
+     */
+    async updateOrderStatus(requestParameters: UpdateOrderStatusRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<OrderDTO> {
+        const response = await this.updateOrderStatusRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

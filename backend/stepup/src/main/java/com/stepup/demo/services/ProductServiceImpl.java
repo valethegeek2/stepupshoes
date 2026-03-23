@@ -3,7 +3,9 @@ package com.stepup.demo.services;
 import com.stepup.demo.models.Category;
 import com.stepup.demo.models.Product;
 import com.stepup.demo.models.ProductVariant;
+import com.stepup.demo.models.UserProfile;
 import com.stepup.demo.models.dtos.PagedResponse;
+import com.stepup.demo.models.dtos.ProductDTO;
 import com.stepup.demo.models.dtos.ProductSearchResponseDTO;
 import com.stepup.demo.models.dtos.VariantDTO;
 import com.stepup.demo.repository.CategoryRepository;
@@ -12,6 +14,7 @@ import com.stepup.demo.repository.ProductSpecification;
 import com.stepup.demo.repository.ProductVariantRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.jpa.domain.Specification;
@@ -38,39 +41,49 @@ public class ProductServiceImpl implements ProductService {
     @Value("${project.image}")
     private String path;
 
+    @Autowired
+    ModelMapper modelMapper;
+
 
     @Override
-    public List<ProductSearchResponseDTO> getAllProducts() {
-        return productRepository.findAll()
-                .stream()
-                .filter(p -> Boolean.TRUE.equals(p.getIsActive()))
-                .map(this::mapToDto)
-                .toList();
+    public PagedResponse<Product, Long> getAllProducts(Integer pageNumber, Integer pageSize, String sortBy, String sortOrder) {
+        PagedResponse<Product, Long> pagedResponse = new PagedResponse<>();
+        pagedResponse.setJpaRepository(productRepository);
+        pagedResponse.processNextPage(pageNumber, pageSize, sortBy, sortOrder);
+        List<Product> products = pagedResponse.getContents();
+        List<Product> filteredProds = products.stream().filter(p -> Boolean.TRUE.equals(p.getIsActive())).toList();
+        pagedResponse.setContents(filteredProds);
+        return  pagedResponse;
     }
 
 
     @Override
-    public ProductSearchResponseDTO getProductById(Long id) {
+    public ProductDTO getProductById(Long id) {
         Product product = productRepository.findById(id)
                 .filter(p -> Boolean.TRUE.equals(p.getIsActive()))
                 .orElseThrow(() -> new EntityNotFoundException("Product not found with id: " + id));
-        return mapToDto(product);
+        ProductDTO productDTO = modelMapper.map(product, ProductDTO.class);
+        return productDTO;
     }
 
 
     @Override
-    public List<ProductSearchResponseDTO> searchProducts(
+    public PagedResponse<Product, Long> searchProducts(
             String name,
             String tags,
             String category,
             String size,
-            String gender
+            String gender,
+            Integer pageNumber,
+            Integer pageSize,
+            String sortBy,
+            String sortOrder
     ) {
         Specification<Product> spec = ProductSpecification.search(name, tags, category, size, gender);
-        return productRepository.findAll(spec)
-                .stream()
-                .map(this::mapToDto)
-                .toList();
+        PagedResponse<Product, Long>  pagedResponse = new PagedResponse<>();
+        pagedResponse.setJpaRepository(productRepository);
+        pagedResponse.processNextPageWithSpecs(pageNumber, pageSize, sortBy, sortOrder, spec);
+        return pagedResponse;
     }
 
 

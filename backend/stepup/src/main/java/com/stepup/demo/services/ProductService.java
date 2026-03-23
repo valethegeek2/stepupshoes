@@ -3,6 +3,7 @@ package com.stepup.demo.services;
 import com.stepup.demo.models.Product;
 import com.stepup.demo.models.ProductVariant;
 import com.stepup.demo.models.dtos.PagedResponse;
+import com.stepup.demo.models.dtos.ProductDTO;
 import com.stepup.demo.models.dtos.ProductSearchResponseDTO;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -12,16 +13,20 @@ import java.util.List;
 public interface ProductService {
 
 
-    List<ProductSearchResponseDTO> getAllProducts();
+    PagedResponse<Product, Long> getAllProducts(Integer pageNumber, Integer pageSize, String sortBy, String sortOrder);
 
-    ProductSearchResponseDTO getProductById(Long id);
+    ProductDTO getProductById(Long id);
 
-    List<ProductSearchResponseDTO> searchProducts(
+    PagedResponse<Product, Long> searchProducts(
             String name,
             String tags,
             String category,
             String size,
-            String gender
+            String gender,
+            Integer pageNumber,
+            Integer pageSize,
+            String sortBy,
+            String sortOrder
     );
 
 

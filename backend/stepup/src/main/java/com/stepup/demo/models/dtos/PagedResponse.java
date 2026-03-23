@@ -1,6 +1,7 @@
 package com.stepup.demo.models.dtos;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.stepup.demo.exceptions.APIException;
 import com.stepup.demo.models.Product;
 import jakarta.persistence.Entity;
 import lombok.AllArgsConstructor;
@@ -11,7 +12,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -52,5 +55,23 @@ public class PagedResponse<T, ID> {
         totalElements = TPage.getTotalElements();
         lastPage = TPage.isLast();
         contents = TPage.getContent();
+    }
+
+    public void processNextPageWithSpecs(Integer pageNumber, Integer pageSize, String sortBy, String sortOrder, Specification spec) {
+        Sort sortByAndOrder = sortOrder.equalsIgnoreCase("asc")
+                ? Sort.by(sortBy).ascending()
+                : Sort.by(sortBy).descending();
+        Pageable pageDetails = PageRequest.of(pageNumber, pageSize, sortByAndOrder);
+        try {
+            Page<T> TPage = ((JpaSpecificationExecutor) jpaRepository).findAll(spec, pageDetails);
+            this.pageNumber = TPage.getNumber();
+            this.pageSize = TPage.getSize();
+            totalPages = TPage.getTotalPages();
+            totalElements = TPage.getTotalElements();
+            lastPage = TPage.isLast();
+            contents = TPage.getContent();
+        } catch (RuntimeException re) {
+            throw new APIException("Error while processing next page jpaSpecification");
+        }
     }
 }

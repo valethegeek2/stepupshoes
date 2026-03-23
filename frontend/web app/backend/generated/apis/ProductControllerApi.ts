@@ -15,34 +15,28 @@
 
 import * as runtime from '../runtime';
 import type {
-  Product,
-  ProductSearchResponseDTO,
-  ProductVariant,
+  PagedResponseProductDTOLong,
+  ProductDTO,
+  VariantDTO,
 } from '../models/index';
 import {
-    ProductFromJSON,
-    ProductToJSON,
-    ProductSearchResponseDTOFromJSON,
-    ProductSearchResponseDTOToJSON,
-    ProductVariantFromJSON,
-    ProductVariantToJSON,
+    PagedResponseProductDTOLongFromJSON,
+    PagedResponseProductDTOLongToJSON,
+    ProductDTOFromJSON,
+    ProductDTOToJSON,
+    VariantDTOFromJSON,
+    VariantDTOToJSON,
 } from '../models/index';
 
-export interface AddVariantRequest {
+export interface GetAllProductVariantsByProductId1Request {
     productId: number;
-    productVariant: ProductVariant;
 }
 
-export interface CreateProduct1Request {
-    product: Product;
-}
-
-export interface DeleteProduct1Request {
-    id: number;
-}
-
-export interface DeleteVariantRequest {
-    variantId: number;
+export interface GetAllProducts1Request {
+    pageNumber?: number;
+    pageSize?: number;
+    sortBy?: string;
+    sortOrder?: string;
 }
 
 export interface GetProductByIdRequest {
@@ -55,16 +49,10 @@ export interface SearchProducts2Request {
     category?: string;
     size?: string;
     gender?: string;
-}
-
-export interface UpdateProduct1Request {
-    id: number;
-    product: Product;
-}
-
-export interface UpdateVariantRequest {
-    variantId: number;
-    productVariant: ProductVariant;
+    pageNumber?: number;
+    pageSize?: number;
+    sortBy?: string;
+    sortOrder?: string;
 }
 
 /**
@@ -73,20 +61,13 @@ export interface UpdateVariantRequest {
 export class ProductControllerApi extends runtime.BaseAPI {
 
     /**
-     * Creates request options for addVariant without sending the request
+     * Creates request options for getAllProductVariantsByProductId1 without sending the request
      */
-    async addVariantRequestOpts(requestParameters: AddVariantRequest): Promise<runtime.RequestOpts> {
+    async getAllProductVariantsByProductId1RequestOpts(requestParameters: GetAllProductVariantsByProductId1Request): Promise<runtime.RequestOpts> {
         if (requestParameters['productId'] == null) {
             throw new runtime.RequiredError(
                 'productId',
-                'Required parameter "productId" was null or undefined when calling addVariant().'
-            );
-        }
-
-        if (requestParameters['productVariant'] == null) {
-            throw new runtime.RequiredError(
-                'productVariant',
-                'Required parameter "productVariant" was null or undefined when calling addVariant().'
+                'Required parameter "productId" was null or undefined when calling getAllProductVariantsByProductId1().'
             );
         }
 
@@ -94,176 +75,9 @@ export class ProductControllerApi extends runtime.BaseAPI {
 
         const headerParameters: runtime.HTTPHeaders = {};
 
-        headerParameters['Content-Type'] = 'application/json';
 
-
-        let urlPath = `/api/products/{productId}/variants`;
+        let urlPath = `/api/v1/products/{productId}/productVariants`;
         urlPath = urlPath.replace(`{${"productId"}}`, encodeURIComponent(String(requestParameters['productId'])));
-
-        return {
-            path: urlPath,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-            body: ProductVariantToJSON(requestParameters['productVariant']),
-        };
-    }
-
-    /**
-     */
-    async addVariantRaw(requestParameters: AddVariantRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ProductVariant>> {
-        const requestOptions = await this.addVariantRequestOpts(requestParameters);
-        const response = await this.request(requestOptions, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => ProductVariantFromJSON(jsonValue));
-    }
-
-    /**
-     */
-    async addVariant(requestParameters: AddVariantRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ProductVariant> {
-        const response = await this.addVariantRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Creates request options for createProduct1 without sending the request
-     */
-    async createProduct1RequestOpts(requestParameters: CreateProduct1Request): Promise<runtime.RequestOpts> {
-        if (requestParameters['product'] == null) {
-            throw new runtime.RequiredError(
-                'product',
-                'Required parameter "product" was null or undefined when calling createProduct1().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-
-        let urlPath = `/api/products`;
-
-        return {
-            path: urlPath,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-            body: ProductToJSON(requestParameters['product']),
-        };
-    }
-
-    /**
-     */
-    async createProduct1Raw(requestParameters: CreateProduct1Request, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Product>> {
-        const requestOptions = await this.createProduct1RequestOpts(requestParameters);
-        const response = await this.request(requestOptions, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => ProductFromJSON(jsonValue));
-    }
-
-    /**
-     */
-    async createProduct1(requestParameters: CreateProduct1Request, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Product> {
-        const response = await this.createProduct1Raw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Creates request options for deleteProduct1 without sending the request
-     */
-    async deleteProduct1RequestOpts(requestParameters: DeleteProduct1Request): Promise<runtime.RequestOpts> {
-        if (requestParameters['id'] == null) {
-            throw new runtime.RequiredError(
-                'id',
-                'Required parameter "id" was null or undefined when calling deleteProduct1().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-
-        let urlPath = `/api/products/{id}`;
-        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
-
-        return {
-            path: urlPath,
-            method: 'DELETE',
-            headers: headerParameters,
-            query: queryParameters,
-        };
-    }
-
-    /**
-     */
-    async deleteProduct1Raw(requestParameters: DeleteProduct1Request, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        const requestOptions = await this.deleteProduct1RequestOpts(requestParameters);
-        const response = await this.request(requestOptions, initOverrides);
-
-        return new runtime.VoidApiResponse(response);
-    }
-
-    /**
-     */
-    async deleteProduct1(requestParameters: DeleteProduct1Request, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.deleteProduct1Raw(requestParameters, initOverrides);
-    }
-
-    /**
-     * Creates request options for deleteVariant without sending the request
-     */
-    async deleteVariantRequestOpts(requestParameters: DeleteVariantRequest): Promise<runtime.RequestOpts> {
-        if (requestParameters['variantId'] == null) {
-            throw new runtime.RequiredError(
-                'variantId',
-                'Required parameter "variantId" was null or undefined when calling deleteVariant().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-
-        let urlPath = `/api/products/variants/{variantId}`;
-        urlPath = urlPath.replace(`{${"variantId"}}`, encodeURIComponent(String(requestParameters['variantId'])));
-
-        return {
-            path: urlPath,
-            method: 'DELETE',
-            headers: headerParameters,
-            query: queryParameters,
-        };
-    }
-
-    /**
-     */
-    async deleteVariantRaw(requestParameters: DeleteVariantRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        const requestOptions = await this.deleteVariantRequestOpts(requestParameters);
-        const response = await this.request(requestOptions, initOverrides);
-
-        return new runtime.VoidApiResponse(response);
-    }
-
-    /**
-     */
-    async deleteVariant(requestParameters: DeleteVariantRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.deleteVariantRaw(requestParameters, initOverrides);
-    }
-
-    /**
-     * Creates request options for getAllProducts1 without sending the request
-     */
-    async getAllProducts1RequestOpts(): Promise<runtime.RequestOpts> {
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-
-        let urlPath = `/api/products`;
 
         return {
             path: urlPath,
@@ -275,17 +89,68 @@ export class ProductControllerApi extends runtime.BaseAPI {
 
     /**
      */
-    async getAllProducts1Raw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<ProductSearchResponseDTO>>> {
-        const requestOptions = await this.getAllProducts1RequestOpts();
+    async getAllProductVariantsByProductId1Raw(requestParameters: GetAllProductVariantsByProductId1Request, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<VariantDTO>>> {
+        const requestOptions = await this.getAllProductVariantsByProductId1RequestOpts(requestParameters);
         const response = await this.request(requestOptions, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(ProductSearchResponseDTOFromJSON));
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(VariantDTOFromJSON));
     }
 
     /**
      */
-    async getAllProducts1(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<ProductSearchResponseDTO>> {
-        const response = await this.getAllProducts1Raw(initOverrides);
+    async getAllProductVariantsByProductId1(requestParameters: GetAllProductVariantsByProductId1Request, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<VariantDTO>> {
+        const response = await this.getAllProductVariantsByProductId1Raw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Creates request options for getAllProducts1 without sending the request
+     */
+    async getAllProducts1RequestOpts(requestParameters: GetAllProducts1Request): Promise<runtime.RequestOpts> {
+        const queryParameters: any = {};
+
+        if (requestParameters['pageNumber'] != null) {
+            queryParameters['pageNumber'] = requestParameters['pageNumber'];
+        }
+
+        if (requestParameters['pageSize'] != null) {
+            queryParameters['pageSize'] = requestParameters['pageSize'];
+        }
+
+        if (requestParameters['sortBy'] != null) {
+            queryParameters['sortBy'] = requestParameters['sortBy'];
+        }
+
+        if (requestParameters['sortOrder'] != null) {
+            queryParameters['sortOrder'] = requestParameters['sortOrder'];
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+
+        let urlPath = `/api/v1/products`;
+
+        return {
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        };
+    }
+
+    /**
+     */
+    async getAllProducts1Raw(requestParameters: GetAllProducts1Request, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PagedResponseProductDTOLong>> {
+        const requestOptions = await this.getAllProducts1RequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => PagedResponseProductDTOLongFromJSON(jsonValue));
+    }
+
+    /**
+     */
+    async getAllProducts1(requestParameters: GetAllProducts1Request = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PagedResponseProductDTOLong> {
+        const response = await this.getAllProducts1Raw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -305,7 +170,7 @@ export class ProductControllerApi extends runtime.BaseAPI {
         const headerParameters: runtime.HTTPHeaders = {};
 
 
-        let urlPath = `/api/products/{id}`;
+        let urlPath = `/api/v1/products/{id}`;
         urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
 
         return {
@@ -318,16 +183,16 @@ export class ProductControllerApi extends runtime.BaseAPI {
 
     /**
      */
-    async getProductByIdRaw(requestParameters: GetProductByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ProductSearchResponseDTO>> {
+    async getProductByIdRaw(requestParameters: GetProductByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ProductDTO>> {
         const requestOptions = await this.getProductByIdRequestOpts(requestParameters);
         const response = await this.request(requestOptions, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => ProductSearchResponseDTOFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => ProductDTOFromJSON(jsonValue));
     }
 
     /**
      */
-    async getProductById(requestParameters: GetProductByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ProductSearchResponseDTO> {
+    async getProductById(requestParameters: GetProductByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ProductDTO> {
         const response = await this.getProductByIdRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -358,10 +223,26 @@ export class ProductControllerApi extends runtime.BaseAPI {
             queryParameters['gender'] = requestParameters['gender'];
         }
 
+        if (requestParameters['pageNumber'] != null) {
+            queryParameters['pageNumber'] = requestParameters['pageNumber'];
+        }
+
+        if (requestParameters['pageSize'] != null) {
+            queryParameters['pageSize'] = requestParameters['pageSize'];
+        }
+
+        if (requestParameters['sortBy'] != null) {
+            queryParameters['sortBy'] = requestParameters['sortBy'];
+        }
+
+        if (requestParameters['sortOrder'] != null) {
+            queryParameters['sortOrder'] = requestParameters['sortOrder'];
+        }
+
         const headerParameters: runtime.HTTPHeaders = {};
 
 
-        let urlPath = `/api/products/search`;
+        let urlPath = `/api/v1/products/search`;
 
         return {
             path: urlPath,
@@ -373,123 +254,17 @@ export class ProductControllerApi extends runtime.BaseAPI {
 
     /**
      */
-    async searchProducts2Raw(requestParameters: SearchProducts2Request, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<ProductSearchResponseDTO>>> {
+    async searchProducts2Raw(requestParameters: SearchProducts2Request, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PagedResponseProductDTOLong>> {
         const requestOptions = await this.searchProducts2RequestOpts(requestParameters);
         const response = await this.request(requestOptions, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(ProductSearchResponseDTOFromJSON));
+        return new runtime.JSONApiResponse(response, (jsonValue) => PagedResponseProductDTOLongFromJSON(jsonValue));
     }
 
     /**
      */
-    async searchProducts2(requestParameters: SearchProducts2Request = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<ProductSearchResponseDTO>> {
+    async searchProducts2(requestParameters: SearchProducts2Request = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PagedResponseProductDTOLong> {
         const response = await this.searchProducts2Raw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Creates request options for updateProduct1 without sending the request
-     */
-    async updateProduct1RequestOpts(requestParameters: UpdateProduct1Request): Promise<runtime.RequestOpts> {
-        if (requestParameters['id'] == null) {
-            throw new runtime.RequiredError(
-                'id',
-                'Required parameter "id" was null or undefined when calling updateProduct1().'
-            );
-        }
-
-        if (requestParameters['product'] == null) {
-            throw new runtime.RequiredError(
-                'product',
-                'Required parameter "product" was null or undefined when calling updateProduct1().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-
-        let urlPath = `/api/products/{id}`;
-        urlPath = urlPath.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id'])));
-
-        return {
-            path: urlPath,
-            method: 'PUT',
-            headers: headerParameters,
-            query: queryParameters,
-            body: ProductToJSON(requestParameters['product']),
-        };
-    }
-
-    /**
-     */
-    async updateProduct1Raw(requestParameters: UpdateProduct1Request, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Product>> {
-        const requestOptions = await this.updateProduct1RequestOpts(requestParameters);
-        const response = await this.request(requestOptions, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => ProductFromJSON(jsonValue));
-    }
-
-    /**
-     */
-    async updateProduct1(requestParameters: UpdateProduct1Request, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Product> {
-        const response = await this.updateProduct1Raw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Creates request options for updateVariant without sending the request
-     */
-    async updateVariantRequestOpts(requestParameters: UpdateVariantRequest): Promise<runtime.RequestOpts> {
-        if (requestParameters['variantId'] == null) {
-            throw new runtime.RequiredError(
-                'variantId',
-                'Required parameter "variantId" was null or undefined when calling updateVariant().'
-            );
-        }
-
-        if (requestParameters['productVariant'] == null) {
-            throw new runtime.RequiredError(
-                'productVariant',
-                'Required parameter "productVariant" was null or undefined when calling updateVariant().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-
-        let urlPath = `/api/products/variants/{variantId}`;
-        urlPath = urlPath.replace(`{${"variantId"}}`, encodeURIComponent(String(requestParameters['variantId'])));
-
-        return {
-            path: urlPath,
-            method: 'PUT',
-            headers: headerParameters,
-            query: queryParameters,
-            body: ProductVariantToJSON(requestParameters['productVariant']),
-        };
-    }
-
-    /**
-     */
-    async updateVariantRaw(requestParameters: UpdateVariantRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ProductVariant>> {
-        const requestOptions = await this.updateVariantRequestOpts(requestParameters);
-        const response = await this.request(requestOptions, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => ProductVariantFromJSON(jsonValue));
-    }
-
-    /**
-     */
-    async updateVariant(requestParameters: UpdateVariantRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ProductVariant> {
-        const response = await this.updateVariantRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

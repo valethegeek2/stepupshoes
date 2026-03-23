@@ -59,8 +59,8 @@ public class SecurityConfig {
                         // Only certain endpoints require authentication
                         .requestMatchers(
                                 "/api/v1/cart/**",
-                                "/api/v1/orders/**",
-                                "/api/v1/auth/test-auth/**"
+                                "/api/v1/orders/**"
+                               // "/api/v1/auth/test-auth/**"
                         ).authenticated()
 
                         // ADMIN Endpoints

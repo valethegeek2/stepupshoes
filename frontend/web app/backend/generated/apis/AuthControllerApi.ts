@@ -18,7 +18,6 @@ import type {
   AuthResponseDTO,
   LoginRequestDTO,
   RegisterRequestDTO,
-  RegisterResponse,
 } from '../models/index';
 import {
     AuthResponseDTOFromJSON,
@@ -27,8 +26,6 @@ import {
     LoginRequestDTOToJSON,
     RegisterRequestDTOFromJSON,
     RegisterRequestDTOToJSON,
-    RegisterResponseFromJSON,
-    RegisterResponseToJSON,
 } from '../models/index';
 
 export interface LoginRequest {
@@ -120,16 +117,20 @@ export class AuthControllerApi extends runtime.BaseAPI {
 
     /**
      */
-    async searchProductsRaw(requestParameters: SearchProductsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<RegisterResponse>> {
+    async searchProductsRaw(requestParameters: SearchProductsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<string>> {
         const requestOptions = await this.searchProductsRequestOpts(requestParameters);
         const response = await this.request(requestOptions, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => RegisterResponseFromJSON(jsonValue));
+        if (this.isJsonMime(response.headers.get('content-type'))) {
+            return new runtime.JSONApiResponse<string>(response);
+        } else {
+            return new runtime.TextApiResponse(response) as any;
+        }
     }
 
     /**
      */
-    async searchProducts(requestParameters: SearchProductsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<RegisterResponse> {
+    async searchProducts(requestParameters: SearchProductsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string> {
         const response = await this.searchProductsRaw(requestParameters, initOverrides);
         return await response.value();
     }

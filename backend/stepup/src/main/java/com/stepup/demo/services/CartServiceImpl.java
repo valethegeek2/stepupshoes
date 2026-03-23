@@ -99,7 +99,7 @@ public class CartServiceImpl implements CartService {
                 + item.getVariant().getPriceAdjustment();
 
         return CartItemResponseDTO.builder()
-                .variantId(item.getVariant().getVariantId())
+                .variantId(item.getVariant().getId())
                 .productName(item.getVariant().getProduct().getName())
                 .color(item.getVariant().getColor())
                 .size(item.getVariant().getSize())

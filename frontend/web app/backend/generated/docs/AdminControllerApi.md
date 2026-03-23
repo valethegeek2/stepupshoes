@@ -9,18 +9,22 @@ All URIs are relative to *http://localhost:8080*
 | [**createProductVariant**](AdminControllerApi.md#createproductvariant) | **POST** /api/v1/admin/products/{productId}/productVariants |  |
 | [**createUser**](AdminControllerApi.md#createuser) | **POST** /api/v1/admin/users |  |
 | [**deleteCategory**](AdminControllerApi.md#deletecategory) | **DELETE** /api/v1/admin/categories/{categoryId} |  |
+| [**deleteOrder**](AdminControllerApi.md#deleteorder) | **DELETE** /api/v1/admin/orders/{orderId} |  |
 | [**deleteProduct**](AdminControllerApi.md#deleteproduct) | **DELETE** /api/v1/admin/products/{productId} |  |
 | [**deleteProductVariant**](AdminControllerApi.md#deleteproductvariant) | **DELETE** /api/v1/admin/products/productVariants/{variantId} |  |
 | [**deleteUser**](AdminControllerApi.md#deleteuser) | **DELETE** /api/v1/admin/users/{userId} |  |
 | [**getAllCategories**](AdminControllerApi.md#getallcategories) | **GET** /api/v1/admin/categories |  |
+| [**getAllOrders**](AdminControllerApi.md#getallorders) | **GET** /api/v1/admin/orders |  |
 | [**getAllProductImages**](AdminControllerApi.md#getallproductimages) | **GET** /api/v1/admin/products/images |  |
 | [**getAllProductVariantsByProductId**](AdminControllerApi.md#getallproductvariantsbyproductid) | **GET** /api/v1/admin/products/{productId}/productVariants |  |
 | [**getAllProducts**](AdminControllerApi.md#getallproducts) | **GET** /api/v1/admin/products |  |
 | [**getAllRoles**](AdminControllerApi.md#getallroles) | **GET** /api/v1/admin/users/roles |  |
 | [**getAllUserProfiles**](AdminControllerApi.md#getalluserprofiles) | **GET** /api/v1/admin/users/profiles |  |
 | [**getAllUsers**](AdminControllerApi.md#getallusers) | **GET** /api/v1/admin/users |  |
+| [**getOrderById1**](AdminControllerApi.md#getorderbyid1) | **GET** /api/v1/admin/orders/{orderId} |  |
 | [**getUserProfile**](AdminControllerApi.md#getuserprofile) | **GET** /api/v1/admin/users/{userId}/profiles |  |
 | [**updateCategory**](AdminControllerApi.md#updatecategory) | **PUT** /api/v1/admin/categories/{categoryId} |  |
+| [**updateOrderStatus**](AdminControllerApi.md#updateorderstatus) | **PUT** /api/v1/admin/orders/{orderId}/status |  |
 | [**updateProduct**](AdminControllerApi.md#updateproduct) | **PUT** /api/v1/admin/products/{productId} |  |
 | [**updateProductVariant**](AdminControllerApi.md#updateproductvariant) | **PUT** /api/v1/admin/products/productVariants/{variantId} |  |
 | [**updateUser**](AdminControllerApi.md#updateuser) | **PUT** /api/v1/admin/users/{userId} |  |
@@ -357,6 +361,71 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
 
+## deleteOrder
+
+> string deleteOrder(orderId)
+
+
+
+### Example
+
+```ts
+import {
+  Configuration,
+  AdminControllerApi,
+} from '';
+import type { DeleteOrderRequest } from '';
+
+async function example() {
+  console.log("🚀 Testing  SDK...");
+  const api = new AdminControllerApi();
+
+  const body = {
+    // number
+    orderId: 789,
+  } satisfies DeleteOrderRequest;
+
+  try {
+    const data = await api.deleteOrder(body);
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// Run the test
+example().catch(console.error);
+```
+
+### Parameters
+
+
+| Name | Type | Description  | Notes |
+|------------- | ------------- | ------------- | -------------|
+| **orderId** | `number` |  | [Defaults to `undefined`] |
+
+### Return type
+
+**string**
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: `*/*`
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
+
+
 ## deleteProduct
 
 > number deleteProduct(productId)
@@ -607,6 +676,80 @@ example().catch(console.error);
 ### Return type
 
 [**PagedResponseCategoryDTOLong**](PagedResponseCategoryDTOLong.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: `*/*`
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
+
+
+## getAllOrders
+
+> PagedResponseOrderDTOLong getAllOrders(pageNumber, pageSize, sortBy, sortOrder)
+
+
+
+### Example
+
+```ts
+import {
+  Configuration,
+  AdminControllerApi,
+} from '';
+import type { GetAllOrdersRequest } from '';
+
+async function example() {
+  console.log("🚀 Testing  SDK...");
+  const api = new AdminControllerApi();
+
+  const body = {
+    // number (optional)
+    pageNumber: 56,
+    // number (optional)
+    pageSize: 56,
+    // string (optional)
+    sortBy: sortBy_example,
+    // string (optional)
+    sortOrder: sortOrder_example,
+  } satisfies GetAllOrdersRequest;
+
+  try {
+    const data = await api.getAllOrders(body);
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// Run the test
+example().catch(console.error);
+```
+
+### Parameters
+
+
+| Name | Type | Description  | Notes |
+|------------- | ------------- | ------------- | -------------|
+| **pageNumber** | `number` |  | [Optional] [Defaults to `0`] |
+| **pageSize** | `number` |  | [Optional] [Defaults to `10`] |
+| **sortBy** | `string` |  | [Optional] [Defaults to `&#39;orderId&#39;`] |
+| **sortOrder** | `string` |  | [Optional] [Defaults to `&#39;asc&#39;`] |
+
+### Return type
+
+[**PagedResponseOrderDTOLong**](PagedResponseOrderDTOLong.md)
 
 ### Authorization
 
@@ -1027,6 +1170,71 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
 
+## getOrderById1
+
+> OrderDTO getOrderById1(orderId)
+
+
+
+### Example
+
+```ts
+import {
+  Configuration,
+  AdminControllerApi,
+} from '';
+import type { GetOrderById1Request } from '';
+
+async function example() {
+  console.log("🚀 Testing  SDK...");
+  const api = new AdminControllerApi();
+
+  const body = {
+    // number
+    orderId: 789,
+  } satisfies GetOrderById1Request;
+
+  try {
+    const data = await api.getOrderById1(body);
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// Run the test
+example().catch(console.error);
+```
+
+### Parameters
+
+
+| Name | Type | Description  | Notes |
+|------------- | ------------- | ------------- | -------------|
+| **orderId** | `number` |  | [Defaults to `undefined`] |
+
+### Return type
+
+[**OrderDTO**](OrderDTO.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: `*/*`
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
+
+
 ## getUserProfile
 
 > UserProfileDTO getUserProfile(userId)
@@ -1149,6 +1357,74 @@ No authorization required
 ### HTTP request headers
 
 - **Content-Type**: `application/json`
+- **Accept**: `*/*`
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
+
+
+## updateOrderStatus
+
+> OrderDTO updateOrderStatus(orderId, status)
+
+
+
+### Example
+
+```ts
+import {
+  Configuration,
+  AdminControllerApi,
+} from '';
+import type { UpdateOrderStatusRequest } from '';
+
+async function example() {
+  console.log("🚀 Testing  SDK...");
+  const api = new AdminControllerApi();
+
+  const body = {
+    // number
+    orderId: 789,
+    // string
+    status: status_example,
+  } satisfies UpdateOrderStatusRequest;
+
+  try {
+    const data = await api.updateOrderStatus(body);
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// Run the test
+example().catch(console.error);
+```
+
+### Parameters
+
+
+| Name | Type | Description  | Notes |
+|------------- | ------------- | ------------- | -------------|
+| **orderId** | `number` |  | [Defaults to `undefined`] |
+| **status** | `string` |  | [Defaults to `undefined`] |
+
+### Return type
+
+[**OrderDTO**](OrderDTO.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
 - **Accept**: `*/*`
 
 

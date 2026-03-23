@@ -76,7 +76,7 @@ No authorization required
 
 ## searchProducts
 
-> RegisterResponse searchProducts(registerRequestDTO)
+> string searchProducts(registerRequestDTO)
 
 
 
@@ -119,7 +119,7 @@ example().catch(console.error);
 
 ### Return type
 
-[**RegisterResponse**](RegisterResponse.md)
+**string**
 
 ### Authorization
 
