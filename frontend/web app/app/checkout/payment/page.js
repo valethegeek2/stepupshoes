@@ -10,11 +10,13 @@ export default function PaymentPage() {
   
   const [paymentMethod, setPaymentMethod] = useState("card");
 
+  // Cart calculations
   const subtotal = cart.reduce((sum, item) => sum + item.price, 0);
-  const tax = subtotal * 0.24; 
+  const tax = subtotal * 0.24; // 24% VAT
   const shippingCost = subtotal > 50 ? 0 : 5.00;
   const finalTotal = subtotal > 0 ? subtotal + tax + shippingCost : 0;
 
+  // Handle order submission
   const handleCompleteOrder = () => {
     alert("Η παραγγελία σας ολοκληρώθηκε με επιτυχία! Ευχαριστούμε.");
     clearCart(); 
@@ -32,13 +34,13 @@ export default function PaymentPage() {
 
       <div className="checkout-layout">
         
-        {/* ΑΡΙΣΤΕΡΑ: Επιλογή Πληρωμής */}
+        {/* Left Column: Payment Method Selection */}
         <div className="checkout-form-section">
           <h2 className="checkout-title" style={{ marginBottom: '30px' }}>Επίλεξε τον τρόπο πληρωμής</h2>
 
           <div className="payment-options-list">
             
-            {/* ΚΑΡΤΑ */}
+            {/* Credit/Debit Card Option */}
             <div className={`payment-option-box ${paymentMethod === "card" ? "active" : ""}`} onClick={() => setPaymentMethod("card")}>
               <div className="payment-option-header">
                 <i className="fa-regular fa-credit-card"></i>
@@ -71,7 +73,7 @@ export default function PaymentPage() {
               )}
             </div>
 
-            {/* ΑΝΤΙΚΑΤΑΒΟΛΗ */}
+            {/* Cash on Delivery (COD) Option */}
             <div className={`payment-option-box ${paymentMethod === "cod" ? "active" : ""}`} onClick={() => setPaymentMethod("cod")}>
               <div className="payment-option-header">
                 <i className="fa-solid fa-money-bill-wave"></i>
@@ -85,7 +87,7 @@ export default function PaymentPage() {
           </div>
         </div>
 
-        {/* ΔΕΞΙΑ: Order Summary */}
+        {/* Right Column: Order Summary */}
         <div className="checkout-summary-section">
           <div className="checkout-order-summary">
             <h3>Order Summary</h3>

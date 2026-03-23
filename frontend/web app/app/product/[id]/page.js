@@ -16,11 +16,13 @@ export default function ProductDetailsPage() {
   const { cart, addToCart, removeFromCart } = useCart();
   const { wishlist, toggleWishlist, removeFromWishlist } = useWishlist();
 
+  // Stock validation
   const maxStock = product?.quantity !== undefined ? product.quantity : 5;
   const isOutOfStock = maxStock === 0;
 
   const [qty, setQty] = useState(isOutOfStock ? 0 : 1);
 
+  // Reset quantity if stock changes to 0
   useEffect(() => {
     if (isOutOfStock) {
       setQty(0);
@@ -39,12 +41,12 @@ export default function ProductDetailsPage() {
   const isWishlisted = wishlist.some((item) => item.id === product.id);
   const isInCart = cart.some((item) => item.id === product.id);
 
-  // Σχετικά Προϊόντα
+  // Get up to 4 related products based on category and gender
   const relatedProducts = productsData
     .filter((p) => p.category === product.category && p.gender === product.gender && p.id !== product.id)
     .slice(0, 4);
 
-  // --- Λογική προσθήκης στο Καλάθι ---
+  // Handle Add to Cart
   const handleAddToCart = () => {
     if (isOutOfStock) return; 
     
@@ -52,22 +54,23 @@ export default function ProductDetailsPage() {
       addToCart(product);
     }
 
-    // Αν υπήρχε στη Wishlist, το βγάζουμε αυτόματα (Αθόρυβα)
+    // Silently remove from wishlist if added to cart
     if (isWishlisted) {
       removeFromWishlist(product.id);
     }
   };
 
-  // --- Λογική προσθήκης στη Wishlist ---
+  // Handle Wishlist Toggle
   const handleWishlistToggle = () => {
     toggleWishlist(product);
 
-    // Αν το προϊόν ΔΕΝ ήταν στη wishlist (άρα τώρα μπήκε) και ΕΙΝΑΙ στο καλάθι, το βγάζουμε από το καλάθι (Αθόρυβα)
+    // Silently remove from cart if newly added to wishlist
     if (!isWishlisted && isInCart) {
       removeFromCart(product.id);
     }
   };
 
+  // Calculate star rating distribution
   const fullStars = Math.floor(product.rating || 5);
   const hasHalfStar = (product.rating % 1) !== 0;
   const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);

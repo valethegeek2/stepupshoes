@@ -3,7 +3,6 @@ import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAuth } from "../../../../context/AuthContext";
-// Φέρνουμε τα προϊόντα για να κάνουμε τον έλεγχο
 import { productsData } from "../../../../data/product";
 
 export default function AddProductPage() {
@@ -11,14 +10,14 @@ export default function AddProductPage() {
   const { user } = useAuth();
   const fileInputRef = useRef(null);
 
-  // --- ΕΝΗΜΕΡΩΜΕΝΟ STATE ΜΕ CATEGORY, GENDER ΚΑΙ TAGS ---
+  // Initialize form state with default values
   const [formData, setFormData] = useState({
     title: "",
     description: "", 
     price: "",
-    category: "shoes", // Νέα προεπιλογή
-    gender: "men",     // Νέο πεδίο
-    tags: "",          // Νέο πεδίο
+    category: "shoes", 
+    gender: "men",     
+    tags: "",          
     brand: "",
     quantity: "",
     image: "" 
@@ -27,7 +26,7 @@ export default function AddProductPage() {
   const [fileName, setFileName] = useState("Δεν επιλέχθηκε αρχείο");
   const [errors, setErrors] = useState({}); 
 
-  // --- O ΕΛΕΓΧΟΣ ΓΙΑ ΤΑ ΔΙΠΛΟΤΥΠΑ ---
+  // Real-time validation for duplicate products
   useEffect(() => {
     const newErrors = {};
 
@@ -48,6 +47,7 @@ export default function AddProductPage() {
     setErrors(newErrors);
   }, [formData.title, formData.description]);
 
+  // Restrict access to admin users only
   if (!user || user.role !== "admin") {
     return (
       <div className="orders-container" style={{ textAlign: "center", padding: "100px 20px" }}>
@@ -61,6 +61,7 @@ export default function AddProductPage() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  // Handle local image file selection and generate preview URL
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -144,7 +145,6 @@ export default function AddProductPage() {
               </div>
             </div>
 
-            {/* ΝΕΑ ΓΡΑΜΜΗ ΜΕ ΦΥΛΟ ΚΑΙ ΤΙΜΗ */}
             <div className="form-row-2" style={{ marginTop: '20px' }}>
               <div className="admin-input-group">
                 <label>Φύλο (Gender) *</label>
@@ -162,7 +162,6 @@ export default function AddProductPage() {
               </div>
             </div>
 
-            {/* ΝΕΑ ΓΡΑΜΜΗ ΜΕ ΑΠΟΘΕΜΑ ΚΑΙ TAGS */}
             <div className="form-row-2" style={{ marginTop: '20px' }}>
               <div className="admin-input-group">
                 <label>Απόθεμα (Τεμάχια) *</label>
@@ -183,6 +182,7 @@ export default function AddProductPage() {
             <div className="admin-input-group" style={{ marginTop: '20px' }}>
               <label>Φωτογραφία Προϊόντος</label>
               
+              {/* Hidden file input */}
               <input 
                 type="file" 
                 accept="image/*" 

@@ -13,16 +13,17 @@ export default function ProductCard({ product }) {
   const isInCart = cart.some((item) => item.id === product.id);
 
   const handleWishlistClick = (e) => {
-    e.preventDefault(); 
+    e.preventDefault(); // Prevent Link navigation when clicking the icon
 
     toggleWishlist(product);
 
-    // Αφαιρείται αθόρυβα από το καλάθι χωρίς κανένα alert!
+    // Remove from cart if it's being added to wishlist
     if (!isWishlisted && isInCart) {
       removeFromCart(product.id);
     }
   };
 
+  // Calculate star rating distribution
   const fullStars = Math.floor(product.rating || 5);
   const hasHalfStar = (product.rating % 1) !== 0;
   const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);

@@ -7,10 +7,10 @@ export default function CheckoutPage() {
   const router = useRouter();
   const { cart, cartCount } = useCart();
 
-  // Υπολογισμοί όπως ακριβώς στο Cart
+  // Cart calculations
   const subtotal = cart.reduce((sum, item) => sum + item.price, 0);
-  const tax = subtotal * 0.24; // Υπολογισμός ΦΠΑ 24%
-  const shippingCost = subtotal > 50 ? 0 : 5.00; // Δωρεάν άνω των 50€
+  const tax = subtotal * 0.24; // 24% VAT calculation
+  const shippingCost = subtotal > 50 ? 0 : 5.00; // Free shipping for orders over 50€
   const finalTotal = subtotal + tax + shippingCost;
 
   const handleProceedToPayment = (e) => {
@@ -29,7 +29,7 @@ export default function CheckoutPage() {
 
       <div className="checkout-layout">
         
-        {/* ΑΡΙΣΤΕΡΑ: Φόρμα Στοιχείων */}
+        {/* Left Column: Shipping details form */}
         <div className="checkout-form-section">
           <h2 className="checkout-title">Στοιχεία παραγγελίας</h2>
           
@@ -70,7 +70,7 @@ export default function CheckoutPage() {
           </form>
         </div>
 
-        {/* ΔΕΞΙΑ: Το Νέο Order Summary (ακριβώς όπως στο Cart) */}
+        {/* Right Column: Order summary */}
         <div className="checkout-summary-section">
           <div className="checkout-order-summary">
             <h3>Order Summary</h3>
@@ -101,7 +101,7 @@ export default function CheckoutPage() {
               <span className="total-price">€ {finalTotal.toFixed(2)}</span>
             </div>
 
-            {/* Κουμπί με λουκετάκι και το πορτοκαλί σου χρώμα */}
+            {/* Trigger hidden submit button */}
             <button 
               className="summary-btn" 
               onClick={() => document.getElementById("submit-checkout").click()}
@@ -109,7 +109,7 @@ export default function CheckoutPage() {
               <i className="fa-solid fa-lock"></i> Στοιχεία πληρωμής
             </button>
 
-            {/* Εικονίδια Ασφαλείας */}
+            {/* Trust badges */}
             <div className="summary-features">
               <div className="feature-item">
                 <i className="fa-solid fa-shield-halved" style={{ color: '#22c55e' }}></i>

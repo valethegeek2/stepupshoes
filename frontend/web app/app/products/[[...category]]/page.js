@@ -9,7 +9,7 @@ export default function ProductsPage() {
   const pathname = usePathname(); 
   const searchParams = useSearchParams(); 
   
-  // --- ΝΕΟ: Διαβάζουμε τι έγραψε στην αναζήτηση ---
+  // Extract search query from URL
   const searchQuery = searchParams.get("search");
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -17,6 +17,7 @@ export default function ProductsPage() {
   const [selectedBrands, setSelectedBrands] = useState([]);
   const [sortOption, setSortOption] = useState("Best Sellers");
 
+  // Sync state with URL parameters on mount
   useEffect(() => {
     const genderFromUrl = searchParams.get("gender");
     if (genderFromUrl) {
@@ -29,6 +30,7 @@ export default function ProductsPage() {
     }
   }, [searchParams]);
 
+  // Filter handlers
   const handleGenderChange = (gender) => {
     setSelectedGenders(prev => 
       prev.includes(gender) ? prev.filter(g => g !== gender) : [...prev, gender]
@@ -48,10 +50,11 @@ export default function ProductsPage() {
     setCurrentPage(1);
   };
 
+  // Main product filtering and sorting logic
   const processedProducts = useMemo(() => {
     let filtered = productsData;
 
-    // --- 0. ΓΕΝΙΚΗ ΑΝΑΖΗΤΗΣΗ (Search Bar) ---
+    // Search query filter
     if (searchQuery) {
       const q = searchQuery.toLowerCase();
       filtered = filtered.filter(p => 
@@ -62,7 +65,7 @@ export default function ProductsPage() {
       );
     }
     
-    // 1. Κατηγορία από URL (Sidebar links)
+    // Category filter based on URL path
     if (pathname.includes("/shoes")) {
       filtered = filtered.filter(p => p.category === "shoes");
     } else if (pathname.includes("/clothing")) {
@@ -73,17 +76,17 @@ export default function ProductsPage() {
       filtered = filtered.filter(p => p.category === "accessories");
     }
 
-    // 2. Φύλο (Gender)
+    // Gender filter
     if (selectedGenders.length > 0) {
       filtered = filtered.filter(p => selectedGenders.includes(p.gender));
     }
 
-    // 3. Μάρκα (Brand)
+    // Brand filter
     if (selectedBrands.length > 0) {
       filtered = filtered.filter(p => selectedBrands.includes(p.brand));
     }
 
-    // 4. Ταξινόμηση
+    // Sorting
     let sorted = [...filtered];
     if (sortOption === "Τιμή: Αύξουσα") {
       sorted.sort((a, b) => a.price - b.price);
@@ -98,11 +101,13 @@ export default function ProductsPage() {
     return sorted;
   }, [pathname, selectedGenders, selectedBrands, sortOption, searchQuery]);
 
+  // Pagination setup
   const PRODUCTS_PER_PAGE = 30;
   const totalPages = Math.ceil(processedProducts.length / PRODUCTS_PER_PAGE) || 1;
   const startIndex = (currentPage - 1) * PRODUCTS_PER_PAGE;
   const currentProducts = processedProducts.slice(startIndex, startIndex + PRODUCTS_PER_PAGE);
 
+  // Breadcrumbs translation dictionary
   const dictionary = {
     "products": "Προϊόντα",
     "shoes": "Παπούτσια",
@@ -112,6 +117,7 @@ export default function ProductsPage() {
   };
   const pathSegments = pathname.split('/').filter(segment => segment !== '');
 
+  // Calculate dynamic sidebar counts
   const baseCategoryProducts = productsData.filter(p => {
     if (searchQuery) {
       const q = searchQuery.toLowerCase();
@@ -136,6 +142,7 @@ export default function ProductsPage() {
   return (
     <div className="plp-container">
       
+      {/* Breadcrumbs Navigation */}
       <div className="breadcrumbs">
         <Link href="/">Αρχική</Link>
         {pathSegments.map((segment, index) => {
@@ -154,7 +161,6 @@ export default function ProductsPage() {
             </span>
           );
         })}
-        {/* Αν υπάρχει αναζήτηση, τη βάζουμε στα breadcrumbs */}
         {searchQuery && (
           <span>
             <span> - </span>
@@ -165,7 +171,6 @@ export default function ProductsPage() {
 
       <div className="plp-header">
         <h1 className="plp-title">
-          {/* Δείχνουμε τον όρο αναζήτησης στον τίτλο της σελίδας! */}
           {searchQuery 
             ? `Αποτελέσματα για: "${searchQuery}"` 
             : (pathSegments.length > 1 ? dictionary[pathSegments[pathSegments.length - 1]] : "Όλα τα Προϊόντα")
@@ -176,6 +181,7 @@ export default function ProductsPage() {
 
       <div className="plp-content">
         
+        {/* Sidebar Filters */}
         <aside className="plp-sidebar">
           
           <div className="filter-group">
@@ -239,6 +245,7 @@ export default function ProductsPage() {
           </div>
         </aside>
 
+        {/* Main Product Grid */}
         <main className="plp-main">
           
           <div className="plp-toolbar">

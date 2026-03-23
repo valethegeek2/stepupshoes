@@ -1,12 +1,12 @@
 "use client";
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation"; // Προσθέσαμε το router
+import { useRouter } from "next/navigation";
 import { useAuth } from "../../context/AuthContext";
 import { ordersData } from "../../data/orders";
 
 export default function OrdersPage() {
-  const router = useRouter(); // Αρχικοποίηση του router
+  const router = useRouter(); 
   const { user } = useAuth();
   
   const [ordersList, setOrdersList] = useState([]);
@@ -14,10 +14,12 @@ export default function OrdersPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10; 
 
+  // Initialize mock data
   useEffect(() => {
     setOrdersList(ordersData);
   }, []);
 
+  // Guard clause for unauthenticated users
   if (!user) {
     return (
       <div className="orders-container" style={{ textAlign: "center", padding: "100px 20px" }}>
@@ -29,7 +31,7 @@ export default function OrdersPage() {
     );
   }
 
-  // Συνάρτηση Ακύρωσης ΜΟΝΟ για τον απλό πελάτη
+  // Handle order cancellation (Customer only)
   const handleCancelOrder = (orderId, currentStatus) => {
     const allowedStatuses = ["Σε εκκρεμότητα", "Επιβεβαιωμένη"];
     
@@ -50,10 +52,12 @@ export default function OrdersPage() {
     return 'bg-warning'; 
   };
 
+  // Filter orders based on user role
   let displayOrders = user.role === "admin" 
     ? ordersList 
     : ordersList.filter(order => order.username === user.username);
 
+  // Apply search filter
   if (searchTerm) {
     displayOrders = displayOrders.filter(order => {
       const matchId = order.id.toLowerCase().includes(searchTerm.toLowerCase());
@@ -62,6 +66,7 @@ export default function OrdersPage() {
     });
   }
 
+  // Pagination logic
   const totalPages = Math.ceil(displayOrders.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const currentOrders = displayOrders.slice(startIndex, startIndex + itemsPerPage);
@@ -131,10 +136,8 @@ export default function OrdersPage() {
                     <td className="text-gray">{order.items.length} items</td>
                     <td className="text-gray">{order.paymentMethod}</td>
                     
-                    {/* --- Η ΑΛΛΑΓΗ ΣΤΟ ACTION ΚΕΛΙ --- */}
                     <td>
                       {user.role === "admin" ? (
-                        /* ΚΟΥΜΠΙ EDIT ΓΙΑ ΤΟΝ ADMIN */
                         <button 
                           className="edit-order-btn"
                           onClick={() => router.push(`/orders/edit/${order.id}`)}
@@ -142,7 +145,6 @@ export default function OrdersPage() {
                           <i className="fa-solid fa-pen"></i> Edit
                         </button>
                       ) : (
-                        /* ΚΟΥΜΠΙ CANCEL ΓΙΑ ΤΟΝ ΠΕΛΑΤΗ */
                         <button 
                           className="cancel-order-btn"
                           onClick={() => handleCancelOrder(order.id, order.status)}

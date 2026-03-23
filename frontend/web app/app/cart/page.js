@@ -3,7 +3,8 @@ import Link from "next/link";
 import { useRouter } from "next/navigation"; 
 import { useCart } from "../../context/CartContext";
 import { useAuth } from "../../context/AuthContext";
-// --- ΝΕΟ: Εισάγουμε τα προϊόντα για να ξέρουμε το απόθεμα! ---
+
+// Mock data for stock validation
 import { productsData } from "../../data/product";
 
 export default function CartPage() {
@@ -12,11 +13,13 @@ export default function CartPage() {
   
   const { user } = useAuth();
 
+  // Cart calculations
   const shipping = 0; 
   const taxRate = 0.24; 
   const tax = cartSubtotal * taxRate;
   const total = cartSubtotal + shipping + tax;
 
+  // Guard clause for unauthenticated users
   if (!user) {
     return (
       <div className="cart-page-container" style={{ textAlign: "center", padding: "100px 20px", minHeight: "60vh" }}>
@@ -59,10 +62,10 @@ export default function CartPage() {
 
             <div className="cart-items-wrapper">
               {cart.map((item) => {
-                // --- ΝΕΟ: Βρίσκουμε το προϊόν στη "βάση" για να δούμε το απόθεμα ---
+                // Check stock availability from original product data
                 const originalProduct = productsData.find(p => p.id === item.id);
                 
-                // Αν δεν έχεις γράψει quantity στο product.js, βάζουμε ένα προεπιλεγμένο όριο (π.χ. 5) για να μη σπάει
+                // Fallback maximum stock limit
                 const maxStock = originalProduct?.quantity !== undefined ? originalProduct.quantity : 5;
 
                 return (
@@ -85,7 +88,7 @@ export default function CartPage() {
                           <button onClick={() => updateQuantity(item.id, -1)}>-</button>
                           <span>{item.quantity}</span>
                           
-                          {/* --- ΝΕΟ: Το κουμπί + έχει πλέον περιορισμό! --- */}
+                          {/* Increment button with stock validation */}
                           <button 
                             onClick={() => {
                               if (item.quantity < maxStock) {
@@ -94,7 +97,6 @@ export default function CartPage() {
                                 alert(`Δυστυχώς, το μέγιστο διαθέσιμο απόθεμα για αυτό το προϊόν είναι ${maxStock} τεμάχια.`);
                               }
                             }}
-                            // Αν φτάσει στο όριο, του αλλάζουμε την εμφάνιση για να φαίνεται ανενεργό
                             style={{ 
                               opacity: item.quantity >= maxStock ? 0.3 : 1, 
                               cursor: item.quantity >= maxStock ? 'not-allowed' : 'pointer' 

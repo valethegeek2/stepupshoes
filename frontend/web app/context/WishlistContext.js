@@ -6,19 +6,19 @@ const WishlistContext = createContext();
 export function WishlistProvider({ children }) {
   const [wishlist, setWishlist] = useState([]);
 
-  // Συνάρτηση που βάζει ή βγάζει ένα προϊόν από τη λίστα
+  // Toggle item presence in wishlist
   const toggleWishlist = (product) => {
     setWishlist((prev) => {
       const exists = prev.find((item) => item.id === product.id);
       if (exists) {
-        return prev.filter((item) => item.id !== product.id); // Αν υπάρχει, το βγάζει
+        return prev.filter((item) => item.id !== product.id); 
       } else {
-        return [...prev, product]; // Αν δεν υπάρχει, το βάζει
+        return [...prev, product];
       }
     });
   };
 
-  // Συνάρτηση για διαγραφή (για το κουμπί 'Αφαίρεση' στη σελίδα της Wishlist)
+  // Explicitly remove item from wishlist
   const removeFromWishlist = (productId) => {
     setWishlist((prev) => prev.filter((item) => item.id !== productId));
   };
@@ -30,7 +30,6 @@ export function WishlistProvider({ children }) {
   );
 }
 
-// Ένα μικρό "εργαλείο" για να το καλούμε εύκολα από άλλα αρχεία
 export function useWishlist() {
   return useContext(WishlistContext);
 }
