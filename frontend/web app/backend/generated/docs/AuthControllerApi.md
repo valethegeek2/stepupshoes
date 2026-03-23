@@ -5,7 +5,7 @@ All URIs are relative to *http://localhost:8080*
 | Method | HTTP request | Description |
 |------------- | ------------- | -------------|
 | [**login**](AuthControllerApi.md#login) | **POST** /api/v1/auth/login |  |
-| [**searchProducts**](AuthControllerApi.md#searchproducts) | **POST** /api/v1/auth/register |  |
+| [**register**](AuthControllerApi.md#register) | **POST** /api/v1/auth/register |  |
 
 
 
@@ -74,9 +74,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
 
-## searchProducts
+## register
 
-> string searchProducts(registerRequestDTO)
+> string register(registerRequestDTO)
 
 
 
@@ -87,7 +87,7 @@ import {
   Configuration,
   AuthControllerApi,
 } from '';
-import type { SearchProductsRequest } from '';
+import type { RegisterRequest } from '';
 
 async function example() {
   console.log("🚀 Testing  SDK...");
@@ -96,10 +96,10 @@ async function example() {
   const body = {
     // RegisterRequestDTO
     registerRequestDTO: ...,
-  } satisfies SearchProductsRequest;
+  } satisfies RegisterRequest;
 
   try {
-    const data = await api.searchProducts(body);
+    const data = await api.register(body);
     console.log(data);
   } catch (error) {
     console.error(error);

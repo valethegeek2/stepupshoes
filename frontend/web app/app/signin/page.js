@@ -2,7 +2,8 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useAuth } from "../../context/AuthContext"; // Φέρνουμε το Auth
+import { Configuration, AuthControllerApi } from '@/backend/generated';
+import { useAuth } from "@/context/AuthContext";
 
 export default function SignInPage() {
   const [username, setUsername] = useState("");
@@ -12,16 +13,47 @@ export default function SignInPage() {
   const { login } = useAuth();
   const router = useRouter(); // Για να αλλάζουμε σελίδα
 
-  const handleLogin = (e) => {
-    e.preventDefault(); // Σταματάει το refresh της σελίδας
-    const success = login(username, password);
-    
-    if (success) {
-      router.push("/"); // Αν μπει σωστά, πάει στην Αρχική!
-    } else {
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    try {
+      const config = new Configuration({ basePath: 'http://localhost:8080' });
+      const authApi = new AuthControllerApi(config);
+
+      const requestOpts = await authApi.loginRequestOpts({
+        loginRequestDTO: {
+          username,
+          password,
+        }
+      });
+
+      const rawResponse = await authApi.request(requestOpts);
+      const data = await rawResponse.json();
+
+      if (data.accessToken) {
+        localStorage.setItem('jwt', data.accessToken);
+        // login(username);
+        login(username, data.accessToken);
+        router.push('/');
+        // router.back();
+      } else {
+        setError("Λάθος Username ή Password!");
+      }
+    } catch (err) {
+      console.error("Login error:", err);
       setError("Λάθος Username ή Password!");
     }
   };
+
+  // const handleLogin = (e) => {
+  //   e.preventDefault(); // Σταματάει το refresh της σελίδας
+  //   const success = login(username, password);
+    
+  //   if (success) {
+  //     router.push("/"); // Αν μπει σωστά, πάει στην Αρχική!
+  //   } else {
+  //     setError("Λάθος Username ή Password!");
+  //   }
+  // };
 
   return (
     <div className="auth-container">

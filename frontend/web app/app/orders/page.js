@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation"; // Προσθέσαμε το router
 import { useAuth } from "../../context/AuthContext";
-import { ordersData } from "../../data/orders";
+import { Configuration, OrderControllerApi } from '@/backend/generated';
 
 export default function OrdersPage() {
   const router = useRouter(); // Αρχικοποίηση του router
@@ -14,8 +14,35 @@ export default function OrdersPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10; 
 
+  // useEffect(() => {
+  //   setOrdersList(ordersData);
+  // }, []);
+
+  
+
   useEffect(() => {
-    setOrdersList(ordersData);
+    const token = localStorage.getItem('jwt');
+    if (!token) return;
+
+    const fetchOrders = async () => {
+      try {
+        const config = new Configuration({ basePath: 'http://localhost:8080' });
+        const orderApi = new OrderControllerApi(config);
+
+        const requestOpts = await orderApi.getMyOrdersRequestOpts({});
+        requestOpts.headers['Authorization'] = `Bearer ${token}`;
+
+        const rawResponse = await orderApi.request(requestOpts);
+        const data = await rawResponse.json();
+        console.log(data);
+        setOrdersList(data || []);
+        console.log("orders list: ", ordersList);
+      } catch (err) {
+        console.error("Error fetching orders:", err);
+      }
+    };
+
+    fetchOrders();
   }, []);
 
   if (!user) {
@@ -36,7 +63,7 @@ export default function OrdersPage() {
     if (allowedStatuses.includes(currentStatus)) {
       if (window.confirm("Είστε σίγουροι ότι θέλετε να ακυρώσετε αυτή την παραγγελία;")) {
         setOrdersList(prev => prev.map(order => 
-          order.id === orderId ? { ...order, status: "Ακυρώθηκε" } : order
+          order.orderId === orderId ? { ...order, status: "Ακυρώθηκε" } : order
         ));
       }
     } else {
@@ -50,16 +77,22 @@ export default function OrdersPage() {
     return 'bg-warning'; 
   };
 
-  let displayOrders = user.role === "admin" 
-    ? ordersList 
-    : ordersList.filter(order => order.username === user.username);
+  // let displayOrders = user.role === "admin" 
+  //   ? ordersList 
+  //   : ordersList.filter(order => order.username === user.username);
+  let displayOrders = ordersList;
 
+  // if (searchTerm) {
+  //   displayOrders = displayOrders.filter(order => {
+  //     const matchId = order.orderId.toLowerCase().includes(searchTerm.toLowerCase());
+  //     const matchUsername = user.role === "admin" && order.username.toLowerCase().includes(searchTerm.toLowerCase());
+  //     return matchId || matchUsername;
+  //   });
+  // }
   if (searchTerm) {
-    displayOrders = displayOrders.filter(order => {
-      const matchId = order.id.toLowerCase().includes(searchTerm.toLowerCase());
-      const matchUsername = user.role === "admin" && order.username.toLowerCase().includes(searchTerm.toLowerCase());
-      return matchId || matchUsername;
-    });
+    displayOrders = displayOrders.filter(order =>
+      order.orderId.toString().includes(searchTerm)
+    );
   }
 
   const totalPages = Math.ceil(displayOrders.length / itemsPerPage);
@@ -112,15 +145,15 @@ export default function OrdersPage() {
             <tbody>
               {currentOrders.length > 0 ? (
                 currentOrders.map((order) => (
-                  <tr key={order.id}>
-                    <td className="fw-bold">{order.id}</td>
+                  <tr key={order.orderId}>
+                    <td className="fw-bold">{order.orderId}</td>
                     
                     {user.role === "admin" && (
                       <td className="fw-bold" style={{ color: "#111" }}>{order.username}</td>
                     )}
 
-                    <td className="text-gray">{order.date}</td>
-                    <td className="fw-bold">€ {order.total.toFixed(2)}</td>
+                    <td className="text-gray">{new Date(order.orderDate).toLocaleDateString()}</td>
+                    <td className="fw-bold">€ {order.totalAmount.toFixed(2)}</td>
                     
                     <td>
                       <span className={`status-badge ${getStatusBadgeClass(order.status)}`}>
@@ -128,7 +161,7 @@ export default function OrdersPage() {
                       </span>
                     </td>
                     
-                    <td className="text-gray">{order.items.length} items</td>
+                    {/* <td className="text-gray">{order.items.length} items</td> */}
                     <td className="text-gray">{order.paymentMethod}</td>
                     
                     {/* --- Η ΑΛΛΑΓΗ ΣΤΟ ACTION ΚΕΛΙ --- */}
@@ -137,7 +170,7 @@ export default function OrdersPage() {
                         /* ΚΟΥΜΠΙ EDIT ΓΙΑ ΤΟΝ ADMIN */
                         <button 
                           className="edit-order-btn"
-                          onClick={() => router.push(`/orders/edit/${order.id}`)}
+                          onClick={() => router.push(`/orders/edit/${order.orderId}`)}
                         >
                           <i className="fa-solid fa-pen"></i> Edit
                         </button>
@@ -145,7 +178,7 @@ export default function OrdersPage() {
                         /* ΚΟΥΜΠΙ CANCEL ΓΙΑ ΤΟΝ ΠΕΛΑΤΗ */
                         <button 
                           className="cancel-order-btn"
-                          onClick={() => handleCancelOrder(order.id, order.status)}
+                          onClick={() => handleCancelOrder(order.orderId, order.status)}
                           title="Ακύρωση Παραγγελίας"
                         >
                           <i className="fa-solid fa-xmark"></i> Cancel

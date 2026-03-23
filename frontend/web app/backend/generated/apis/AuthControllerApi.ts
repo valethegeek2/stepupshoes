@@ -32,7 +32,7 @@ export interface LoginRequest {
     loginRequestDTO: LoginRequestDTO;
 }
 
-export interface SearchProductsRequest {
+export interface RegisterRequest {
     registerRequestDTO: RegisterRequestDTO;
 }
 
@@ -87,13 +87,13 @@ export class AuthControllerApi extends runtime.BaseAPI {
     }
 
     /**
-     * Creates request options for searchProducts without sending the request
+     * Creates request options for register without sending the request
      */
-    async searchProductsRequestOpts(requestParameters: SearchProductsRequest): Promise<runtime.RequestOpts> {
+    async registerRequestOpts(requestParameters: RegisterRequest): Promise<runtime.RequestOpts> {
         if (requestParameters['registerRequestDTO'] == null) {
             throw new runtime.RequiredError(
                 'registerRequestDTO',
-                'Required parameter "registerRequestDTO" was null or undefined when calling searchProducts().'
+                'Required parameter "registerRequestDTO" was null or undefined when calling register().'
             );
         }
 
@@ -117,8 +117,8 @@ export class AuthControllerApi extends runtime.BaseAPI {
 
     /**
      */
-    async searchProductsRaw(requestParameters: SearchProductsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<string>> {
-        const requestOptions = await this.searchProductsRequestOpts(requestParameters);
+    async registerRaw(requestParameters: RegisterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<string>> {
+        const requestOptions = await this.registerRequestOpts(requestParameters);
         const response = await this.request(requestOptions, initOverrides);
 
         if (this.isJsonMime(response.headers.get('content-type'))) {
@@ -130,8 +130,8 @@ export class AuthControllerApi extends runtime.BaseAPI {
 
     /**
      */
-    async searchProducts(requestParameters: SearchProductsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string> {
-        const response = await this.searchProductsRaw(requestParameters, initOverrides);
+    async register(requestParameters: RegisterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string> {
+        const response = await this.registerRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

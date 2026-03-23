@@ -38,13 +38,13 @@ export default function ProductCard({ product }) {
         ></i>
 
         <Link href={`/product/${product.id}`}>
-          <img src={product.image || "https://via.placeholder.com/300"} alt={product.title} />
+          <img src={product.productImage || "https://via.placeholder.com/300"} alt={product.name} />
         </Link>
       </div>
       
       <div className="product-info">
         <Link href={`/product/${product.id}`} className="product-title">
-          {product.title}
+          {product.name}
         </Link>
         <div className="product-rating">
           {[...Array(fullStars)].map((_, i) => <i key={`full-${i}`} className="fa-solid fa-star"></i>)}
@@ -54,7 +54,7 @@ export default function ProductCard({ product }) {
         </div>
         
         <p className="product-price">
-          € {Number(product.price).toFixed(2)}
+          € {Number(product.basePrice).toFixed(2)}
         </p>
       </div>
     </div>

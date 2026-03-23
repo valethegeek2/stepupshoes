@@ -24,6 +24,24 @@ export interface PlaceOrderRequestDTO {
      * @type {string}
      * @memberof PlaceOrderRequestDTO
      */
+    firstName: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PlaceOrderRequestDTO
+     */
+    lastName: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PlaceOrderRequestDTO
+     */
+    phoneNumber: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PlaceOrderRequestDTO
+     */
     shippingAddress: string;
     /**
      * 
@@ -67,6 +85,9 @@ export type PlaceOrderRequestDTOPaymentMethodEnum = typeof PlaceOrderRequestDTOP
  * Check if a given object implements the PlaceOrderRequestDTO interface.
  */
 export function instanceOfPlaceOrderRequestDTO(value: object): value is PlaceOrderRequestDTO {
+    if (!('firstName' in value) || value['firstName'] === undefined) return false;
+    if (!('lastName' in value) || value['lastName'] === undefined) return false;
+    if (!('phoneNumber' in value) || value['phoneNumber'] === undefined) return false;
     if (!('shippingAddress' in value) || value['shippingAddress'] === undefined) return false;
     if (!('shippingCity' in value) || value['shippingCity'] === undefined) return false;
     if (!('shippingPostalCode' in value) || value['shippingPostalCode'] === undefined) return false;
@@ -84,6 +105,9 @@ export function PlaceOrderRequestDTOFromJSONTyped(json: any, ignoreDiscriminator
     }
     return {
         
+        'firstName': json['firstName'],
+        'lastName': json['lastName'],
+        'phoneNumber': json['phoneNumber'],
         'shippingAddress': json['shippingAddress'],
         'shippingCity': json['shippingCity'],
         'shippingPostalCode': json['shippingPostalCode'],
@@ -103,6 +127,9 @@ export function PlaceOrderRequestDTOToJSONTyped(value?: PlaceOrderRequestDTO | n
 
     return {
         
+        'firstName': value['firstName'],
+        'lastName': value['lastName'],
+        'phoneNumber': value['phoneNumber'],
         'shippingAddress': value['shippingAddress'],
         'shippingCity': value['shippingCity'],
         'shippingPostalCode': value['shippingPostalCode'],

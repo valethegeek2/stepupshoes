@@ -4,13 +4,13 @@ All URIs are relative to *http://localhost:8080*
 
 | Method | HTTP request | Description |
 |------------- | ------------- | -------------|
-| [**searchProducts1**](SearchControllerApi.md#searchproducts1) | **GET** /api/v2/products/search |  |
+| [**searchProducts**](SearchControllerApi.md#searchproducts) | **GET** /api/v2/products/search |  |
 
 
 
-## searchProducts1
+## searchProducts
 
-> Array&lt;ProductSearchResponseDTO&gt; searchProducts1(name, tags, category, size, gender)
+> Array&lt;ProductSearchResponseDTO&gt; searchProducts(name, tags, category, size, gender)
 
 
 
@@ -21,7 +21,7 @@ import {
   Configuration,
   SearchControllerApi,
 } from '';
-import type { SearchProducts1Request } from '';
+import type { SearchProductsRequest } from '';
 
 async function example() {
   console.log("🚀 Testing  SDK...");
@@ -38,10 +38,10 @@ async function example() {
     size: size_example,
     // string (optional)
     gender: gender_example,
-  } satisfies SearchProducts1Request;
+  } satisfies SearchProductsRequest;
 
   try {
-    const data = await api.searchProducts1(body);
+    const data = await api.searchProducts(body);
     console.log(data);
   } catch (error) {
     console.error(error);

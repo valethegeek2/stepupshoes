@@ -1,6 +1,8 @@
 package com.stepup.demo.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 
 import java.math.BigDecimal;
@@ -16,6 +18,17 @@ import java.util.List;
 @Builder
 public class Order {
 
+    @NotBlank
+    @Size(min = 1, max = 100)
+    private String firstName;
+
+    @NotBlank
+    @Size(min = 1, max = 100)
+    private String lastName;
+
+    @NotBlank
+    @Size(min = 1, max = 16)
+    private String phoneNumber;
 
     public enum OrderStatus {
         pending, confirmed, processing, shipped, delivered, cancelled, failed

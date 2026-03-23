@@ -33,6 +33,24 @@ export interface OrderDTO {
     userId?: number;
     /**
      * 
+     * @type {string}
+     * @memberof OrderDTO
+     */
+    firstName: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof OrderDTO
+     */
+    lastName: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof OrderDTO
+     */
+    phoneNumber: string;
+    /**
+     * 
      * @type {Date}
      * @memberof OrderDTO
      */
@@ -133,6 +151,9 @@ export type OrderDTOPaymentStatusEnum = typeof OrderDTOPaymentStatusEnum[keyof t
  * Check if a given object implements the OrderDTO interface.
  */
 export function instanceOfOrderDTO(value: object): value is OrderDTO {
+    if (!('firstName' in value) || value['firstName'] === undefined) return false;
+    if (!('lastName' in value) || value['lastName'] === undefined) return false;
+    if (!('phoneNumber' in value) || value['phoneNumber'] === undefined) return false;
     if (!('totalAmount' in value) || value['totalAmount'] === undefined) return false;
     if (!('status' in value) || value['status'] === undefined) return false;
     if (!('shippingAddress' in value) || value['shippingAddress'] === undefined) return false;
@@ -152,6 +173,9 @@ export function OrderDTOFromJSONTyped(json: any, ignoreDiscriminator: boolean): 
         
         'orderId': json['orderId'] == null ? undefined : json['orderId'],
         'userId': json['userId'] == null ? undefined : json['userId'],
+        'firstName': json['firstName'],
+        'lastName': json['lastName'],
+        'phoneNumber': json['phoneNumber'],
         'orderDate': json['orderDate'] == null ? undefined : (new Date(json['orderDate'])),
         'totalAmount': json['totalAmount'],
         'status': json['status'],
@@ -178,6 +202,9 @@ export function OrderDTOToJSONTyped(value?: OrderDTO | null, ignoreDiscriminator
         
         'orderId': value['orderId'],
         'userId': value['userId'],
+        'firstName': value['firstName'],
+        'lastName': value['lastName'],
+        'phoneNumber': value['phoneNumber'],
         'orderDate': value['orderDate'] == null ? value['orderDate'] : value['orderDate'].toISOString(),
         'totalAmount': value['totalAmount'],
         'status': value['status'],

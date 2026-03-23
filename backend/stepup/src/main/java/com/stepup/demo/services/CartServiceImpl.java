@@ -45,8 +45,8 @@ public class CartServiceImpl implements CartService {
         ProductVariant variant = variantRepository.findById(req.getVariantId())
                 .orElseThrow(() -> new EntityNotFoundException("Variant not found with id: " + req.getVariantId()));
 
-        if (req.getQuantity() <= 0)
-            throw new IllegalArgumentException("Quantity must be greater than zero");
+//        if (req.getQuantity() <= 0)
+//            throw new IllegalArgumentException("Quantity must be greater than zero");
 
         if (!Boolean.TRUE.equals(variant.getIsAvailable()))
             throw new IllegalStateException("Variant is no longer available: " + req.getVariantId());

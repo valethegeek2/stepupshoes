@@ -3,6 +3,7 @@ package com.stepup.demo.models.dtos;
 import com.stepup.demo.models.Order;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,6 +17,19 @@ public class OrderDTO {
 
     private Long orderId;
     private Long userId;
+
+    @NotBlank
+    @Size(min = 1, max = 100)
+    private String firstName;
+
+    @NotBlank
+    @Size(min = 1, max = 100)
+    private String lastName;
+
+    @NotBlank
+    @Size(min = 1, max = 16)
+    private String phoneNumber;
+
     private Instant orderDate;
     @NotNull
     private BigDecimal totalAmount;

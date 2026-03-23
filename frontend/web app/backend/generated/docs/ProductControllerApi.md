@@ -7,7 +7,7 @@ All URIs are relative to *http://localhost:8080*
 | [**getAllProductVariantsByProductId1**](ProductControllerApi.md#getallproductvariantsbyproductid1) | **GET** /api/v1/products/{productId}/productVariants |  |
 | [**getAllProducts1**](ProductControllerApi.md#getallproducts1) | **GET** /api/v1/products |  |
 | [**getProductById**](ProductControllerApi.md#getproductbyid) | **GET** /api/v1/products/{id} |  |
-| [**searchProducts2**](ProductControllerApi.md#searchproducts2) | **GET** /api/v1/products/search |  |
+| [**searchProducts1**](ProductControllerApi.md#searchproducts1) | **GET** /api/v1/products/search |  |
 
 
 
@@ -215,9 +215,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
 
-## searchProducts2
+## searchProducts1
 
-> PagedResponseProductDTOLong searchProducts2(name, tags, category, size, gender, pageNumber, pageSize, sortBy, sortOrder)
+> PagedResponseProductDTOLong searchProducts1(name, tags, category, size, gender, pageNumber, pageSize, sortBy, sortOrder)
 
 
 
@@ -228,7 +228,7 @@ import {
   Configuration,
   ProductControllerApi,
 } from '';
-import type { SearchProducts2Request } from '';
+import type { SearchProducts1Request } from '';
 
 async function example() {
   console.log("🚀 Testing  SDK...");
@@ -253,10 +253,10 @@ async function example() {
     sortBy: sortBy_example,
     // string (optional)
     sortOrder: sortOrder_example,
-  } satisfies SearchProducts2Request;
+  } satisfies SearchProducts1Request;
 
   try {
-    const data = await api.searchProducts2(body);
+    const data = await api.searchProducts1(body);
     console.log(data);
   } catch (error) {
     console.error(error);

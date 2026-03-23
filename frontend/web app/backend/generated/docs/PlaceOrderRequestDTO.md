@@ -6,6 +6,9 @@
 
 Name | Type
 ------------ | -------------
+`firstName` | string
+`lastName` | string
+`phoneNumber` | string
 `shippingAddress` | string
 `shippingCity` | string
 `shippingPostalCode` | string
@@ -19,6 +22,9 @@ import type { PlaceOrderRequestDTO } from ''
 
 // TODO: Update the object below with actual values
 const example = {
+  "firstName": null,
+  "lastName": null,
+  "phoneNumber": null,
   "shippingAddress": null,
   "shippingCity": null,
   "shippingPostalCode": null,

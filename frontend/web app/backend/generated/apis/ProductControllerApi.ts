@@ -43,7 +43,7 @@ export interface GetProductByIdRequest {
     id: number;
 }
 
-export interface SearchProducts2Request {
+export interface SearchProducts1Request {
     name?: string;
     tags?: string;
     category?: string;
@@ -198,9 +198,9 @@ export class ProductControllerApi extends runtime.BaseAPI {
     }
 
     /**
-     * Creates request options for searchProducts2 without sending the request
+     * Creates request options for searchProducts1 without sending the request
      */
-    async searchProducts2RequestOpts(requestParameters: SearchProducts2Request): Promise<runtime.RequestOpts> {
+    async searchProducts1RequestOpts(requestParameters: SearchProducts1Request): Promise<runtime.RequestOpts> {
         const queryParameters: any = {};
 
         if (requestParameters['name'] != null) {
@@ -254,8 +254,8 @@ export class ProductControllerApi extends runtime.BaseAPI {
 
     /**
      */
-    async searchProducts2Raw(requestParameters: SearchProducts2Request, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PagedResponseProductDTOLong>> {
-        const requestOptions = await this.searchProducts2RequestOpts(requestParameters);
+    async searchProducts1Raw(requestParameters: SearchProducts1Request, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PagedResponseProductDTOLong>> {
+        const requestOptions = await this.searchProducts1RequestOpts(requestParameters);
         const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => PagedResponseProductDTOLongFromJSON(jsonValue));
@@ -263,8 +263,8 @@ export class ProductControllerApi extends runtime.BaseAPI {
 
     /**
      */
-    async searchProducts2(requestParameters: SearchProducts2Request = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PagedResponseProductDTOLong> {
-        const response = await this.searchProducts2Raw(requestParameters, initOverrides);
+    async searchProducts1(requestParameters: SearchProducts1Request = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PagedResponseProductDTOLong> {
+        const response = await this.searchProducts1Raw(requestParameters, initOverrides);
         return await response.value();
     }
 

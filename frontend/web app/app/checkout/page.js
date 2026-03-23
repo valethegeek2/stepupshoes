@@ -2,10 +2,24 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCart } from "../../context/CartContext";
+import { useState } from "react";
 
 export default function CheckoutPage() {
   const router = useRouter();
   const { cart, cartCount } = useCart();
+
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    city: "",
+    address: "",
+    postalCode: "",
+    phoneNumber: "",
+  });
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
 
   // Υπολογισμοί όπως ακριβώς στο Cart
   const subtotal = cart.reduce((sum, item) => sum + item.price, 0);
@@ -13,9 +27,20 @@ export default function CheckoutPage() {
   const shippingCost = subtotal > 50 ? 0 : 5.00; // Δωρεάν άνω των 50€
   const finalTotal = subtotal + tax + shippingCost;
 
+  //const handleProceedToPayment = (e) => {
+    // e.preventDefault();
+    // router.push("/checkout/payment"); 
   const handleProceedToPayment = (e) => {
     e.preventDefault();
-    router.push("/checkout/payment"); 
+    const params = new URLSearchParams({
+      firstName: formData.firstName,
+      lastName: formData.lastName,
+      city: formData.city,
+      address: formData.address,
+      postalCode: formData.postalCode,
+      phoneNumber: formData.phoneNumber,
+    });
+    router.push(`/checkout/payment?${params.toString()}`);
   };
 
   return (
@@ -37,32 +62,32 @@ export default function CheckoutPage() {
           <form className="checkout-form" onSubmit={handleProceedToPayment}>
             <div className="form-row">
               <div className="input-group">
-                <input type="text" placeholder="Όνομα" required />
+                <input name="firstName" type="text" placeholder="Όνομα" required onChange={handleChange} />
               </div>
               <div className="input-group">
-                <input type="text" placeholder="Επώνυμο" required />
+                <input name="lastName" type="text" placeholder="Επώνυμο" required onChange={handleChange} />
               </div>
             </div>
 
             <div className="input-group">
-              <input type="text" placeholder="Πόλη" required />
+              <input name="city" type="text" placeholder="Πόλη" required onChange={handleChange} />
             </div>
 
             <div className="form-row">
               <div className="input-group">
-                <input type="text" placeholder="Διεύθυνση" required />
+                <input name="address" type="text" placeholder="Διεύθυνση" required onChange={handleChange} />
               </div>
-              <div className="input-group">
+              {/* <div className="input-group">
                 <input type="text" placeholder="Οδός και Αριθμός" required />
-              </div>
+              </div> */}
             </div>
 
             <div className="form-row">
               <div className="input-group">
-                <input type="text" placeholder="Τ.Κ." required />
+                <input name="postalCode" type="text" placeholder="Τ.Κ." required onChange={handleChange} />
               </div>
               <div className="input-group">
-                <input type="tel" placeholder="Τηλέφωνο (Κινητό)" required />
+                <input name="phoneNumber" type="tel" placeholder="Τηλέφωνο (Κινητό)" required onChange={handleChange} />
               </div>
             </div>
 

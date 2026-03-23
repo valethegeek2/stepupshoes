@@ -3,10 +3,23 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCart } from "../../../context/CartContext";
+import { useSearchParams } from "next/navigation";
+import { Configuration, OrderControllerApi } from '@/backend/generated';
 
 export default function PaymentPage() {
   const router = useRouter();
   const { cart, cartCount, clearCart } = useCart();
+
+  const searchParams = useSearchParams();
+
+  const shippingData = {
+    firstName: searchParams.get("firstName"),
+    lastName: searchParams.get("lastName"),
+    city: searchParams.get("city"),
+    address: searchParams.get("address"),
+    postalCode: searchParams.get("postalCode"),
+    phoneNumber: searchParams.get("phoneNumber"),
+  };
   
   const [paymentMethod, setPaymentMethod] = useState("card");
 
@@ -15,11 +28,48 @@ export default function PaymentPage() {
   const shippingCost = subtotal > 50 ? 0 : 5.00;
   const finalTotal = subtotal > 0 ? subtotal + tax + shippingCost : 0;
 
-  const handleCompleteOrder = () => {
-    alert("Η παραγγελία σας ολοκληρώθηκε με επιτυχία! Ευχαριστούμε.");
-    clearCart(); 
-    router.push("/"); 
+
+  const handleCompleteOrder = async () => {
+    const token = localStorage.getItem('jwt');
+    if (!token) {
+      router.push('/signin');
+      return;
+    }
+
+    try {
+      const config = new Configuration({ basePath: 'http://localhost:8080' });
+      const orderApi = new OrderControllerApi(config);
+
+      const requestOpts = await orderApi.placeOrderRequestOpts({
+        placeOrderRequestDTO: {
+          firstName: shippingData.firstName,
+          lastName: shippingData.lastName,
+          phoneNumber: shippingData.phoneNumber,
+          shippingAddress: shippingData.address,
+          shippingCity: shippingData.city,
+          shippingPostalCode: shippingData.postalCode,
+          paymentMethod: paymentMethod,
+          notes: "null",
+        }
+      });
+
+      requestOpts.headers['Authorization'] = `Bearer ${token}`;
+      await orderApi.request(requestOpts);
+
+      alert("Η παραγγελία σας ολοκληρώθηκε με επιτυχία! Ευχαριστούμε.");
+      clearCart();
+      router.push("/");
+    } catch (err) {
+      console.error("Error placing order:", err);
+      alert("Σφάλμα κατά την ολοκλήρωση της παραγγελίας.");
+    }
   };
+
+  // const handleCompleteOrder = () => {
+  //   alert("Η παραγγελία σας ολοκληρώθηκε με επιτυχία! Ευχαριστούμε.");
+  //   clearCart(); 
+  //   router.push("/"); 
+  // };
 
   return (
     <div className="checkout-container">
@@ -72,7 +122,7 @@ export default function PaymentPage() {
             </div>
 
             {/* ΑΝΤΙΚΑΤΑΒΟΛΗ */}
-            <div className={`payment-option-box ${paymentMethod === "cod" ? "active" : ""}`} onClick={() => setPaymentMethod("cod")}>
+            <div className={`payment-option-box ${paymentMethod === "cash" ? "active" : ""}`} onClick={() => setPaymentMethod("cash")}>
               <div className="payment-option-header">
                 <i className="fa-solid fa-money-bill-wave"></i>
                 <div>

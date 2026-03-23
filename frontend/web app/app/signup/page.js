@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { Configuration, AuthControllerApi } from '@/backend/generated';
 // Εισάγουμε τα δεδομένα των χρηστών για τον έλεγχο
 import { usersData } from "../../data/users";
 
@@ -66,7 +67,7 @@ export default function SignUpPage() {
     setFormData({ ...formData, role: e.target.checked ? "admin" : "user" });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (Object.keys(errors).length > 0) {
@@ -74,9 +75,31 @@ export default function SignUpPage() {
       return;
     }
 
-    console.log("New User Registered:", formData);
-    alert(`Registration successful! (Role: ${formData.role})`);
-    router.push("/signin"); 
+    try {
+      const config = new Configuration({ basePath: 'http://localhost:8080' });
+      const authApi = new AuthControllerApi(config);
+
+      const requestOpts = await authApi.registerRequestOpts({
+        registerRequestDTO: {
+          username: formData.username,
+          email: formData.email,
+          password: formData.password,
+          firstName: "null",
+          lastName: "null",
+          address: "null",
+          city: "null",
+          postalCode: "null",
+          phoneNumber: "null",
+        }
+      });
+
+      const rawResponse = await authApi.request(requestOpts);
+      alert("Registration successful!");
+      router.push("/signin");
+    } catch (err) {
+      console.error("Register error:", err);
+      alert("Σφάλμα κατά την εγγραφή.");
+    }
   };
 
   return (

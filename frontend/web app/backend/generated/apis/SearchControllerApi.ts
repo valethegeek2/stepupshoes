@@ -22,7 +22,7 @@ import {
     ProductSearchResponseDTOToJSON,
 } from '../models/index';
 
-export interface SearchProducts1Request {
+export interface SearchProductsRequest {
     name?: string;
     tags?: string;
     category?: string;
@@ -36,9 +36,9 @@ export interface SearchProducts1Request {
 export class SearchControllerApi extends runtime.BaseAPI {
 
     /**
-     * Creates request options for searchProducts1 without sending the request
+     * Creates request options for searchProducts without sending the request
      */
-    async searchProducts1RequestOpts(requestParameters: SearchProducts1Request): Promise<runtime.RequestOpts> {
+    async searchProductsRequestOpts(requestParameters: SearchProductsRequest): Promise<runtime.RequestOpts> {
         const queryParameters: any = {};
 
         if (requestParameters['name'] != null) {
@@ -76,8 +76,8 @@ export class SearchControllerApi extends runtime.BaseAPI {
 
     /**
      */
-    async searchProducts1Raw(requestParameters: SearchProducts1Request, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<ProductSearchResponseDTO>>> {
-        const requestOptions = await this.searchProducts1RequestOpts(requestParameters);
+    async searchProductsRaw(requestParameters: SearchProductsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<ProductSearchResponseDTO>>> {
+        const requestOptions = await this.searchProductsRequestOpts(requestParameters);
         const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(ProductSearchResponseDTOFromJSON));
@@ -85,8 +85,8 @@ export class SearchControllerApi extends runtime.BaseAPI {
 
     /**
      */
-    async searchProducts1(requestParameters: SearchProducts1Request = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<ProductSearchResponseDTO>> {
-        const response = await this.searchProducts1Raw(requestParameters, initOverrides);
+    async searchProducts(requestParameters: SearchProductsRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<ProductSearchResponseDTO>> {
+        const response = await this.searchProductsRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

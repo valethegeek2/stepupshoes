@@ -1,12 +1,60 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import ProductCard from "../components/ProductCard";
 // Φέρνουμε τα πραγματικά σου mock δεδομένα
-import { productsData } from "../data/product";
+//import { productsData } from "../data/product";
+import {
+  Configuration,
+  ProductControllerApi,
+} from '@/backend/generated';
+
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState("mens-products");
+  const [apiProducts, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const productsData = apiProducts || [];
+
+  // Backend APIS
+  useEffect(() => {
+  const fetchProducts = async () => {
+    try {
+      const config = new Configuration({
+        basePath: "http://localhost:8080"
+        // accessToken: () => localStorage.getItem("jwt"),
+      });
+
+      const api = new ProductControllerApi(config);
+
+      const requestOpts = await api.getAllProducts1RequestOpts({
+        pageNumber: 0,
+        pageSize: 5,
+        sortBy: "id",
+        sortOrder: "asc",
+      });
+
+      // const token = localStorage.getItem("jwt");
+      // if (token) {
+      //   requestOpts.headers["Authorization"] = `Bearer ${token}`;
+      // }
+
+      const res = await api.request(requestOpts);
+      const data = await res.json();
+
+      console.log("Data: ")
+      console.log(data.contents);
+      setProducts(data.contents || []);
+    } catch (err) {
+      console.error("Error fetching products:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  fetchProducts();
+}, []);
 
   // --- ΣΥΝΑΡΤΗΣΗ: Βρίσκει τα κορυφαία σε πωλήσεις (Best Sellers) ---
   // Ταξινομεί με βάση τα reviews (φθίνουσα σειρά) και παίρνει τα πρώτα `limit`
@@ -37,9 +85,11 @@ export default function Home() {
 
   // 5. Παπούτσια: Τα 4 κορυφαία όπου η κατηγορία είναι "shoes"
   const featuredShoes = getBestSellers(
-    productsData.filter(p => p.category === "shoes"), 
+    productsData.filter(p => p.category.name === "shoes"), 
     4
   );
+
+  if (loading) return <p>Loading...</p>;
 
   return (
     <>

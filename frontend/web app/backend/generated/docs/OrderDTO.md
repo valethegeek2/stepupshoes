@@ -8,6 +8,9 @@ Name | Type
 ------------ | -------------
 `orderId` | number
 `userId` | number
+`firstName` | string
+`lastName` | string
+`phoneNumber` | string
 `orderDate` | Date
 `totalAmount` | number
 `status` | string
@@ -28,6 +31,9 @@ import type { OrderDTO } from ''
 const example = {
   "orderId": null,
   "userId": null,
+  "firstName": null,
+  "lastName": null,
+  "phoneNumber": null,
   "orderDate": null,
   "totalAmount": null,
   "status": null,

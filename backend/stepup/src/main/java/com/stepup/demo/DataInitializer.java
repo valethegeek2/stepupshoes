@@ -147,7 +147,7 @@ public class DataInitializer {
             p1.setBasePrice(120.0F);
             p1.setGender(Gender.MEN);
             p1.setIsActive(true);
-            p1.setProductImage("default.png");
+            p1.setProductImage("nike.jpg");
             p1.setReviews(34L);
             p1.setRating(4.3F);
 
@@ -160,7 +160,7 @@ public class DataInitializer {
             p2.setBasePrice(150.0F);
             p2.setGender(Gender.MEN);
             p2.setIsActive(true);
-            p2.setProductImage("default.png");
+            p2.setProductImage("adidas.jpg");
             p2.setReviews(68L);
             p2.setRating(3.4F);
 
@@ -212,7 +212,7 @@ public class DataInitializer {
             p6.setBasePrice(15.0F);
             p6.setGender(Gender.UNISEX);
             p6.setIsActive(true);
-            p6.setProductImage("default.png");
+            p6.setProductImage("asics.jpg");
             p6.setReviews(12L);
             p6.setRating(2.0F);
 

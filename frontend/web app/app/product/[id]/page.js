@@ -2,30 +2,90 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation"; 
-import { productsData } from "../../../data/product";
+//import { productsData } from "../../../data/product";
 import ProductCard from "../../../components/ProductCard";
 import { useCart } from "../../../context/CartContext";
 import { useWishlist } from "../../../context/WishlistContext";
+import { Configuration, ProductControllerApi, CartControllerApi } from '@/backend/generated';
 
 export default function ProductDetailsPage() {
   const params = useParams(); 
   const productId = params?.id;
 
-  const product = productsData.find((p) => String(p.id) === String(productId));
+  useEffect(() => {
+    if (!productId) return;
+    fetchProductData();
+  }, [productId]);
+
+  const config = new Configuration({ basePath: "http://localhost:8080" });
+  const api = new ProductControllerApi(config);
+
+  const [apiProducts, setProduct] = useState(null);
+  const [related, setRelated] = useState(null);
+  const [variants, setVariants] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const product = apiProducts;
+
+  const fetchProductData = async () => {
+    try {
+      const body = {
+        // number
+        id: productId,
+      };
+      const prod = await api.getProductById(body);
+      setProduct(prod);
+      const related = await api.getAllProducts1({})
+      setRelated(related.contents || []);
+      const varBody = {
+        // number
+        productId: productId,
+      };
+
+      const vars = await api.getAllProductVariantsByProductId1(varBody);
+      setVariants(vars || []);
+      // setMaxStock(vars.reduce(
+      //   (sum, v) => sum + (v.isAvailable ? v.stock : 0), 0))
+      console.log("vars");
+      console.log(vars);
+    } catch (err) {
+      console.error("Error fetching product:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const { cart, addToCart, removeFromCart } = useCart();
   const { wishlist, toggleWishlist, removeFromWishlist } = useWishlist();
 
-  const maxStock = product?.quantity !== undefined ? product.quantity : 5;
-  const isOutOfStock = maxStock === 0;
+  const maxStock = variants.reduce(
+    (sum, v) => sum + (v.stock || 0),
+    0
+  );
 
-  const [qty, setQty] = useState(isOutOfStock ? 0 : 1);
+  const [qty, setQty] = useState(1);
+
+  const [selectedColor, setSelectedColor] = useState(null);
+  const [selectedSize, setSelectedSize] = useState(null);
+
+  const availableColors = [...new Set(variants.map(v => v.color))];
+  const availableSizes = [...new Set(variants.map(v => v.size))];
+
+  const selectedVariant = variants.find(
+    v => v.color === selectedColor && v.size === selectedSize
+  );
+
+  const isOutOfStock = selectedVariant ? selectedVariant.stock === 0 : false;
 
   useEffect(() => {
-    if (isOutOfStock) {
+    if (maxStock === 0) {
       setQty(0);
+    } else if (qty === 0) {
+      setQty(1);
     }
-  }, [isOutOfStock]);
+  }, [maxStock]);
+
+  if (loading) return <p>Loading...</p>;
 
   if (!product) {
     return (
@@ -40,23 +100,94 @@ export default function ProductDetailsPage() {
   const isInCart = cart.some((item) => item.id === product.id);
 
   // Σχετικά Προϊόντα
-  const relatedProducts = productsData
-    .filter((p) => p.category === product.category && p.gender === product.gender && p.id !== product.id)
-    .slice(0, 4);
+  const relatedProducts = (related || [])
+  .filter((p) =>
+    p.category?.name === product.category?.name &&
+    p.gender === product.gender &&
+    p.id !== product.id
+  )
+  .slice(0, 4);
 
   // --- Λογική προσθήκης στο Καλάθι ---
-  const handleAddToCart = () => {
-    if (isOutOfStock) return; 
-    
-    for (let i = 0; i < qty; i++) {
-      addToCart(product);
-    }
 
-    // Αν υπήρχε στη Wishlist, το βγάζουμε αυτόματα (Αθόρυβα)
-    if (isWishlisted) {
-      removeFromWishlist(product.id);
+  const handleAddToCart = async () => {
+    const token = localStorage.getItem('jwt');
+    if (!token) {
+      window.location.href = '/signin';
+      return;
+    }
+    if (!selectedVariant) {
+      alert("Παρακαλώ επιλέξτε χρώμα και μέγεθος.");
+      return;
+    }
+    if (isOutOfStock) return;
+
+    try {
+      const config = new Configuration({ basePath: 'http://localhost:8080' });
+      const cartApi = new CartControllerApi(config);
+
+      const requestOpts = await cartApi.addToCartRequestOpts({
+        addToCartRequestDTO: {
+          variantId: selectedVariant.id,
+          quantity: qty,
+        }
+      });
+
+      requestOpts.headers['Authorization'] = `Bearer ${token}`;
+
+      const rawResponse = await cartApi.request(requestOpts);
+      console.log("Cart status:", rawResponse.status);
+
+      // Local cart update
+      const cartItem = {
+        id: selectedVariant.id,
+        name: product.name,
+        price: Number(product.basePrice) + Number(selectedVariant.priceAdjustment || 0),
+        productImage: product.productImage,
+        color: selectedVariant.color,
+        size: selectedVariant.size,
+        stock: selectedVariant.stock,
+      };
+
+      for (let i = 0; i < qty; i++) {
+        addToCart(cartItem);
+      }
+
+      if (isWishlisted) {
+        removeFromWishlist(product.id);
+      }
+
+    } catch (err) {
+      console.error("Error adding to cart:", err);
+      alert("Σφάλμα κατά την προσθήκη στο καλάθι.");
     }
   };
+
+  // const handleAddToCart = () => {
+  //   if (!selectedVariant) {
+  //     alert("Παρακαλώ επιλέξτε χρώμα και μέγεθος.");
+  //     return;
+  //   }
+  //   if (isOutOfStock) return;
+
+  //   const cartItem = {
+  //     id: selectedVariant.id,
+  //     name: product.name,
+  //     price: Number(product.basePrice) + Number(selectedVariant.priceAdjustment || 0),
+  //     productImage: product.productImage,
+  //     color: selectedVariant.color,
+  //     size: selectedVariant.size,
+  //     stock: selectedVariant.stock,
+  //   };
+
+  //   for (let i = 0; i < qty; i++) {
+  //     addToCart(cartItem);
+  //   }
+
+  //   if (isWishlisted) {
+  //     removeFromWishlist(product.id);
+  //   }
+  // };
 
   // --- Λογική προσθήκης στη Wishlist ---
   const handleWishlistToggle = () => {
@@ -76,7 +207,7 @@ export default function ProductDetailsPage() {
     <div className="pdp-container">
       
       <div className="pdp-top-bar">
-        <Link href={`/products/${product.category || ''}`} className="return-link">
+        <Link href={`/products/${product.category?.name || ''}`} className="return-link">
           &larr; Return to Shop
         </Link>
       </div>
@@ -85,12 +216,12 @@ export default function ProductDetailsPage() {
         
         <div className="pdp-image-col">
           <div className="pdp-image-box">
-            <img src={product.image || ""} alt={product.title || product.name} />
+            <img src={product.productImage || ""} alt={product.name} />
           </div>
         </div>
 
         <div className="pdp-info-col">
-          <h1 className="pdp-title">{product.title || product.name}</h1>
+          <h1 className="pdp-title">{product.name}</h1>
           
           <div className="pdp-rating">
             <div className="stars">
@@ -101,22 +232,81 @@ export default function ProductDetailsPage() {
             <span>({product.rating || "5.0"}) &bull; {product.reviews || "0"} reviews</span>
           </div>
 
-          <p className="pdp-price">€ {Number(product.price).toFixed(2)}</p>
+          <p className="pdp-price">€ {Number(product.basePrice).toFixed(2)}</p>
 
           <p className="pdp-description">
             {product.description || "Premium sports gear designed for top performance and comfort."}
           </p>
-
+{/*isOutOfStock ? '#d10000' : '#2bd67b', */}
           <p style={{ 
-            color: isOutOfStock ? '#d10000' : '#2bd67b', 
+            color: (!selectedVariant && maxStock === 0) || isOutOfStock ? '#d10000' : '#2bd67b', 
             fontWeight: 'bold', 
             marginTop: '-15px', 
             marginBottom: '20px' 
           }}>
-            {isOutOfStock ? "Out of Stock" : `In Stock (${maxStock} διαθέσιμα)`}
+            {/*{isOutOfStock ? "Out of Stock" : `In Stock (${maxStock} διαθέσιμα)`}*/}
+            {!selectedVariant 
+                ? (maxStock === 0 ? "Out of Stock" : `Διαθέσιμο απόθεμα: ${maxStock} τεμάχια`)
+                : isOutOfStock 
+                  ? "Out of Stock" 
+                  : `In Stock (${selectedVariant.stock} διαθέσιμα)`}
           </p>
 
           <hr className="pdp-divider" />
+
+          {/* Select variant section */}
+          <div className="pdp-variants">
+            <div className="pdp-variant-group">
+              <span className="qty-label">Color</span>
+              <div className="pdp-variant-options">
+                {availableColors.map(color => (
+                  <button
+                    key={color}
+                    onClick={() => { setSelectedColor(color); setSelectedSize(null); }}
+                    style={{
+                      padding: '6px 14px',
+                      marginRight: '8px',
+                      border: selectedColor === color ? '2px solid #f59e0b' : '2px solid #ccc',
+                      borderRadius: '6px',
+                      cursor: 'pointer',
+                      fontWeight: selectedColor === color ? 'bold' : 'normal',
+                    }}
+                  >
+                    {color}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="pdp-variant-group" style={{ marginTop: '12px' }}>
+              <span className="qty-label">Size</span>
+              <div className="pdp-variant-options">
+                {availableSizes.map(size => {
+                  const available = variants.some(
+                    v => v.size === size && v.color === selectedColor && v.stock > 0
+                  );
+                  return (
+                    <button
+                      key={size}
+                      onClick={() => available && setSelectedSize(size)}
+                      disabled={!available}
+                      style={{
+                        padding: '6px 14px',
+                        marginRight: '8px',
+                        border: selectedSize === size ? '2px solid #f59e0b' : '2px solid #ccc',
+                        borderRadius: '6px',
+                        cursor: available ? 'pointer' : 'not-allowed',
+                        opacity: available ? 1 : 0.4,
+                        fontWeight: selectedSize === size ? 'bold' : 'normal',
+                      }}
+                    >
+                      {size}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
 
           <div className="pdp-qty-section">
             <span className="qty-label">Quantity</span>
