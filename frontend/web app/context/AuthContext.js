@@ -5,20 +5,21 @@ import { usersData } from "../data/users";
 const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
-  const [user, setUser] = useState(null); // null σημαίνει ότι δεν είμαστε συνδεδεμένοι
+  const [user, setUser] = useState(null); 
 
-  // Συνάρτηση Σύνδεσης
+  // Handle user login
   const login = (username, password) => {
-    // Ψάχνει αν υπάρχει ο χρήστης στα mock δεδομένα μας
+    // Check credentials against mock data
     const foundUser = usersData.find(u => u.username === username && u.password === password);
+    
     if (foundUser) {
-      setUser(foundUser); // Τον αποθηκεύει στη μνήμη
-      return true; // Επιτυχία!
+      setUser(foundUser);
+      return true;
     }
-    return false; // Αποτυχία!
+    return false;
   };
 
-  // Συνάρτηση Αποσύνδεσης
+  // Handle user logout
   const logout = () => {
     setUser(null);
   };

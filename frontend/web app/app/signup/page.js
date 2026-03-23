@@ -2,7 +2,8 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-// Εισάγουμε τα δεδομένα των χρηστών για τον έλεγχο
+
+// Mock user data for validation
 import { usersData } from "../../data/users";
 
 export default function SignUpPage() {
@@ -18,11 +19,11 @@ export default function SignUpPage() {
 
   const [errors, setErrors] = useState({});
 
-  // --- Ο "ΖΩΝΤΑΝΟΣ" ΕΛΕΓΧΟΣ ---
+  // Real-time form validation
   useEffect(() => {
     const newErrors = {};
 
-    // 1. Έλεγχος Username
+    // Validate Username uniqueness
     if (formData.username.trim() !== "") {
       const usernameExists = usersData.find(
         u => u.username.toLowerCase() === formData.username.trim().toLowerCase()
@@ -32,15 +33,15 @@ export default function SignUpPage() {
       }
     }
 
-    // 2. Έλεγχος Email (ΚΑΙ για το @gmail.com ΚΑΙ για το αν υπάρχει ήδη)
+    // Validate Email format and availability
     if (formData.email.trim() !== "") {
       const emailValue = formData.email.trim().toLowerCase();
       
-      // Πρώτα ελέγχουμε αν τελειώνει σε @gmail.com
+      // Enforce @gmail.com domain restriction
       if (!emailValue.endsWith("@gmail.com")) {
         newErrors.email = "Email must end with @gmail.com.";
       } else {
-        // Αν είναι σωστό gmail, ελέγχουμε αν είναι πιασμένο
+        // Check if email is already registered
         const emailExists = usersData.find(
           u => u.email.toLowerCase() === emailValue
         );
@@ -50,7 +51,7 @@ export default function SignUpPage() {
       }
     }
 
-    // 3. Έλεγχος Κωδικών (Αν δεν ταιριάζουν)
+    // Validate Password match
     if (formData.confirmPassword !== "" && formData.password !== formData.confirmPassword) {
       newErrors.passwordMismatch = "Passwords do not match.";
     }

@@ -11,7 +11,7 @@ export default function EditOrderPage() {
   const params = useParams();
   const { user } = useAuth();
 
-  // Κρατάμε ένα αντίγραφο των αρχικών δεδομένων για να δούμε αν έγιναν αλλαγές!
+  // Keep a copy of initial data to track changes
   const [initialData, setInitialData] = useState(null);
 
   const [formData, setFormData] = useState({
@@ -44,7 +44,7 @@ export default function EditOrderPage() {
         };
         const defaultItems = orderToEdit.items || [];
 
-        // Αποθηκεύουμε την αρχική κατάσταση
+        // Store initial state
         setInitialData({
           delivery: defaultDelivery,
           items: defaultItems
@@ -59,6 +59,7 @@ export default function EditOrderPage() {
     }
   }, [params.id]);
 
+  // Guard clause for non-admin users
   if (!user || user.role !== "admin") {
     return (
       <div className="orders-container" style={{ textAlign: "center", padding: "100px 20px" }}>
@@ -108,7 +109,7 @@ export default function EditOrderPage() {
   const handleSubmit = (e) => {
     e.preventDefault();
     
-    // Έλεγχος ΠΡΙΝ την αποθήκευση για λάθος προϊόντα
+    // Validate products before saving
     const hasInvalidProducts = formData.items.some(item => 
       !productsData.some(p => p.title.toLowerCase() === (item.title || "").trim().toLowerCase())
     );
@@ -118,7 +119,7 @@ export default function EditOrderPage() {
       return; 
     }
 
-    // --- ΝΕΟΣ ΕΛΕΓΧΟΣ: Έλεγχος για υπέρβαση αποθέματος ---
+    // Check for stock availability
     const hasStockIssues = formData.items.some(item => {
       const product = productsData.find(p => p.title.toLowerCase() === (item.title || "").trim().toLowerCase());
       return product && item.quantity > product.quantity;
@@ -129,14 +130,14 @@ export default function EditOrderPage() {
       return;
     }
 
-    // Μετατρέπουμε τα αντικείμενα σε string για να δούμε αν είναι ακριβώς ίδια με τα αρχικά
+    // Compare current data with initial data using JSON stringify
     const deliveryChanged = JSON.stringify(initialData.delivery) !== JSON.stringify(formData.delivery);
     const itemsChanged = JSON.stringify(initialData.items) !== JSON.stringify(formData.items);
 
     let finalStatus = formData.status;
     let statusMessage = "";
 
-    // Αν άλλαξε κάτι στα στοιχεία παράδοσης ή στα προϊόντα, το γυρνάμε σε "Σε εκκρεμότητα"
+    // Revert status to pending if delivery or items changed
     if (deliveryChanged || itemsChanged) {
       finalStatus = "Σε εκκρεμότητα";
       statusMessage = "\n\nΛόγω αλλαγών στα προϊόντα ή στα στοιχεία παράδοσης, η κατάσταση της παραγγελίας επέστρεψε σε 'Σε εκκρεμότητα'.";
@@ -144,7 +145,7 @@ export default function EditOrderPage() {
 
     const finalTotal = calculateTotal();
     
-    // Το τελικό αντικείμενο που θα στέλναμε στη βάση δεδομένων
+    // Final payload to be saved
     const finalOrderToSave = {
       ...formData,
       status: finalStatus,
@@ -233,10 +234,10 @@ export default function EditOrderPage() {
             </datalist>
 
             {formData.items.map((item, index) => {
-              // Βρίσκουμε το αντίστοιχο προϊόν από τη βάση δεδομένων
+              // Find matching product in database
               const matchedProduct = productsData.find(p => p.title.toLowerCase() === (item.title || "").trim().toLowerCase());
               
-              // Έλεγχοι ορθότητας και αποθέματος
+              // Validation and stock checks
               const isValidProduct = item.title === "" || !!matchedProduct;
               const maxStock = matchedProduct ? matchedProduct.quantity : 0;
               const isStockExceeded = matchedProduct && item.quantity > maxStock;

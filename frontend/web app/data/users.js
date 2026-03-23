@@ -1,11 +1,9 @@
-// data/users.js
-
 export const usersData = [
   {
     id: 1,
     username: "admin",
     email: "admin@sportwear.com",
-    password: "123", // Κωδικός για εύκολες δοκιμές
+    password: "123", 
     role: "admin"
   },
   {

@@ -3,7 +3,8 @@ import Link from "next/link";
 import { useWishlist } from "../../context/WishlistContext";
 import { useCart } from "../../context/CartContext";
 import { useAuth } from "../../context/AuthContext"; 
-// --- ΝΕΟ: Εισάγουμε τα δεδομένα των προϊόντων για τον έλεγχο αποθέματος ---
+
+// Mock data for stock validation
 import { productsData } from "../../data/product";
 
 export default function WishlistPage() {
@@ -11,7 +12,7 @@ export default function WishlistPage() {
   const { addToCart } = useCart();
   const { user } = useAuth();
 
-  // --- ΝΕΟ: Η μεταφορά όλων στο καλάθι ελέγχει πλέον και το απόθεμα! ---
+  // Handle bulk adding to cart while checking stock availability
   const handleAddAllToCart = () => {
     let addedCount = 0;
     let outOfStockCount = 0;
@@ -20,7 +21,7 @@ export default function WishlistPage() {
       const originalProduct = productsData.find(p => p.id === item.id);
       const isOutOfStock = originalProduct ? originalProduct.quantity === 0 : false;
 
-      // Προσθέτει στο καλάθι ΜΟΝΟ όσα έχουν απόθεμα
+      // Add to cart only if in stock
       if (!isOutOfStock) {
         addToCart(item);               
         removeFromWishlist(item.id);   
@@ -37,6 +38,7 @@ export default function WishlistPage() {
     }
   };
 
+  // Guard clause for unauthenticated users
   if (!user) {
     return (
       <div className="wishlist-container" style={{ textAlign: "center", padding: "100px 20px", minHeight: "60vh" }}>
@@ -58,7 +60,6 @@ export default function WishlistPage() {
         <span style={{ color: '#555' }}>WISHLIST</span>
       </div>
 
-      {/* Τίτλος και Κουμπί Όλων */}
       <div className="wishlist-header-row">
         <h1 className="wishlist-page-title">WISHLIST</h1>
         {wishlist.length > 0 && (
@@ -68,7 +69,6 @@ export default function WishlistPage() {
         )}
       </div>
 
-      {/* Εμφάνιση Προϊόντων */}
       {wishlist.length === 0 ? (
         <p style={{ marginTop: '30px', fontSize: '18px', color: '#555' }}>Η Wishlist σας είναι άδεια. Προσθέστε αγαπημένα προϊόντα!</p>
       ) : (
@@ -81,14 +81,13 @@ export default function WishlistPage() {
 
           <div className="wishlist-items-list">
             {wishlist.map((item) => {
-              // --- ΝΕΟ: Βρίσκουμε αν το συγκεκριμένο προϊόν είναι Out of Stock ---
+              // Determine stock status for the current item
               const originalProduct = productsData.find(p => p.id === item.id);
               const isOutOfStock = originalProduct ? originalProduct.quantity === 0 : false;
 
               return (
                 <div className="wishlist-item-row" key={item.id}>
                   
-                  {/* Αριστερά: Φωτό και Πληροφορίες */}
                   <div className="wishlist-item-left">
                     <div className="wishlist-img-box">
                       <img src={item.image || ""} alt={item.title} />
@@ -99,7 +98,7 @@ export default function WishlistPage() {
                         {item.title}
                       </Link>
                       
-                      {/* Προαιρετικό: Ένα μικρό σηματάκι αν είναι εξαντλημένο */}
+                      {/* Out of stock indicator */}
                       {isOutOfStock && (
                         <p style={{ color: '#d10000', fontSize: '12px', fontWeight: 'bold', marginTop: '5px' }}>
                           Εξαντλήθηκε
@@ -108,18 +107,16 @@ export default function WishlistPage() {
                     </div>
                   </div>
 
-                  {/* Μέση: Τιμή */}
                   <div className="wishlist-item-price">
                     € {Number(item.price).toFixed(2)}
                   </div>
 
-                  {/* Δεξιά: Κουμπιά */}
                   <div className="wishlist-item-actions">
                     <button className="remove-item-btn" onClick={() => removeFromWishlist(item.id)}>
                       <i className="fa-regular fa-trash-can"></i> Αφαίρεση
                     </button>
                     
-                    {/* --- ΝΕΟ: Το κουμπί προσθήκης γκριζάρει και κλειδώνει αν το stock είναι 0 --- */}
+                    {/* Add to cart button (disabled if out of stock) */}
                     <button 
                       className="add-to-cart-btn" 
                       onClick={() => {

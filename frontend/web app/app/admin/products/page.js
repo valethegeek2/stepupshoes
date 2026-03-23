@@ -9,11 +9,13 @@ export default function AdminProductsPage() {
   const router = useRouter();
   const { user } = useAuth();
   
+  // Local state for products, search, and pagination
   const [productList, setProductList] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10; 
 
+  // Initialize product list with mock data and fallback values
   useEffect(() => {
     const initializedProducts = products.map(p => ({
       ...p,
@@ -23,6 +25,7 @@ export default function AdminProductsPage() {
     setProductList(initializedProducts);
   }, []);
 
+  // Restrict access to admin users only
   if (!user || user.role !== "admin") {
     return (
       <div className="orders-container" style={{ textAlign: "center", padding: "100px 20px" }}>
@@ -34,12 +37,14 @@ export default function AdminProductsPage() {
     );
   }
 
+  // Handle product deletion
   const handleDelete = (id) => {
     if (window.confirm("Είστε σίγουροι ότι θέλετε να διαγράψετε αυτό το προϊόν;")) {
       setProductList(prev => prev.filter(p => p.id !== id));
     }
   };
 
+  // Apply search filter based on title or ID
   let displayProducts = productList;
   if (searchTerm) {
     displayProducts = displayProducts.filter(product => 
@@ -48,6 +53,7 @@ export default function AdminProductsPage() {
     );
   }
 
+  // Calculate pagination variables
   const totalPages = Math.ceil(displayProducts.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const currentProducts = displayProducts.slice(startIndex, startIndex + itemsPerPage);
@@ -95,7 +101,7 @@ export default function AdminProductsPage() {
                 <th>ID</th>
                 <th>PRODUCT</th>
                 <th>CATEGORY</th>
-                <th>GENDER</th> {/* Προστέθηκε το GENDER */}
+                <th>GENDER</th>
                 <th>BRAND</th>
                 <th>QUANTITY</th>
                 <th>PRICE</th>
@@ -120,7 +126,7 @@ export default function AdminProductsPage() {
                       </td>
 
                       <td className="text-gray">{product.category}</td>
-                      <td className="text-gray" style={{ textTransform: 'capitalize' }}>{product.gender}</td> {/* Προστέθηκε το GENDER */}
+                      <td className="text-gray" style={{ textTransform: 'capitalize' }}>{product.gender}</td>
                       <td className="text-gray">{product.brand}</td>
                       <td className="fw-bold">{product.quantity}</td>
                       <td className="fw-bold">€ {Number(product.price).toFixed(2)}</td>
@@ -133,7 +139,6 @@ export default function AdminProductsPage() {
 
                       <td>
                         <div className="action-btns">
-                          {/* Κουμπί Επεξεργασίας */}
                           <button 
                             className="action-btn edit-btn" 
                             title="Επεξεργασία" 
@@ -142,7 +147,6 @@ export default function AdminProductsPage() {
                             <i className="fa-solid fa-pen"></i>
                           </button>
                           
-                          {/* Κουμπί Διαγραφής */}
                           <button 
                             className="action-btn delete-btn" 
                             title="Διαγραφή" 
@@ -157,7 +161,7 @@ export default function AdminProductsPage() {
                 })
               ) : (
                 <tr>
-                  <td colSpan="9" style={{ textAlign: "center", padding: "40px", color: "#666" }}> {/* Αλλάξαμε το colSpan σε 9 επειδή προσθέσαμε στήλη */}
+                  <td colSpan="9" style={{ textAlign: "center", padding: "40px", color: "#666" }}>
                     Δεν βρέθηκαν προϊόντα.
                   </td>
                 </tr>

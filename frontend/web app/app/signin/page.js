@@ -2,7 +2,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useAuth } from "../../context/AuthContext"; // Φέρνουμε το Auth
+import { useAuth } from "../../context/AuthContext";
 
 export default function SignInPage() {
   const [username, setUsername] = useState("");
@@ -10,14 +10,17 @@ export default function SignInPage() {
   const [error, setError] = useState("");
   
   const { login } = useAuth();
-  const router = useRouter(); // Για να αλλάζουμε σελίδα
+  const router = useRouter();
 
+  // Handle form submission
   const handleLogin = (e) => {
-    e.preventDefault(); // Σταματάει το refresh της σελίδας
+    e.preventDefault(); 
+    
     const success = login(username, password);
     
     if (success) {
-      router.push("/"); // Αν μπει σωστά, πάει στην Αρχική!
+      // Redirect to home on successful login
+      router.push("/"); 
     } else {
       setError("Λάθος Username ή Password!");
     }
@@ -31,7 +34,6 @@ export default function SignInPage() {
           Sportwear<span className="dot">.</span>
         </Link>
 
-        {/* Συνδέουμε τη φόρμα με τη συνάρτησή μας */}
         <form className="auth-form" onSubmit={handleLogin}>
           
           {error && <p style={{ color: 'red', fontSize: '14px', margin: 0 }}>{error}</p>}

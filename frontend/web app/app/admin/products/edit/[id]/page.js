@@ -11,7 +11,7 @@ export default function EditProductPage() {
   const { user } = useAuth();
   const fileInputRef = useRef(null);
 
-  // --- ΕΝΗΜΕΡΩΜΕΝΟ STATE ---
+  // Initialize form state
   const [formData, setFormData] = useState({
     title: "",
     description: "", 
@@ -28,12 +28,12 @@ export default function EditProductPage() {
   const [fileName, setFileName] = useState("");
   const [errors, setErrors] = useState({});
 
+  // Load existing product data on mount
   useEffect(() => {
     if (params.id) {
       const productToEdit = productsData.find(p => p.id.toString() === params.id.toString());
       
       if (productToEdit) {
-        // --- ΦΟΡΤΩΝΟΥΜΕ ΤΑ ΔΕΔΟΜΕΝΑ (Και τα νέα πεδία) ---
         setFormData({
           title: productToEdit.title || "",
           description: productToEdit.description || "",
@@ -54,7 +54,7 @@ export default function EditProductPage() {
     }
   }, [params.id]);
 
-  // --- O ΕΛΕΓΧΟΣ ΓΙΑ ΤΑ ΔΙΠΛΟΤΥΠΑ ---
+  // Real-time validation for duplicate products
   useEffect(() => {
     const newErrors = {};
 
@@ -82,6 +82,7 @@ export default function EditProductPage() {
     setErrors(newErrors);
   }, [formData.title, formData.description, params?.id]);
 
+  // Restrict access to admin users only
   if (!user || user.role !== "admin") {
     return (
       <div className="orders-container" style={{ textAlign: "center", padding: "100px 20px" }}>
@@ -95,6 +96,7 @@ export default function EditProductPage() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  // Handle local image file selection
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -207,7 +209,6 @@ export default function EditProductPage() {
               </div>
             </div>
 
-            {/* Tags (Ολόκληρη σειρά) */}
             <div className="admin-input-group" style={{ marginTop: '20px' }}>
               <label>Tags (Λέξεις-κλειδιά)</label>
               <input 

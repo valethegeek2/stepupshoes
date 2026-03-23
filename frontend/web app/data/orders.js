@@ -1,4 +1,3 @@
-// data/orders.js
 
 export const ordersData = [
   { 

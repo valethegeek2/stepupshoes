@@ -6,7 +6,7 @@ const CartContext = createContext();
 export function CartProvider({ children }) {
   const [cart, setCart] = useState([]);
 
-  // Προσθήκη στο καλάθι (αν υπάρχει ήδη, αυξάνει την ποσότητα)
+  // Add new item or increment quantity if it already exists
   const addToCart = (product) => {
     setCart((prev) => {
       const existing = prev.find((item) => item.id === product.id);
@@ -19,28 +19,28 @@ export function CartProvider({ children }) {
     });
   };
 
-  // Διαγραφή όλου του προϊόντος
+  // Remove item completely from cart
   const removeFromCart = (id) => {
     setCart((prev) => prev.filter((item) => item.id !== id));
   };
 
-  // Αυξομείωση ποσότητας (+ / -)
+  // Adjust item quantity (+ / -)
   const updateQuantity = (id, amount) => {
     setCart((prev) =>
       prev.map((item) => {
         if (item.id === id) {
           const newQty = item.quantity + amount;
-          return { ...item, quantity: newQty > 0 ? newQty : 1 }; // Δεν αφήνουμε να πάει κάτω από 1
+          return { ...item, quantity: newQty > 0 ? newQty : 1 }; // Prevent quantity from dropping below 1
         }
         return item;
       })
     );
   };
 
-  // Άδειασμα καλαθιού (Clear All)
+  // Clear all items from cart
   const clearCart = () => setCart([]);
 
-  // Υπολογισμοί: Σύνολο τεμαχίων και Τελική Τιμή
+  // Derived state: Total items and subtotal
   const cartCount = cart.reduce((total, item) => total + item.quantity, 0);
   const cartSubtotal = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
 

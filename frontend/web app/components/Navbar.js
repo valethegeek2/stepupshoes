@@ -1,7 +1,6 @@
 "use client";
 import { useState } from "react";
 import Link from "next/link";
-// Προσθέσαμε το useRouter για να κάνουμε την ανακατεύθυνση
 import { usePathname, useRouter } from "next/navigation";
 import { useWishlist } from "../context/WishlistContext"; 
 import { useCart } from "../context/CartContext.js";
@@ -9,12 +8,13 @@ import { useAuth } from "../context/AuthContext";
 
 export default function Navbar() {
   const pathname = usePathname(); 
-  const router = useRouter(); // <--- ΝΕΟ
+  const router = useRouter(); 
   
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
-  const [searchTerm, setSearchTerm] = useState(""); // <--- ΝΕΟ: Κρατάει τι γράφει ο χρήστης
+  const [searchTerm, setSearchTerm] = useState(""); 
 
+  // Hide navbar on auth routes
   const hideOnRoutes = ["/signin", "/signup", "/forgot-password"];
   if (hideOnRoutes.includes(pathname)) {
     return null; 
@@ -31,13 +31,12 @@ export default function Navbar() {
 
   const { user, logout } = useAuth();
 
-  // --- ΝΕΑ ΣΥΝΑΡΤΗΣΗ ΑΝΑΖΗΤΗΣΗΣ ---
+  // Handle product search submission
   const handleSearch = (e) => {
     e.preventDefault();
     if (searchTerm.trim() !== "") {
-      // Τον στέλνει στη σελίδα products με παράμετρο search
       router.push(`/products?search=${encodeURIComponent(searchTerm.trim())}`);
-      setSearchTerm(""); // Αδειάζει τη μπάρα μετά την αναζήτηση
+      setSearchTerm(""); 
     }
   };
 
@@ -55,7 +54,7 @@ export default function Navbar() {
         </button>
       </div>
       
-      {/* --- ΝΕΑ ΜΠΑΡΑ ΑΝΑΖΗΤΗΣΗΣ --- */}
+      {/* Search Bar */}
       <form className="search-container" onSubmit={handleSearch}>
         <i className="fa-solid fa-magnifying-glass"></i>
         <input 
@@ -121,7 +120,7 @@ export default function Navbar() {
         )}
       </div>
 
-      {/* ΑΠΛΟΠΟΙΗΜΕΝΟ ΜΕΝΟΥ (1 Επίπεδο) */}
+      {/* Main Navigation Menu */}
       <div className={`mega-menu-container ${isMenuOpen ? 'active' : ''}`}>
         <ul className="mega-menu-sidebar">
             <li className="mega-menu-item">

@@ -2,40 +2,39 @@
 import { useState } from "react";
 import Link from "next/link";
 import ProductCard from "../components/ProductCard";
-// Φέρνουμε τα πραγματικά σου mock δεδομένα
+// Mock data
 import { productsData } from "../data/product";
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState("mens-products");
 
-  // --- ΣΥΝΑΡΤΗΣΗ: Βρίσκει τα κορυφαία σε πωλήσεις (Best Sellers) ---
-  // Ταξινομεί με βάση τα reviews (φθίνουσα σειρά) και παίρνει τα πρώτα `limit`
+  // Get best sellers based on reviews
   const getBestSellers = (products, limit = 4) => {
     return [...products].sort((a, b) => b.reviews - a.reviews).slice(0, limit);
   };
 
-  // 1. Featured Products: Τα 4 κορυφαία από ΟΛΟ το μαγαζί
+  // Top 4 overall
   const featuredProducts = getBestSellers(productsData, 4);
 
-  // 2. Ανδρικά: Τα 4 κορυφαία όπου το gender είναι "men"
+  // Men's top 4
   const mensProducts = getBestSellers(
     productsData.filter(p => p.gender === "men"), 
     4
   );
 
-  // 3. Γυναικεία: Τα 4 κορυφαία όπου το gender είναι "women"
+  // Women's top 4
   const womensProducts = getBestSellers(
     productsData.filter(p => p.gender === "women"), 
     4
   );
 
-  // 4. Παιδικά: Τα 4 κορυφαία όπου το gender είναι "boy" ή "girl"
+  // Kids' top 4
   const kidsProducts = getBestSellers(
     productsData.filter(p => p.gender === "boy" || p.gender === "girl"), 
     4
   );
 
-  // 5. Παπούτσια: Τα 4 κορυφαία όπου η κατηγορία είναι "shoes"
+  // Top 4 shoes
   const featuredShoes = getBestSellers(
     productsData.filter(p => p.category === "shoes"), 
     4
@@ -45,9 +44,6 @@ export default function Home() {
     <>
       <div className="hero-section">
           <img src="brand.png" alt="Sportwear" className="hero-bg-img" />
-          <Link href="/products">
-            <button className="shop-now-btn">Shop Now</button>
-          </Link>
       </div>
 
       <div className="features-section">
@@ -94,7 +90,7 @@ export default function Home() {
           </div>
       </div>
 
-      {/* Categories Links (Gender) */}
+      {/* Gender Categories */}
       <div className="categories-section">
           <div className="category-card">
               <img src="ανδρικα.png" alt="Men" className="category-img" />
@@ -161,31 +157,31 @@ export default function Home() {
           </div>
       </div>
 
-      {/* Top Brands Links */}
+      {/* Top Brands */}
       <div className="top-brands-wrapper">
           <h2 className="brands-title">TOP BRANDS</h2>
           
           <div className="categories-section brands-section">
               <div className="category-card">
-                  <img src="adidas.jpg" alt="Brand 1" className="category-img" />
+                  <img src="adidas.png" alt="Brand 1" className="category-img" />
                   <Link href="/products?brand=Adidas">
                     <button className="category-btn">Shop Now</button>
                   </Link>
               </div>
               <div className="category-card">
-                  <img src="nike.jpg" alt="Brand 2" className="category-img" />
+                  <img src="nike.png" alt="Brand 2" className="category-img" />
                   <Link href="/products?brand=Nike">
                     <button className="category-btn">Shop Now</button>
                   </Link>
               </div>
               <div className="category-card">
-                  <img src="asiscs.jpg" alt="Brand 3" className="category-img" />
+                  <img src="asics.png" alt="Brand 3" className="category-img" />
                   <Link href="/products?brand=Asics">
                     <button className="category-btn">Shop Now</button>
                   </Link>
               </div>
               <div className="category-card">
-                  <img src="new_balance.jpg" alt="Brand 4" className="category-img" />
+                  <img src="new_balance.png" alt="Brand 4" className="category-img" />
                   <Link href="/products?brand=New Balance">
                     <button className="category-btn">Shop Now</button>
                   </Link>

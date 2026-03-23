@@ -1,4 +1,6 @@
-/* --- Γενικές Ρυθμίσεις --- */
+/* =========================================
+   Global Settings
+   ========================================= */
 * {
     margin: 0;
     padding: 0;
@@ -6,7 +8,9 @@
     font-family: Arial, sans-serif;
 }
 
-/* --- Επάνω Μενού (Navbar) --- */
+/* =========================================
+   Navigation Bar
+   ========================================= */
 .nav {
     display: flex;
     align-items: center;
@@ -30,7 +34,7 @@
     font-size: 24px;
 }
 
-/* --- Κουμπί ΠΡΟΪΟΝΤΑ --- */
+/* Products Button */
 .products-btn {
     background-color: #f59e0b;
     color: #111;
@@ -54,7 +58,7 @@
     font-size: 18px;
 }
 
-/* --- Αναζήτηση --- */
+/* Search Bar */
 .search-container {
     position: relative;
     width: 45%;
@@ -78,7 +82,7 @@
     font-size: 15px;
 }
 
-/* --- Δεξί Μενού --- */
+/* Right Navbar Items */
 .nav-right {
     display: flex;
     align-items: center;
@@ -174,7 +178,11 @@
     color: #1a3c82;
 }
 
-/* --- Κεντρική Εικόνα (Hero Section) --- */
+/* =========================================
+   Home Page Sections
+   ========================================= */
+
+/* Hero Section */
 .hero-section {
     position: relative;
     margin: 20px 40px;
@@ -205,7 +213,7 @@
     background-color: #d97706;
 }
 
-/* --- Μπάρα Χαρακτηριστικών --- */
+/* Features Bar */
 .features-section {
     display: flex;
     justify-content: space-between;
@@ -234,7 +242,7 @@
     color: #777;
 }
 
-/* --- Featured Products Section --- */
+/* Featured Products */
 .featured-products-section {
     margin-top: 61px;
     padding: 20px 40px 60px 40px;
@@ -354,7 +362,7 @@
     font-weight: 800;
 }
 
-/* --- Categories Section (4 εικόνες στη σειρά) --- */
+/* Categories Section */
 .categories-section {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -398,7 +406,7 @@
     background-color: #d97706;
 }
 
-/* --- Tabbed Products Section --- */
+/* Tabbed Products */
 .tabbed-products-section {
     padding: 20px 40px 80px 40px;
 }
@@ -438,7 +446,7 @@
     display: grid;
 }
 
-/* --- Top Brands Section --- */
+/* Top Brands */
 .top-brands-wrapper {
     margin-top: -20px;
 }
@@ -456,7 +464,7 @@
     padding-top: 20px; 
 }
 
-/* --- All Brands Banner Section --- */
+/* All Brands Banner */
 .all-brands-section {
     padding: 20px 40px 60px 40px; 
 }
@@ -483,7 +491,9 @@
     display: block;
 }
 
-/* --- Footer Section --- */
+/* =========================================
+   Footer Section
+   ========================================= */
 .footer {
     padding: 60px 40px 20px 40px;
     background-color: #fff;
@@ -573,9 +583,8 @@
     word-spacing: 2px;
 }
 
-
 /* =========================================
-   Product Listing Page (PLP) - Σελίδα Προϊόντων
+   Product Listing Page (PLP)
    ========================================= */
 .plp-container {
     padding: 20px 40px 80px 40px;
@@ -583,7 +592,7 @@
     margin: 0 auto;
 }
 
-/* --- Breadcrumbs --- */
+/* Breadcrumbs */
 .breadcrumbs {
     font-size: 13px;
     color: #555;
@@ -606,7 +615,7 @@
     color: #999;
 }
 
-/* --- Επικεφαλίδα Σελίδας --- */
+/* Page Header */
 .plp-header {
     display: flex;
     align-items: flex-end;
@@ -629,19 +638,19 @@
     margin-bottom: 5px;
 }
 
-/* --- Κεντρικό Layout (Sidebar + Grid) --- */
+/* Main Layout */
 .plp-content {
     display: flex;
     gap: 40px;
     align-items: flex-start;
 }
 
-/* --- Αριστερή Στήλη (Filters) --- */
+/* Sidebar Filters */
 .plp-sidebar {
     width: 250px;
     flex-shrink: 0;
     position: sticky;
-    top: 90px; /* Για να μένει σταθερό όταν σκρολάρεις */
+    top: 90px;
 }
 
 .filter-group {
@@ -678,11 +687,11 @@
 }
 
 .filter-list li.active-category {
-    color: #f59e0b; /* Το πορτοκαλί σου χρώμα */
+    color: #f59e0b; 
     font-weight: bold;
 }
 
-/* Στυλ για Checkboxes (Φύλο κλπ) */
+/* Checkbox Styles */
 .checkbox-item {
     display: flex;
     align-items: center;
@@ -704,7 +713,7 @@
     font-size: 13px;
 }
 
-/* --- Δεξιά Στήλη (Προϊόντα) --- */
+/* Main Product Grid */
 .plp-main {
     flex-grow: 1;
 }
@@ -728,12 +737,11 @@
 
 .plp-grid {
     display: grid;
-    /* 3 προϊόντα ανά σειρά επειδή έχουμε και το sidebar αριστερά */
     grid-template-columns: repeat(3, 1fr); 
     gap: 30px;
 }
 
-/* --- Pagination (Σελιδοποίηση) --- */
+/* Pagination */
 .pagination-container {
     display: flex;
     flex-direction: row; 
@@ -744,7 +752,7 @@
 
 .pagination-text {
     font-size: 15px;
-    color: #000; /* Έγινε μαύρο */
+    color: #000;
 }
 
 .pagination-select-wrapper {
@@ -762,12 +770,11 @@
     border-radius: 20px; 
     padding: 6px 35px 6px 15px; 
     font-size: 15px;
-    color: #000; /* Έγινε μαύρο */
+    color: #000; 
     font-weight: 700;
     cursor: pointer;
     outline: none;
     
-    /* Έκανα και το βελάκι μαύρο (άλλαξα το stroke σε %23000000) */
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000000' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
     background-repeat: no-repeat;
     background-position: right 12px center;
@@ -775,14 +782,12 @@
     transition: border-color 0.2s ease;
 }
 
-/* Όταν πατάει ο χρήστης το κουτάκι, το περίγραμμα γίνεται μαύρο αντί για μπλε */
 .pagination-select:focus {
     border-color: #000;
 }
 
-
 /* =========================================
-   Navbar Badge (Το 9+)
+   Navbar Badge 
    ========================================= */
 .nav-icon-wrapper {
     position: relative;
@@ -809,7 +814,7 @@
 }
 
 /* =========================================
-   Wishlist Page Layout (Από φωτογραφία Intersport)
+   Wishlist Page Layout
    ========================================= */
 .wishlist-container {
     padding: 20px 40px 80px 40px;
@@ -831,7 +836,7 @@
     margin: 0;
 }
 
-/* Πράσινα Κουμπιά (Add to cart) */
+/* Action Buttons */
 .add-all-cart-btn, .add-to-cart-btn {
     background-color: #2bd67b;
     color: #fff;
@@ -848,7 +853,7 @@
     background-color: #24b869;
 }
 
-/* Επικεφαλίδες Πίνακα (Προϊόν - Τιμή) */
+/* Table Headers */
 .wishlist-table-header {
     display: flex;
     border-bottom: 2px solid #1a3c82;
@@ -864,13 +869,13 @@
 }
 
 .col-price {
-    width: 400px; /* Για να ευθυγραμμιστεί με τα δεξιά */
+    width: 400px;
     font-weight: bold;
     color: #1a3c82;
     font-size: 16px;
 }
 
-/* Οι γραμμές των προϊόντων */
+/* Product Rows */
 .wishlist-item-row {
     display: flex;
     align-items: center;
@@ -960,7 +965,6 @@
     color: #d10000;
 }
 
-
 /* =========================================
    Shopping Cart Page
    ========================================= */
@@ -968,7 +972,7 @@
     padding: 40px;
     max-width: 1400px;
     margin: 0 auto;
-    background-color: #fafafa; /* Ελαφρύ γκρι φόντο για να ξεχωρίζουν τα λευκά κουτιά */
+    background-color: #fafafa; 
     min-height: calc(100vh - 400px);
 }
 
@@ -1008,9 +1012,9 @@
     align-items: flex-start;
 }
 
-/* Αριστερή Στήλη (Items) */
+/* Left Column (Items) */
 .cart-left-col {
-    flex: 1; /* Πιάνει όλο τον διαθέσιμο χώρο */
+    flex: 1;
     background: #fff;
     border-radius: 12px;
     padding: 25px;
@@ -1155,7 +1159,7 @@
     color: #111;
 }
 
-/* Δεξιά Στήλη (Summary) */
+/* Right Column (Summary) */
 .cart-right-col {
     width: 380px;
     background: #fff;
@@ -1202,7 +1206,7 @@
 }
 
 .summary-total-row span:last-child {
-    color: #f59e0b; /* Πορτοκαλί σύνολο όπως στη φωτό */
+    color: #f59e0b;
 }
 
 .checkout-btn {
@@ -1248,7 +1252,6 @@
     color: #555;
 }
 
-
 /* =========================================
    Authentication Pages (Sign In / Sign Up)
    ========================================= */
@@ -1256,8 +1259,8 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 100vh; /* Πλέον του λέμε να πιάνει ΟΛΟ το ύψος της οθόνης */
-    background-color: #ffffff; /* Το κάναμε ολόλευκο! */
+    min-height: 100vh;
+    background-color: #ffffff;
     padding: 60px 20px;
 }
 
@@ -1271,7 +1274,7 @@
     text-align: center;
 }
 
-/* Λογότυπο */
+/* Logo */
 .auth-logo {
     font-size: 32px;
     font-weight: 800;
@@ -1282,10 +1285,10 @@
 }
 
 .auth-logo .dot {
-    color: #f59e0b; /* Το πορτοκαλί σου χρώμα */
+    color: #f59e0b; 
 }
 
-/* Φόρμα & Inputs */
+/* Form & Inputs */
 .auth-form {
     display: flex;
     flex-direction: column;
@@ -1359,7 +1362,7 @@
 }
 
 .auth-footer-link a {
-    color: #1a3c82; /* Το μπλε που χρησιμοποιείς στα μενού σου */
+    color: #1a3c82; 
     font-weight: bold;
     text-decoration: none;
     transition: color 0.2s;
@@ -1370,11 +1373,11 @@
     color: #f59e0b;
 }
 
-/* --- Admin Checkbox στο Sign Up --- */
+/* Admin Checkbox */
 .auth-checkbox {
     display: flex;
     align-items: center;
-    margin-top: -5px; /* Φέρνει το checkbox λίγο πιο κοντά στα inputs */
+    margin-top: -5px; 
 }
 
 .auth-checkbox label {
@@ -1390,10 +1393,9 @@
 .auth-checkbox input[type="checkbox"] {
     width: 16px;
     height: 16px;
-    accent-color: #f59e0b; /* Το κάνει πορτοκαλί όταν τσεκαριστεί! */
+    accent-color: #f59e0b; 
     cursor: pointer;
 }
-
 
 /* =========================================
    Product Details Page (PDP)
@@ -1420,7 +1422,7 @@
     color: #f59e0b;
 }
 
-/* Κεντρικό Layout (Φωτό + Info) */
+/* Main Layout */
 .pdp-main-layout {
     display: flex;
     gap: 60px;
@@ -1428,7 +1430,7 @@
     margin-bottom: 80px;
 }
 
-/* Αριστερή Στήλη: Φωτογραφία */
+/* Left Column (Image) */
 .pdp-image-col {
     flex: 1;
 }
@@ -1436,7 +1438,7 @@
 .pdp-image-box {
     width: 100%;
     aspect-ratio: 1 / 1;
-    background-color: #f8f9fa; /* Το ανοιχτό γκρι από την εικόνα σου */
+    background-color: #f8f9fa;
     border-radius: 20px;
     display: flex;
     justify-content: center;
@@ -1451,7 +1453,7 @@
     object-fit: contain;
 }
 
-/* Δεξιά Στήλη: Πληροφορίες */
+/* Right Column (Info) */
 .pdp-info-col {
     flex: 1;
     padding-top: 20px;
@@ -1501,7 +1503,7 @@
     margin-bottom: 30px;
 }
 
-/* Ποσότητα */
+/* Quantity Section */
 .pdp-qty-section {
     margin-bottom: 30px;
 }
@@ -1514,7 +1516,6 @@
     font-weight: bold;
 }
 
-/* Ίδιος σχεδιασμός με το cart */
 .qty-controls {
     display: inline-flex;
     align-items: center;
@@ -1543,7 +1544,7 @@
     color: #222;
 }
 
-/* Κουμπιά Αγοράς / Wishlist */
+/* Action Buttons */
 .pdp-actions {
     display: flex;
     align-items: center;
@@ -1646,7 +1647,7 @@
     gap: 15px;
 }
 
-/* Το μικρό τριγωνάκι (βελάκι) που δείχνει προς τα πάνω */
+/* Dropdown pointer */
 .user-dropdown::before {
     content: "";
     position: absolute;
@@ -1664,11 +1665,11 @@
     margin: 0;
     border-bottom: 1px solid #eee;
     padding-bottom: 10px;
-    position: relative; /* Για να είναι πάνω από το τριγωνάκι */
+    position: relative; 
 }
 
 .dropdown-username strong {
-    color: #f59e0b; /* Πορτοκαλί όνομα */
+    color: #f59e0b;
 }
 
 .dropdown-logout-btn {
@@ -1689,11 +1690,9 @@
     color: #d10000;
 }
 
-/* Μεγαλώνει μόνο το εικονίδιο του χρήστη */
 .user-menu-container .nav-icon-wrapper i {
-    font-size: 24px; /* Μπορείς να το κάνεις 26px, 28px κλπ. μέχρι να σου αρέσει */
+    font-size: 24px;
 }
-
 
 /* =========================================
    Checkout Page
@@ -1730,7 +1729,7 @@
     align-items: flex-start;
 }
 
-/* ΑΡΙΣΤΕΡΑ: Φόρμα */
+/* Left Column (Form) */
 .checkout-form-section {
     flex: 2;
 }
@@ -1791,8 +1790,7 @@
     border-color: #f59e0b;
 }
 
-/* ΔΕΞΙΑ: Σύνοψη */
-/* ΔΕΞΙΑ: Νέο Order Summary */
+/* Right Column (Summary) */
 .checkout-summary-section {
     flex: 1;
 }
@@ -1848,10 +1846,10 @@
 }
 
 .summary-total .total-price {
-    color: #f59e0b; /* Το χαρακτηριστικό σου πορτοκαλί! */
+    color: #f59e0b;
 }
 
-/* Πορτοκαλί Κουμπί Πληρωμής */
+/* Payment Button */
 .summary-btn {
     width: 100%;
     background-color: #f59e0b;
@@ -1874,7 +1872,7 @@
     background-color: #d97706;
 }
 
-/* Εικονίδια Ασφαλείας */
+/* Trust Badges */
 .summary-features {
     display: flex;
     flex-direction: column;
@@ -1893,12 +1891,11 @@
     font-size: 16px;
 }
 
-
 /* =========================================
    Payment Page Styles
    ========================================= */
 .payment-option-box {
-    border: 1px solid #ddd; /* Το κλασικό γκρι περίγραμμα όταν ΔΕΝ είναι επιλεγμένο */
+    border: 1px solid #ddd;
     border-radius: 12px;
     background-color: #fff;
     cursor: pointer;
@@ -1906,14 +1903,14 @@
     overflow: hidden; 
 }
 
-/* ΟΤΑΝ ΕΙΝΑΙ ΕΠΙΛΕΓΜΕΝΟ: Παίρνει το χρώμα του κουμπιού σου! */
+/* Active selected state */
 .payment-option-box.active {
-    border: 2px solid #f59e0b; /* Πορτοκαλί border */
-    background-color: #fff !important; /* Το αναγκάζουμε να είναι ολόλευκο! */
+    border: 2px solid #f59e0b;
+    background-color: #fff !important;
 }
 
 .payment-option-box:hover:not(.active) {
-    border-color: #aaa; /* Απλό hover effect αν δεν είναι επιλεγμένο */
+    border-color: #aaa;
 }
 
 .payment-option-header {
@@ -1925,32 +1922,31 @@
 
 .payment-option-header i {
     font-size: 24px;
-    color: #555; /* Αρχικό χρώμα εικονιδίου */
+    color: #555;
     transition: color 0.2s;
 }
 
 .payment-option-header h4 {
     font-size: 16px;
     font-weight: bold;
-    color: #111; /* Αρχικό χρώμα τίτλου */
+    color: #111;
     margin: 0 0 5px 0;
     transition: color 0.2s;
 }
 
 .payment-option-header p {
     font-size: 13px;
-    color: #666; /* Αρχικό χρώμα υποτίτλου */
+    color: #666;
     margin: 0;
     transition: color 0.2s;
 }
 
-/* ΑΛΛΑΓΗ ΧΡΩΜΑΤΟΣ ΣΤΑ ΓΡΑΜΜΑΤΑ ΟΤΑΝ ΕΙΝΑΙ ACTIVE (προαιρετικό αλλά πανέμορφο) */
+/* Active state text colors */
 .payment-option-box.active .payment-option-header i,
 .payment-option-box.active .payment-option-header h4,
 .payment-option-box.active .payment-option-header p {
     color: #f59e0b;
 }
-
 
 /* =========================================
    Orders Page (Table Design)
@@ -1962,7 +1958,6 @@
     min-height: 60vh;
 }
 
-/* Breadcrumbs & Title */
 .orders-page-header {
     margin-bottom: 30px;
 }
@@ -1986,11 +1981,11 @@
 .orders-page-header .main-title {
     font-size: 32px;
     font-weight: 800;
-    color:black; /* Ένα σκούρο μπλε όπως στη φώτο σου με το wishlist */
+    color: black;
     margin: 0;
 }
 
-/* Κάρτα Πίνακα */
+/* Table Card */
 .orders-table-card {
     background-color: #fff;
     border-radius: 12px;
@@ -2030,7 +2025,7 @@
     font-size: 14px;
 }
 
-/* Πίνακας */
+/* Table Structure */
 .table-responsive {
     overflow-x: auto;
 }
@@ -2066,12 +2061,23 @@
     background-color: #fcfcfc;
 }
 
-/* Βοηθητικές Κλάσεις Κειμένου */
+/* Utility Classes */
 .fw-bold { font-weight: bold; }
 .text-gray { color: #666 !important; }
 
-/* Badges Κατάστασης */
-/* Κουμπί Ακύρωσης Παραγγελίας */
+/* Status Badges */
+.status-badge {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.bg-success { background-color: #dcfce7; color: #166534; }
+.bg-danger { background-color: #fee2e2; color: #991b1b; }
+.bg-warning { background-color: #fef3c7; color: #92400e; }
+
+/* Cancel Order Button */
 .cancel-order-btn {
     background-color: #fee2e2;
     color: #ef4444;
@@ -2086,11 +2092,18 @@
     gap: 6px;
     transition: all 0.2s;
 }
-/* Κουμπί Επεξεργασίας Παραγγελίας (Για τον Admin) */
+
+.cancel-order-btn:hover {
+    background-color: #ef4444;
+    color: #fff;
+    border-color: #ef4444;
+}
+
+/* Edit Order Button */
 .edit-order-btn {
-    background-color: #eff6ff; /* Απαλό γαλάζιο φόντο */
-    color: #3b82f6; /* Έντονο μπλε γράμματα */
-    border: 1px solid #bfdbfe; /* Γαλάζιο περίγραμμα */
+    background-color: #eff6ff; 
+    color: #3b82f6; 
+    border: 1px solid #bfdbfe; 
     padding: 6px 12px;
     border-radius: 6px;
     font-size: 12px;
@@ -2107,22 +2120,6 @@
     color: #fff;
     border-color: #3b82f6;
 }
-
-.cancel-order-btn:hover {
-    background-color: #ef4444;
-    color: #fff;
-    border-color: #ef4444;
-}
-.status-badge {
-    padding: 6px 12px;
-    border-radius: 20px;
-    font-size: 12px;
-    font-weight: bold;
-}
-
-.bg-success { background-color: #dcfce7; color: #166534; }
-.bg-danger { background-color: #fee2e2; color: #991b1b; }
-.bg-warning { background-color: #fef3c7; color: #92400e; }
 
 /* Pagination */
 .pagination-container {
@@ -2168,7 +2165,7 @@
     transition: all 0.2s;
 }
 
-/* Το πορτοκαλί σου χρώμα όταν η σελίδα είναι επιλεγμένη! */
+/* Active page indicator */
 .page-number.active {
     background-color: #f59e0b;
     border-color: #f59e0b;
@@ -2248,10 +2245,10 @@
 }
 
 /* =========================================
-   Admin Add/Edit Product Form (Vertical)
+   Admin Add/Edit Product Form 
    ========================================= */
 .admin-form-container {
-    max-width: 1000px; /* Το άφησα μεγάλο για το title */
+    max-width: 1000px;
     margin: 0 auto;
     padding: 40px 20px;
     min-height: 60vh;
@@ -2265,11 +2262,11 @@
     border: 1px solid #eaeaea;
 }
 
-/* ΝΕΟ: Η κάθετη διάταξη */
+/* Vertical Form Layout */
 .vertical-form-layout {
     display: flex;
     flex-direction: column;
-    gap: 10px; /* Κενό ανάμεσα στα στοιχεία */
+    gap: 10px; 
 }
 
 .section-title {
@@ -2298,7 +2295,7 @@
     flex: 1;
 }
 
-/* Mobile responsive για τα πεδία που είναι δίπλα-δίπλα */
+/* Responsive layout for side-by-side inputs */
 @media (max-width: 600px) {
     .form-row-2 {
         flex-direction: column;
@@ -2357,12 +2354,13 @@
     object-fit: cover;
 }
 
+/* Align buttons right */
 .admin-form-actions {
     margin-top: 40px;
     padding-top: 20px;
     border-top: 1px solid #eaeaea;
     display: flex;
-    justify-content: flex-end; /* Κουμπιά στα δεξιά */
+    justify-content: flex-end; 
     gap: 15px;
 }
 

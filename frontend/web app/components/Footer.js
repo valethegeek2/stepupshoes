@@ -4,10 +4,10 @@ import { usePathname } from "next/navigation";
 export default function Footer() {
   const pathname = usePathname();
 
-  // Λίστα με τις σελίδες που ΔΕΝ θέλουμε να φαίνεται το Footer
+  // Hide footer on auth routes
   const hideOnRoutes = ["/signin", "/signup", "/forgot-password"];
   if (hideOnRoutes.includes(pathname)) {
-    return null; // Αν είμαστε σε αυτές τις σελίδες, κρύψου!
+    return null;
   }
 
   return (
